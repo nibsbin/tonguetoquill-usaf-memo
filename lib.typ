@@ -7,27 +7,34 @@
 #let INDENT_SIZE = 0.5in
 #let PAR_COUNTER_PREFIX = "par-counter-"
 
-// Base function for creating subparagraphs with different numbering schemes
 #let make-par(level, numbering-format, content) = {
+  // Indent first line to align with parent paragraph text
   let indent = INDENT_SIZE * level
   let par-counter = counter(PAR_COUNTER_PREFIX+str(level))
-  
-  block()[
-    #context {
-      par-counter.step()
-      let num = par-counter.display(numbering-format)
-      // AFH 33-337: Indent first line to align number with parent paragraph text,
-      // subsequent lines wrap to left margin (no indent)
-      v(BLANK_LINE)
-      pad(left: indent)[
-        #par(hanging-indent: -indent)[#num #content]
-      ]
-    }
-  ]
 
-  // Reset child counter
-  counter(PAR_COUNTER_PREFIX+str(level+1)).update(1)
+  context {
+    // The processed number
+    let num = par-counter.display(numbering-format)
+    par-counter.step()
+    
+    // Reset the child's counter
+    counter(PAR_COUNTER_PREFIX+str(level+1)).update(1)
+
+    // Create the final block with the necessary padding and blank line
+    block[
+      #v(BLANK_LINE)
+      #pad(left: indent)[
+        // Create a grid to simulate hanging indent
+        #grid(
+          columns: (auto, 1fr),
+          column-gutter: 0.5em,
+          num, content
+        )
+      ]
+    ]
+  }
 }
+
 
 // Base paragraph function: 0 indent, itemizes with numbers
 #let base-par(content) = {
@@ -49,12 +56,31 @@
   make-par(3, "(a)", content)
 }
 
-// Function to process raw text into AFH 33-337 compliant body formatting
-#let process-afh-body(content) = {
-  //reset base paragraph counter
+#let process-body(content) = {
+  // Reset base paragraph counter
   counter("par-counter-0").update(1)
   
-  // Simply return the content - users will use base-par() and sub-par() functions
+  // Function to recursively process content
+  show par: it => {
+    // Check if this paragraph contains our numbered content by looking for numbered patterns
+    let content_str = repr(it.body)
+    let is-processed = content_str.contains("grid(") and (
+      content_str.contains("1.") or 
+      content_str.contains("a.") or 
+      content_str.contains("(1)") or 
+      content_str.contains("(a)")
+    )
+    
+    if is-processed {
+      // This is already a numbered paragraph from our functions, pass it through
+      it
+    } else {
+      // This is a regular paragraph, wrap it with base-par
+      base-par(it.body)
+    }
+  }
+  
+  // Process the content (this will trigger the show rule)
   content
 }
 
@@ -71,7 +97,7 @@
   subject: "Format for the Official Memorandum",
   references: (
     "AFH 33-337, 27 May 2015, The Tongue and Quill",
-    "AFI 33-360, 18 May 2006, Publications and Forms Management" 
+    "AFI 33-360, 18 May 2006, Publications and Forms Management"
   ),
   body,
   signature-name: "",
@@ -90,7 +116,7 @@
   )
   set text(font: "Times New Roman", size: 12pt)
   set par(leading: LINE_SPACING, spacing: LINE_SPACING)
-  
+
   // DoD Seal - floating in top left corner
   place(
     top + left,
@@ -153,7 +179,7 @@
   v(BLANK_LINE)
   // AFH 33-337: Justify text for professional appearance
   set par(justify: true)
-  process-afh-body(body)
+  process-body(body)
 
   // Signature Block
   v(5em)
@@ -187,18 +213,30 @@
   }
 }
 
+// Example usage demonstrating the typst-usaf-memo template functionality
 #official-memorandum()[
-#base-par()[Use only approved organizational letterhead for all correspondence.  This applies to all letterhead, both pre-printed and computer generated.  Reference (a) details for the format and style of official letterhead such as centering the first line of the header 5/8ths of an inch from the top of the page in 12 point Copperplate Gothic Bold font (Letterhead Line 1 style of this template).  The second header line is centered 3 points below the first line in 10.5 point Copperplate Gothic Bold font (Letterhead Line 2 style of this template).]
-#base-par()[Note that this template provides proper formatting for various elements via Word Styles.  The recipient line uses the “MEMO FOR” style, the body of the memorandum uses the “Body” style, the signature block uses the “Signature Block” style, and so on.  The “Normal” style is left available for edge cases not covered by this template, but should be used sparingly, if at all.]
-#base-par()[Place “MEMORANDUM FOR” on the second line below the date.  Leave two spaces between “MEMORANDUM FOR” and the recipient’s office symbol.  If there are multiple recipients, two or three office symbols may be placed on each line aligned under the entries on the first line.  If there are numerous recipients, type “DISTRIBUTION” after “MEMORANDUM FOR” and use a “DISTRIBUTION” element below the signature block.]
-#base-par()[Place “FROM:” on the second line below the “MEMORANDUM FOR” line.  Leave two spaces between the colon in “FROM:” and the originator’s office symbol.  The “FROM:” element contains the full mailing address of the originator’s office unless the mailing address is in the header or if all the recipients are located in the same installation as the originator.]
-#base-par()[Place “SUBJECT:” in uppercase letters on the second line below the last line of the FROM element.  Leave two spaces between the colon in “SUBJECT:” and the subject.  Capitalize the first letter of each word except articles, prepositions, and conjunctions (this is sometimes referred to as “title case”).  Be clear and concise.  If the subject is long, try to revise and shorten the subject; if shortening is not feasible, align the second line under the first word of the subject.]
-#base-par()[Body text begins on the second line below the last line in the subject element and is flush with the left margin.  If the Reference element is used, then the body text begins on the second line below the last line on the Reference element.]
-#sub-par()[When a paragraph is split between pages, there must be at least two lines from the paragraph on both pages.  This template should automatically handle this formatting, but in the case of widowed sentences you can use a manual page break.  Similarly, avoid single-sentence paragraphs by revising or reorganizing the content.]
-#sub-par()[Number or letter each body text paragraph and subparagraph according to the format for subdividing paragraphs in official memorandums presented in the Tongue and Quill. This subdivision format is provided in this template in the “Body” style.  When a memorandum is subdivided, the number of levels used should be relative to the length of the memorandum.  Shorter products typically use three or fewer levels.  Longer products may use more levels, but only the number of levels needed.]
-#base-par()[Follow the spacing guidance for between the text, signature block, attachment element, courtesy copy element, and distribution lists, if used, carefully.  The signature block starts on the fifth line below the body text – this spacing is handled automatically by the Signature Block style.  Never separate the text from the signature block: the signature page must include body text above the signature block.  Also, the first element below the signature block begins on the third line below the last line of the duty title; this applies to attachments, courtesy copies, and distribution lists, whichever is used first.]
-#base-par()[Elements of the Official Memorandum can be inserted as templated parts in MS Word.  Select the “Insert” menu, “Quick Parts”, and then select the desired element.  Follow the formatting instructions provided with the element template.]
-#base-par()[To add classification banner markings (including FOUO markings), click on the header or footer, and in the “Header & Footer Tools” tab, select the Header / Footer dropdown menus on the left side. Use the pre-generated headers and footers – note that the first page is different from the second page onward, and so the second page header and footer must be applied separately. ]
-#base-par()[The example of this memorandum applies to many official memorandums that Airmen may be tasked to prepare; however, there are additional elements for special uses of the official memorandum.  Refer to the Tongue and Quill discussion on the official memorandum for more details, or consult published guidance applicable to your duties.]
+
+Welcome to the tongue2quill typst template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards.
+
+Key features of this template include automatic:
+
++ DoD seal placement
++ proper letterhead formatting, standardized spacing and margins, and compliant font usage (Times New Roman 12pt).
+
+*Paragraph Numbering*. The template features automatic paragraph numbering that follows Air Force formatting requirements. Simply write regular paragraphs and they will be numbered sequentially (1., 2., 3., etc.) with proper spacing and indentation.
+
+#sub-par[Wrap paragraphs in `#sub-par[...]` for hierarchical sub-paragraph. Each subpargraph is automatically numbered and indented to comply with AF 33-337.]
+
+#sub-sub-par[`#sub-sub-par[...]` and so on creates deeper levels of sub-paragraphs.]
+
+Key features of the typst-usaf-memo template include automatic DoD seal placement, proper letterhead formatting, standardized spacing and margins, and compliant font usage (Times New Roman 12pt).
+
+#sub-par[The template supports all standard memorandum sections including references, attachments, carbon copy (cc) lists, and distribution lists.]
+
+#sub-par[Customization options allow you to modify letterhead titles, organization information, and signature blocks while maintaining formatting compliance.]
+
+To use this template, simply import it into your Typst document and call the `official-memorandum()` function with your content. Regular paragraphs will be automatically numbered, and you can use `sub-par()`, `sub-sub-par()`, and `sub-sub-sub-par()` functions for hierarchical organization.
+
+The template ensures your documents meet Air Force publication standards while leveraging the power and flexibility of the Typst typesetting system.
 
 ]
