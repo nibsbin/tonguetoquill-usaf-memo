@@ -142,6 +142,8 @@
     "HQ PACAF/A1",
     "HQ ACC/A1"
     ),
+  letterhead-font: "Arial",
+  body-font: "Times New Roman",
   body
 ) = {
   // Set document properties
@@ -150,7 +152,7 @@
     paper: "us-letter",
     margin: (left: 1in, right: 1in, top: 1in, bottom: 1in),
   )
-  set text(font: "Times New Roman", size: 12pt)
+  set text(font: body-font, size: 12pt)
   set par(leading: LINE_SPACING, spacing: LINE_SPACING)
 
   // AFH 33-337: Page numbering - floating, 0.5-inch from top, flush right
@@ -175,11 +177,13 @@
     [
       // Center: Title and Caption - main content positioned at center
       #place(
-        center + horizon,
+        center + top,
         [
           #align(center)[
-            #text(12pt, weight: "bold", font: "Times New Roman")[#letterhead-title]\
-            #text(10.5pt, weight: "bold", font: "Times New Roman", fill: luma(24%))[#letterhead-caption]
+            #text(12pt, weight: "bold", font: letterhead-font)[#letterhead-title]\
+            #text(10.5pt, weight: "bold",
+            font: letterhead-font, fill: luma(24%)
+            )[#letterhead-caption]
           ]
         ]
       )
@@ -242,7 +246,6 @@
 
   // Body - Apply proper formatting per AFH 33-337 with automatic paragraph numbering
   // AFH 33-337: Begin text on the second line below the subject or references
-  v(BLANK_LINE)
   // AFH 33-337: Justify text for professional appearance
   set par(justify: true)
   process-body(body)
