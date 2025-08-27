@@ -109,7 +109,6 @@
     "AFH 33-337, 27 May 2015, The Tongue and Quill",
     "AFI 33-360, 18 May 2006, Publications and Forms Management"
   ),
-  body,
   signature-block: (
     "FIRST M. LAST, Rank, USAF",
     "AFIT Masters Student, Carnegie Mellon University",
@@ -129,6 +128,7 @@
     "HQ PACAF/A1",
     "HQ ACC/A1"
     ),
+  body
 ) = {
   // Set document properties
   set document(author: "Typst User", title: subject)
@@ -152,13 +152,25 @@
     }
   }
 
-  // DoD Seal - floating in top left corner
-  place(
-    top + left,
-    dx: -.24in,
-    dy: -.24in,
-    image(letterhead-seal, width: 1in)
-  )
+  // DoD Seal - floating in top left corner, vertically centered with letterhead
+  context {
+    // Calculate letterhead text height for vertical centering
+    let letterhead-content = [
+      #text(12pt, weight: "bold", font: "Times New Roman")[#letterhead-title]\
+      #text(10.5pt, weight: "bold", font: "Times New Roman", fill: luma(24%))[#letterhead-caption]
+    ]
+    let letterhead-height = measure(letterhead-content).height
+    
+    // Center the seal vertically with the letterhead
+    let centered-dy = -.24in + (letterhead-height - 1in) / 2
+    
+    place(
+      top + left,
+      dx: -.24in,
+      dy: centered-dy,
+      image(letterhead-seal, width: 1in)
+    )
+  }
 
   // Letterhead - positioned absolutely to not affect flow
   place(
@@ -189,7 +201,7 @@
     columns: (auto, TWO_SPACES, 1fr),
     text(12pt)[FROM:], "", // Two spaces between FROM: and content
     align(left)[
-      #from-block.join("\\\n")
+      #from-block.join("\n")
     ]
   )
 
