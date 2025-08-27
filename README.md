@@ -5,11 +5,13 @@ A comprehensive Typst template for creating official United States Air Force mem
 ## Features
 
 - **Automatic formatting compliance** with AFH 33-337 standards
-- **Hierarchical paragraph numbering** (1., a., (1), (a))
+- **Hierarchical paragraph numbering** (1., a., (1), (a)) with proper indentation
+- **Smart page break handling** for closing sections with continuation formatting
 - **Professional typography** with Times New Roman font and proper spacing
-- **Complete letterhead automation** including DoD seal placement
+- **Complete letterhead automation** including DoD seal placement and scaling
 - **Flexible content management** for various memo types
 - **Proper signature block positioning** and closing elements
+- **Intelligent space management** prevents orphaned headers and improper splits
 
 ## Quick Start
 
@@ -132,34 +134,62 @@ Another regular paragraph.
 #sub-sub-sub-par[Third-level subparagraphs are numbered (a), (b), (c), etc.]
 ```
 
+## Smart Page Break Handling
+
+The template automatically manages page breaks for closing sections according to AFH 33-337 standards:
+
+- **Attachments**: "Do not divide attachment listings between two pages"
+- **Distribution**: "Do not divide distribution lists between two pages"
+- **CC sections**: Consistent handling with other sections
+
+### How It Works
+
+1. **Content measurement**: Calculates if section fits on current page
+2. **Automatic continuation**: Shows "(listed on next page)" when needed
+3. **Clean breaks**: Moves entire sections to avoid orphaned headers
+4. **Compliant formatting**: Follows exact AFH 33-337 continuation requirements
+
+Example output:
+```
+Attachments (listed on next page):
+[page break]
+Attachments:
+1. Document A
+2. Document B
+```
+
 ## Document Structure
 
 The template automatically handles:
 
 1. **Page setup**: US Letter size with 1-inch margins
 2. **Typography**: 12pt Times New Roman font with proper line spacing
-3. **Header elements**: DoD seal, letterhead, and date positioning
-4. **Body formatting**: Justified text with proper paragraph spacing
+3. **Header elements**: DoD seal (scaled to 1in × 2in), letterhead, and date positioning
+4. **Body formatting**: Justified text with proper paragraph spacing and numbering
 5. **Signature block**: Positioned 4.5 inches from left edge
-6. **Closing elements**: Attachments, cc, and distribution lists
+6. **Closing elements**: Attachments, cc, and distribution lists with smart page breaks
 7. **Page numbering**: Starts on page 2, positioned 0.5" from top, flush right
+8. **Continuation handling**: Proper "(listed on next page)" formatting for long sections
 
 ## Examples
 
-The `examples/` directory contains sample memorandums demonstrating various use cases:
+The `template/` directory contains sample memorandums demonstrating various use cases:
 
+- **usaf-memo.typ**: Standard Air Force memorandum template
+- **ussf-memo.typ**: Space Force memorandum variant
 - **starkindustries.typ**: A humorous memo featuring Iron Man regulatory compliance issues
 
 To compile an example:
 
 ```bash
-typst compile examples/starkindustries.typ --root .
+typst compile template/starkindustries.typ --root .
 ```
 
 ## Requirements
 
 - **Typst**: Version 0.13.0 or higher
 - **Assets**: The `assets/dod_seal.png` file must be accessible for the DoD seal
+- **Fonts**: Times New Roman font (typically pre-installed on most systems)
 
 ## File Structure
 
@@ -167,10 +197,14 @@ typst compile examples/starkindustries.typ --root .
 typst-usaf-memo/
 ├── lib.typ              # Main template file
 ├── assets/
-│   └── dod_seal.png     # Department of Defense seal
-├── examples/
-│   └── starkindustries.typ  # Example memo
-├── docs/                # Documentation
+│   ├── dod_seal.png     # Department of Defense seal
+│   └── starkindustries_seal.png  # Example organization seal
+├── template/
+│   ├── usaf-memo.typ    # Standard USAF memo template
+│   ├── ussf-memo.typ    # Space Force memo template
+│   └── starkindustries.typ  # Example memo with custom branding
+├── docs/
+│   └── afh33-337_chapter14  # AFH 33-337 Chapter 14 reference
 ├── README.md           # This file
 └── LICENSE             # License information
 ```
@@ -182,10 +216,13 @@ This template implements the following AFH 33-337 requirements:
 - **Margins**: 1 inch on all sides
 - **Font**: Times New Roman, 12 point
 - **Line spacing**: Proper spacing between elements
-- **Paragraph numbering**: Standard Air Force hierarchy
+- **Paragraph numbering**: Standard Air Force hierarchy with automatic indentation
 - **Date format**: Right-aligned, spelled out format
 - **Signature block**: Positioned according to regulations
 - **Page numbering**: Starts page 2, top right, 0.5" from edge
+- **DoD seal**: Scaled to fit 1in × 2in box while preserving aspect ratio
+- **Page breaks**: Smart handling of closing sections with continuation formatting
+- **Orphan prevention**: No isolated section headers or improper splits
 
 ## Contributing
 
