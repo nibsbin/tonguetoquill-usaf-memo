@@ -94,8 +94,9 @@
 
 //=====Frontend=====
 #let usaf-memo(
-  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
+  letterhead-title: "DEPARTMENT",
   letterhead-caption: "ORGANIZATION",
+  letterhead-seal: "assets/dod_seal.png",
   memo-for: "ORG/SYMBOL",
   from-block: (
     "ORG/SYMBOL",
@@ -156,7 +157,7 @@
     top + left,
     dx: -.24in,
     dy: -.24in,
-    image("assets/dod_seal.png", width: 1in)
+    image(letterhead-seal, width: 1in)
   )
 
   // Letterhead - positioned absolutely to not affect flow
