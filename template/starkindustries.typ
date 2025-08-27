@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-#usaf-memo(
+#official-memorandum(
   letterhead-title: "STARK INDUSTRIES",
   letterhead-caption: "EXECUTIVE OFFICE",
   letterhead-seal: "assets/starkindustries_seal.png",
