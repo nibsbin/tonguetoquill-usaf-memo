@@ -195,6 +195,12 @@ Contributions are welcome! Please feel free to submit issues or pull requests to
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+Assets used in this project:
+
+- `assets/dod_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Seal_of_the_United_States_Department_of_Defense_(2001%E2%80%932022).svg).
+
+- `assets/starkindustries_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Stark_Industries.png).
+
 ## Author
 
 Created by [Nibs](https://github.com/snpm)
