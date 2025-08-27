@@ -83,7 +83,7 @@
 }
 
 //=====Frontend=====
-#let official-memorandum(
+#let usaf-memo(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "ORGANIZATION",
   memo-for: "ORG/SYMBOL",
@@ -255,7 +255,7 @@
 }
 
 //=====Example=====
-#official-memorandum()[
+#usaf-memo()[
 
 Welcome to the Typst USAF Memo template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards. This comprehensive template eliminates the tedious formatting work that typically consumes valuable time when preparing official correspondence.
 
