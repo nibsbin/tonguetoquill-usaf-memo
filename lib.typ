@@ -269,10 +269,10 @@ The template has been meticulously designed to ensure full compliance with Air F
 
 #sub-par[*Complete document formatting automation*. All letterhead elements, margins, fonts, date formatting, signature block positioning, and closing elements are automatically configured according to AFH 33-337 specifications. This includes proper placement of the Department of Defense seal, organization letterhead, and precise positioning of all document elements.]
 
-#sub-par[*Flexible content management*. The template accommodates various memorandum types including single addressee, multiple addressee, distribution lists, and "IN TURN" coordination formats. Reference citations, attachments, courtesy copies, and distribution lists are all properly formatted and positioned.]
+#sub-par[*Flexible content management*. The template accommodates various memorandum types including single addressee, multiple addressee, and distribution lists. Reference citations, attachments, courtesy copies, and distribution lists are all properly formatted and positioned.]
 
 #sub-par[*Professional presentation standards*. Typography follows Air Force requirements with 12-point Times New Roman font, proper line spacing, justified text alignment, and consistent spacing between document elements. Page numbering, when required, is automatically positioned 0.5 inches from the top of the page and flush with the right margin.]
 
-Created by #link("https://github.com/snpm")[Nibs]. Write more. Stress less.
+Created by #link("https://github.com/snpm")[Nibs].
 
 ]
