@@ -54,6 +54,16 @@
   make-par(3, "(a)", content)
 }
 
+// Level 4 subpagraph: 4 indents, itemizes with underlined 1
+#let sub-sub-sub-sub-par(content) = {
+  make-par(4, underline("1"), content)
+}
+
+// Level 5 subpagraph: 5 indents, itemizes with underlined a
+#let sub-sub-sub-sub-sub-par(content) = {
+  make-par(5, underline("a"), content)
+}
+
 #let process-body(content) = {
   // Reset base paragraph counter
   counter("par-counter-0").update(1)
@@ -87,12 +97,12 @@
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "ORGANIZATION",
   memo-for: "ORG/SYMBOL",
-  from-block: [
-    ORG/SYMBOL\
-    Organization\
-    Street Address\
-    City ST 80841-2024
-  ],
+  from-block: (
+    "ORG/SYMBOL",
+    "Organization",
+    "Street Address",
+    "City ST 80841-2024"
+  ),
   subject: "Format for the Official Memorandum",
   references: (
     "AFH 33-337, 27 May 2015, The Tongue and Quill",
@@ -109,15 +119,15 @@
     "AFI 33-360, 18 May 2006, Publications and Forms Management"
   ),
   
-  cc: [
-    HQ AETC/A1\
-    12 FS/DO (Capt Thomas Moore)
-  ],
-  distribution: [
-    HQ USAF/A1\
-    HQ PACAF/A1\
-    HQ ACC/A1
-    ],
+  cc: (
+    "HQ AETC/A1",
+    "12 FS/DO (Capt Thomas Moore)"
+  ),
+  distribution: (
+    "HQ USAF/A1",
+    "HQ PACAF/A1",
+    "HQ ACC/A1"
+    ),
 ) = {
   // Set document properties
   set document(author: "Typst User", title: subject)
@@ -177,7 +187,9 @@
   grid(
     columns: (auto, TWO_SPACES, 1fr),
     text(12pt)[FROM:], "", // Two spaces between FROM: and content
-    align(left)[#from-block]
+    align(left)[
+      #from-block.join("\\\n")
+    ]
   )
 
   // SUBJECT - AFH 33-337: on the second line below the last line of FROM
@@ -236,7 +248,7 @@
     }
     [cc:]
     parbreak()
-    cc
+    cc.join("\\\n")
   }
 
   // Distribution - AFH 33-337: flush left, second line below attachment/cc OR third line below signature
@@ -250,7 +262,7 @@
     }
     [DISTRIBUTION:]
     parbreak()
-    distribution
+    distribution.join("\\\n")
   }
 }
 
