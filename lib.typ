@@ -75,12 +75,12 @@
 
 // Level 4 subpagraph: 4 indents, itemizes with underlined 1
 #let sub-sub-sub-sub-par(content) = {
-  make-par(4, underline("1"), content)
+  make-par(4, n => underline(str(n)), content)
 }
 
 // Level 5 subpagraph: 5 indents, itemizes with underlined a
 #let sub-sub-sub-sub-sub-par(content) = {
-  make-par(5, underline("a"), content)
+  make-par(5, n => underline([#numbering("a", n)]), content)
 }
 
 #let process-body(content) = {
