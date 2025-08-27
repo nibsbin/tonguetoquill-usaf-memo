@@ -7,6 +7,25 @@
 #let INDENT_SIZE = 0.5in
 #let PAR_COUNTER_PREFIX = "par-counter-"
 
+// Render closing section with automatic page break handling
+#let render-closing-section(items, label, numbering-style: none, continuation-label: none) = {
+  let content = {
+    [#label]
+    parbreak()
+    if numbering-style != none { enum(..items, numbering: numbering-style) } else { items.join("\n") }
+  }
+  
+  context {
+    let available_space = page.height - here().position().y - 1in
+    if measure(content).height > available_space {
+      // Use continuation format
+      if continuation-label != none { continuation-label } else { label + " (listed on next page):" }
+      pagebreak()
+    }
+    content
+  }
+}
+
 #let make-par(level, numbering-format, content) = {
   // Indent first line to align with parent paragraph text
   let indent = INDENT_SIZE * level
@@ -70,20 +89,15 @@
   
   // Function to recursively process content
   show par: it => {
-    // Check if this paragraph contains our numbered content by looking for numbered patterns
+    // Check if this paragraph is aligned/formatted
     let content_str = repr(it.body)
-    let is-processed = content_str.contains("grid(") and (
-      content_str.contains("1.") or 
-      content_str.contains("a.") or 
-      content_str.contains("(1)") or 
-      content_str.contains("(a)")
-    )
+    let is-processed = content_str.contains("grid(")
     
     if is-processed {
-      // This is already a numbered paragraph from our functions, pass it through
+      // This is already a formatted paragraph, pass it through
       it
     } else {
-      // This is a regular paragraph, wrap it with base-par
+      // This is a raw paragraph, wrap it with base-par
       base-par(it.body)
     }
   }
@@ -94,8 +108,8 @@
 
 //=====Frontend=====
 #let usaf-memo(
-  letterhead-title: "DEPARTMENT",
-  letterhead-caption: "ORGANIZATION",
+  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
+  letterhead-caption: "AIR FORCE MATERIEL COMMAND",
   letterhead-seal: "assets/dod_seal.png",
   memo-for: "ORG/SYMBOL",
   from-block: (
@@ -152,45 +166,42 @@
     }
   }
 
-  // DoD Seal - floating in top left corner, vertically centered with letterhead
-  context {
-    // Calculate letterhead text height for vertical centering
-    let letterhead-content = [
-      #text(12pt, weight: "bold", font: "Times New Roman")[#letterhead-title]\
-      #text(10.5pt, weight: "bold", font: "Times New Roman", fill: luma(24%))[#letterhead-caption]
-    ]
-    let letterhead-height = measure(letterhead-content).height
-    
-    // Center the seal vertically with the letterhead
-    let centered-dy = -.24in + (letterhead-height - 1in) / 2
-    
-    place(
-      top + left,
-      dx: -.24in,
-      dy: centered-dy,
-      image(letterhead-seal, width: 1in)
-    )
-  }
-
-  // Letterhead - positioned absolutely to not affect flow
-  place(
-    top + center,
-    align(center)[
-      #text(12pt, weight: "bold", font: "Times New Roman")[#letterhead-title]\
-      #text(10.5pt, weight: "bold", font: "Times New Roman", fill: luma(24%))[#letterhead-caption]
+  // Letterhead
+  box(
+    width: 100%, // Full content width
+    height: 0.75in, // Reserved letterhead height
+    fill: none,
+    stroke: none,
+    [
+      // Center: Title and Caption - main content positioned at center
+      #place(
+        center + horizon,
+        [
+          #align(center)[
+            #text(12pt, weight: "bold", font: "Times New Roman")[#letterhead-title]\
+            #text(10.5pt, weight: "bold", font: "Times New Roman", fill: luma(24%))[#letterhead-caption]
+          ]
+        ]
+      )
+      
+      // Left: Seal - positioned independently on the left
+      #place(
+        left + horizon,
+        dx: -.25in,
+        dy: -.125in,
+        [#image(letterhead-seal, width: 1in, height: 2in, fit: "contain")]
+      )
     ]
   )
 
   // Date - AFH 33-337: 1.75 inches from top of page, flush right
-  // Create invisible placeholder content to reserve space for letterhead
-  block(height: 0.75in, width: 100%)[#hide[]]
   align(right)[#datetime.today().display("[day] [month repr:long] [year]")]
 
   // MEMORANDUM FOR block
   v(BLANK_LINE)
   grid(
     columns: (auto, TWO_SPACES, 1fr),
-    "MEMORANDUM FOR", "", // Two spaces between MEMORANDUM FOR and recipient
+    "MEMORANDUM FOR", "", // Two spaces between MEMORANDUM FOR and rWecipient
     align(left)[#memo-for]
   )
 
@@ -245,37 +256,33 @@
   
   // Attachments - AFH 33-337: at left margin, third line below signature element
   if attachments != [] {
-    v(3 * LINE_SPACING) // Third line below signature = 3 line spaces
-    let num_attachments = attachments.len()
-    if num_attachments == 1 { "Attachment:" } else { str(num_attachments) + " Attachments:" }
-    parbreak() // No space; just a line break
-    enum(..attachments, numbering: "1.")
+    v(3 * LINE_SPACING)
+    let num = attachments.len()
+    let label = (if num == 1 { "Attachment:" } else { str(num) + " Attachments:" })
+    let continuation = (if num == 1 { "Attachment" } else { str(num) + " Attachments" }) + " (listed on next page):"
+    
+    render-closing-section(attachments, label, numbering-style: "1.", continuation-label: continuation)
+  }
+
+  // Helper function to add proper spacing for closing sections
+  let add-closing-spacing(has_attachments, has_cc) = {
+    if has_attachments or has_cc {
+      v(2 * LINE_SPACING) // Second line below previous element
+    } else {
+      v(3 * LINE_SPACING) // Third line below signature if first element
+    }
   }
 
   // cc - AFH 33-337: flush left, second line below attachment OR third line below signature
   if cc != [] {
-    if attachments != [] {
-      v(2 * LINE_SPACING) // Second line below attachment element
-    } else {
-      v(3 * LINE_SPACING) // Third line below signature element if no attachments
-    }
-    [cc:]
-    parbreak()
-    cc.join("\\\n")
+    add-closing-spacing(attachments != [], false)
+    render-closing-section(cc, "cc:")
   }
 
   // Distribution - AFH 33-337: flush left, second line below attachment/cc OR third line below signature
   if distribution != [] {
-    if cc != [] {
-      v(2 * LINE_SPACING) // Second line below cc element
-    } else if attachments != [] {
-      v(2 * LINE_SPACING) // Second line below attachment element
-    } else {
-      v(3 * LINE_SPACING) // Third line below signature element if no attachments or cc
-    }
-    [DISTRIBUTION:]
-    parbreak()
-    distribution.join("\\\n")
+    add-closing-spacing(attachments != [], cc != [])
+    render-closing-section(distribution, "DISTRIBUTION:")
   }
 }
 
