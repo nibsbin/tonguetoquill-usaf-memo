@@ -7,6 +7,11 @@
 #let INDENT_SIZE = 0.5in
 #let PAR_COUNTER_PREFIX = "par-counter-"
 
+// Extendable for more levels
+#let PAR_NUMBERING_FORMATS = ("1.", "a.", "(1)", "(a)", n=>underline(str(n)), n=>underline(str(n))) 
+
+#let PAR_BLOCK_INDENT = state("BLOCK_INDENT",true)
+
 // Render closing section with automatic page break handling
 #let render-closing-section(items, label, numbering-style: none, continuation-label: none) = {
   let content = {
@@ -26,61 +31,87 @@
   }
 }
 
-#let make-par(level, numbering-format, content) = {
-  // Indent first line to align with parent paragraph text
-  let indent = INDENT_SIZE * level
+#let get-numbering-format(level) = {
+  if level < PAR_NUMBERING_FORMATS.len() {
+    PAR_NUMBERING_FORMATS.at(level)
+  } else {
+    "1"
+  }
+}
+
+#let get-paragraph-indent(level) = {
+  if level == 0 {
+    0pt
+  } else {
+    let buffer = ""
+    // Loop through levels to build buffer for indentation calculation
+    for i in range(0, level){
+      let numbering-format = get-numbering-format(i)
+      if level > 0 {
+        // Add extra space for the TWO_SPACES after each numbering
+        buffer += h(TWO_SPACES)
+      }
+      let _ = counter("paragraph-indent-dummy").update(1)
+      buffer += counter("paragraph-indent-dummy").display(numbering-format)
+    }
+    measure(buffer).width
+  }
+}
+
+#let make-par(level, content) = {
   let par-counter = counter(PAR_COUNTER_PREFIX+str(level))
+  let numbering-format = get-numbering-format(level)
 
   context {
     // The processed number
     let num = par-counter.display(numbering-format)
     par-counter.step()
-    
+
     // Reset the child's counter
     counter(PAR_COUNTER_PREFIX+str(level+1)).update(1)
+    let indent-amount = get-paragraph-indent(level)
 
-    // Create the final block with the necessary padding and blank line
+    // Create the final block with proper cascading indentation
     block[
       #v(BLANK_LINE)
-      #pad(left: indent)[
-        // Create a grid to simulate hanging indent
-        #grid(
-          columns: (auto, 1fr),
-          column-gutter: 0.5em,
-          num, content
-        )
-      ]
+      #if PAR_BLOCK_INDENT.get() {
+        pad(left: indent-amount)[
+          #num#h(TWO_SPACES)#content
+        ]
+      } else {
+        [#h(indent-amount)#num#h(two_spaces)#content]
+      }
     ]
   }
 }
 // Base paragraph function: 0 indent, itemizes with numbers
 #let base-par(content) = {
-  make-par(0, "1.", content)
+  make-par(0, content)
 }
 
 // Level 1 subparagraph: 1 indent, itemizes with a.
 #let sub-par(content) = {
-  make-par(1, "a.", content)
+  make-par(1, content)
 }
 
 // Level 2 subparagraph: 2 indents, itemizes with (1)
 #let sub-sub-par(content) = {
-  make-par(2, "(1)", content)
+  make-par(2, content)
 }
 
 // Level 3 subparagraph: 3 indents, itemizes with (a)
 #let sub-sub-sub-par(content) = {
-  make-par(3, "(a)", content)
+  make-par(3, content)
 }
 
 // Level 4 subpagraph: 4 indents, itemizes with underlined 1
 #let sub-sub-sub-sub-par(content) = {
-  make-par(4, n => underline(str(n)), content)
+  make-par(4, content)
 }
 
 // Level 5 subpagraph: 5 indents, itemizes with underlined a
 #let sub-sub-sub-sub-sub-par(content) = {
-  make-par(5, n => underline([#numbering("a", n)]), content)
+  make-par(5, content)
 }
 
 #let process-body(content) = {
@@ -130,6 +161,7 @@
   distribution: (),
   letterhead-font: "Arial",
   body-font: "Times New Roman",
+  block-indent: true,
   body
 ) = {
   // Set document properties
@@ -140,6 +172,7 @@
   )
   set text(font: body-font, size: 12pt)
   set par(leading: LINE_SPACING, spacing: LINE_SPACING)
+  PAR_BLOCK_INDENT.update(block-indent)
 
   // AFH 33-337: Page numbering - floating, 0.5-inch from top, flush right
   // First page never numbered, start with page 2
