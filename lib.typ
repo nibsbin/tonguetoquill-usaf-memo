@@ -1,4 +1,5 @@
 // lib.typ: A Typst template for Tongue and Quill official memorandums.
+#import "indorsement.typ": render-indorsements, indorsement
 
 //=====Backend=====
 //==CONFIGS
@@ -141,11 +142,8 @@
   content
 }
 
-//==INDORSEMENTS
-
-
 //=====Frontend=====
-#let official-memorandum(
+#let OfficialMemorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "AIR FORCE MATERIEL COMMAND",
   letterhead-seal: "assets/dod_seal.png",
@@ -166,6 +164,7 @@
   attachments: (),
   cc: (),
   distribution: (),
+  indorsements: (),
   letterhead_font: "Arial",
   body_font: "Times New Roman",
   block_indent: true,
@@ -319,10 +318,13 @@
     add_closing_spacing(attachments.len() > 0, cc.len() > 0)
     _render_closing_section(distribution, "DISTRIBUTION:")
   }
+
+  // Indorsements
+  
 }
 
 //=====Example=====
-#official-memorandum()[
+#OfficialMemorandum()[
 
 Welcome to the Typst USAF Memo template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards. This comprehensive template eliminates the tedious formatting work that typically consumes valuable time when preparing official correspondence.
 
