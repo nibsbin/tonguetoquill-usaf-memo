@@ -1,32 +1,37 @@
 // lib.typ: A Typst template for Tongue and Quill official memorandums.
-#import "indorsement.typ": render-indorsements, indorsement
+#import "indorsement.typ": render_indorsements, Indorsement
 
-//=====Backend=====
-//==CONFIGS
-#let TWO_SPACES = .5em
+//=====Configuration=====
+#let TWO_SPACES = 0.5em
 #let BLANK_LINE = 1em
-#let LINE_SPACING = .5em
+#let LINE_SPACING = 0.5em
 #let INDENT_SIZE = 0.5in
 #let PAR_COUNTER_PREFIX = "par-counter-"
-// Extendable for more levels
-#let PAR_NUMBERING_FORMATS = ("1.", "a.", "(1)", "(a)", n=>underline(str(n)), n=>underline(str(n))) 
-#let PAR_BLOCK_INDENT = state("BLOCK_INDENT",true)
+#let PAR_NUMBERING_FORMATS = ("1.", "a.", "(1)", "(a)", n => underline(str(n)), n => underline(str(n)))
+#let PAR_BLOCK_INDENT = state("BLOCK_INDENT", true)
 
 
-//==BODY PARAGRAPHS
+//==CLOSING SECTIONS
 // Render closing section with automatic page break handling
 #let _render_closing_section(items, label, numbering_style: none, continuation_label: none) = {
   let content = {
     [#label]
     parbreak()
-    if numbering_style != none { enum(..items, numbering: numbering_style) } else { items.join("\n") }
+    if numbering_style != none { 
+      enum(..items, numbering: numbering_style) 
+    } else { 
+      items.join("\n") 
+    }
   }
   
   context {
     let available_space = page.height - here().position().y - 1in
     if measure(content).height > available_space {
-      // Use continuation format
-      if continuation_label != none { continuation_label } else { label + " (listed on next page):" }
+      if continuation_label != none { 
+        continuation_label 
+      } else { 
+        label + " (listed on next page):" 
+      }
       pagebreak()
     }
     content
@@ -45,100 +50,58 @@
 
 // Get the indent width for a level
 #let _get_paragraph_indent(level) = {
-  if level == 0 {
-    0pt
-  } else {
-    let buffer = ""
-    // Loop through levels to build buffer for indentation calculation
-    for i in range(0, level){
-      let numbering_format = _get_numbering_format(i)
-      if level > 0 {
-        // Add extra space for the TWO_SPACES after each numbering
-        buffer += h(TWO_SPACES)
-      }
-      let _ = counter("paragraph-indent-dummy").update(1)
-      buffer += counter("paragraph-indent-dummy").display(numbering_format)
-    }
-    measure(buffer).width
+  if level == 0 { return 0pt }
+  
+  let buffer = ""
+  for i in range(0, level) {
+    let numbering_format = _get_numbering_format(i)
+    buffer += h(TWO_SPACES)
+    let _ = counter("paragraph-indent-dummy").update(1)
+    buffer += counter("paragraph-indent-dummy").display(numbering_format)
   }
+  measure(buffer).width
 }
 
 #let _make_par(level, content) = {
-  let par_counter = counter(PAR_COUNTER_PREFIX+str(level))
+  let par_counter = counter(PAR_COUNTER_PREFIX + str(level))
   let numbering_format = _get_numbering_format(level)
 
   context {
-    // The processed number
     let num = par_counter.display(numbering_format)
     par_counter.step()
-
-    // Reset the child's counter
-    counter(PAR_COUNTER_PREFIX+str(level+1)).update(1)
+    counter(PAR_COUNTER_PREFIX + str(level + 1)).update(1)
     let indent_amount = _get_paragraph_indent(level)
 
-    // Create the final block with proper cascading indentation
     block[
       #v(BLANK_LINE)
       #if PAR_BLOCK_INDENT.get() {
-        pad(left: indent_amount)[
-          #num#h(TWO_SPACES)#content
-        ]
+        pad(left: indent_amount)[#num#h(TWO_SPACES)#content]
       } else {
         [#h(indent_amount)#num#h(TWO_SPACES)#content]
       }
     ]
   }
 }
-// Base paragraph function: 0 indent, itemizes with numbers
-#let base-par(content) = {
-  _make_par(0, content)
-}
-
-// Level 1 subparagraph: 1 indent, itemizes with a.
-#let sub-par(content) = {
-  _make_par(1, content)
-}
-
-// Level 2 subparagraph: 2 indents, itemizes with (1)
-#let sub-sub-par(content) = {
-  _make_par(2, content)
-}
-
-// Level 3 subparagraph: 3 indents, itemizes with (a)
-#let sub-sub-sub-par(content) = {
-  _make_par(3, content)
-}
-
-// Level 4 subpagraph: 4 indents, itemizes with underlined 1
-#let sub-sub-sub-sub-par(content) = {
-  _make_par(4, content)
-}
-
-// Level 5 subpagraph: 5 indents, itemizes with underlined a
-#let sub-sub-sub-sub-sub-par(content) = {
-  _make_par(5, content)
-}
+// Paragraph functions with automatic numbering
+#let base-par(content) = _make_par(0, content)
+#let sub-par(content) = _make_par(1, content)
+#let sub-sub-par(content) = _make_par(2, content)
+#let sub-sub-sub-par(content) = _make_par(3, content)
+#let sub-sub-sub-sub-par(content) = _make_par(4, content)
+#let sub-sub-sub-sub-sub-par(content) = _make_par(5, content)
 
 #let _process_body(content) = {
-  // Reset base paragraph counter
   counter("par-counter-0").update(1)
   
-  // Function to recursively process content
   show par: it => {
-    // Check if this paragraph is aligned/formatted
     let content_str = repr(it.body)
-    let is_processed = content_str.contains("grid(")
-    
-    if is_processed {
-      // This is already a formatted paragraph, pass it through
-      it
+    if content_str.contains("grid(") {
+      it // Already formatted paragraph
     } else {
-      // This is a raw paragraph, wrap it with base_par
-      base-par(it.body)
+      base-par(it.body) // Wrap raw paragraph
     }
   }
   
-  // Process the content (this will trigger the show rule)
   content
 }
 
@@ -147,8 +110,8 @@
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "AIR FORCE MATERIEL COMMAND",
   letterhead-seal: "assets/dod_seal.png",
-  memo_for: ("ORG/SYMBOL",),
-  from_block: (
+  memo-for: ("ORG/SYMBOL",),
+  from-block: (
     "ORG/SYMBOL",
     "Organization",
     "Street Address",
@@ -156,7 +119,7 @@
   ),
   subject: "Format for the Official Memorandum",
   references: (),
-  signature_block: (
+  signature-block: (
     "FIRST M. LAST, Rank, USAF",
     "AFIT Masters Student, Carnegie Mellon University",
     "Organization (if not on letterhead)"
@@ -180,13 +143,12 @@
   set par(leading: LINE_SPACING, spacing: LINE_SPACING)
   PAR_BLOCK_INDENT.update(block_indent)
 
-  // Page numbering - floating, 0.5-inch from top, flush right
+  // Page numbering (starts on page 2)
   context {
-    // First page never numbered, start with page 2
     if counter(page).get().first() > 1 {
       place(
         top + right,
-        dx: 0in,  // Flush with right margin (no offset)
+        dx: 0in,
         dy: -0.5in,
         text(12pt)[#counter(page).display()]
       )
@@ -195,71 +157,61 @@
 
   // Letterhead
   box(
-    width: 100%, // Full content width
-    height: 0.75in, // Reserved letterhead height
+    width: 100%,
+    height: 0.75in,
     fill: none,
     stroke: none,
     [
-      // Center: Title and Caption - main content positioned at center
       #place(
         center + top,
-        [
-          #align(center)[
-            #text(12pt, weight: "bold", font: letterhead_font)[#letterhead-title]\
-            #text(10.5pt, weight: "bold",
-            font: letterhead_font, fill: luma(24%)
-            )[#letterhead-caption]
-          ]
+        align(center)[
+          #text(12pt, weight: "bold", font: letterhead_font)[#letterhead-title]\
+          #text(10.5pt, weight: "bold", font: letterhead_font, fill: luma(24%))[#letterhead-caption]
         ]
       )
       
-      // Left: Seal - positioned independently on the left
       #place(
         left + horizon,
-        dx: -.25in,
-        dy: -.125in,
-        [#image(letterhead-seal, width: 1in, height: 2in, fit: "contain")]
+        dx: -0.25in,
+        dy: -0.125in,
+        image(letterhead-seal, width: 1in, height: 2in, fit: "contain")
       )
     ]
   )
 
-  // Date - AFH 33-337: 1.75 inches from top of page, flush right
+  // Date (AFH 33-337: 1.75 inches from top, flush right)
   align(right)[#datetime.today().display("[day] [month repr:long] [year]")]
 
   // MEMORANDUM FOR block
   v(BLANK_LINE)
   grid(
     columns: (auto, TWO_SPACES, 1fr),
-    "MEMORANDUM FOR", "", // Two spaces between MEMORANDUM FOR and recipient
+    "MEMORANDUM FOR", "",
     align(left)[
-      #if type(memo_for) == array {
-        memo_for.join("\n")
+      #if type(memo-for) == array {
+        memo-for.join("\n")
       } else {
-        memo_for
+        memo-for
       }
     ]
   )
 
-
-  // FROM - AFH 33-337: on the second line below the last line of MEMORANDUM FOR
+  // FROM block
   v(BLANK_LINE)
   grid(
     columns: (auto, TWO_SPACES, 1fr),
-    text(12pt)[FROM:], "", // Two spaces between FROM: and content
-    align(left)[
-      #from_block.join("\n")
-    ]
+    "FROM:", "",
+    align(left)[#from-block.join("\n")]
   )
 
-  // SUBJECT - AFH 33-337: on the second line below the last line of FROM
+  // SUBJECT block
   v(BLANK_LINE)
   grid(
     columns: (auto, TWO_SPACES, 1fr),
     "SUBJECT:", "", [#subject]
   )
 
-
-  // References - AFH 33-337: on the second line below the last line of SUBJECT
+  // References (optional)
   if references.len() > 0 {
     v(BLANK_LINE)
     grid(
@@ -268,58 +220,64 @@
     )
   }
 
-
-  // Body - Apply proper formatting per AFH 33-337 with automatic paragraph numbering
-  // AFH 33-337: Begin text on the second line below the subject or references
-  // AFH 33-337: Justify text for professional appearance
+  // Body content
   set par(justify: true)
   _process_body(body)
 
-  // Signature Block - AFH 33-337: 4.5 inches from left edge or 3 spaces right of center
-  // AFH 33-337: Start on fifth line below last line of text
-  v(5em) 
-  align(left)[
-    //4.5in from left edge minus 1in margin
-    #pad(left: 4.5in-1in)[
-      #text(hyphenate: false)[
-      #for line in signature_block {
-        par(hanging-indent: 1em,justify: false)[#line]
-      }]
-    ]
-  ]
+  // Signature Block with page break handling
+  context {
+    let signature_content = {
+      v(5em)
+      align(left)[
+        #pad(left: 4.5in - 1in)[
+          #text(hyphenate: false)[
+            #for line in signature-block {
+              par(hanging-indent: 1em, justify: false)[#line]
+            }
+          ]
+        ]
+      ]
+    }
+    
+    let available_space = page.height - here().position().y - 1in
+    let signature_height = measure(signature_content).height
+    
+    if signature_height > available_space {
+      pagebreak(weak: true)
+    }
+    
+    signature_content
+  }
+  // Closing sections
+  let has_attachments = attachments.len() > 0
+  let has_cc = cc.len() > 0
+  let has_distribution = distribution.len() > 0
   
-  // Attachments - AFH 33-337: at left margin, third line below signature element
-  if attachments.len() > 0 {
+  // Attachments
+  if has_attachments {
     v(3 * LINE_SPACING)
     let num = attachments.len()
-    let label = (if num == 1 { "Attachment:" } else { str(num) + " Attachments:" })
+    let label = if num == 1 { "Attachment:" } else { str(num) + " Attachments:" }
     let continuation = (if num == 1 { "Attachment" } else { str(num) + " Attachments" }) + " (listed on next page):"
-    
     _render_closing_section(attachments, label, numbering_style: "1.", continuation_label: continuation)
   }
 
-  // Helper function to add proper spacing for closing sections
-  let add_closing_spacing(has_attachments, has_cc) = {
-    if has_attachments or has_cc {
-      v(2 * LINE_SPACING) // Second line below previous element
-    } else {
-      v(3 * LINE_SPACING) // Third line below signature if first element
-    }
-  }
-
-  // cc - AFH 33-337: flush left, second line below attachment OR third line below signature
-  if cc.len() > 0 {
-    add_closing_spacing(attachments.len() > 0, false)
+  // cc
+  if has_cc {
+    v(if has_attachments { 2 * LINE_SPACING } else { 3 * LINE_SPACING })
     _render_closing_section(cc, "cc:")
   }
 
-  // Distribution - AFH 33-337: flush left, second line below attachment/cc OR third line below signature
-  if distribution.len() > 0 {
-    add_closing_spacing(attachments.len() > 0, cc.len() > 0)
+  // Distribution
+  if has_distribution {
+    v(if has_attachments or has_cc { 2 * LINE_SPACING } else { 3 * LINE_SPACING })
     _render_closing_section(distribution, "DISTRIBUTION:")
   }
 
   // Indorsements
+  if indorsements.len() > 0 {
+    render_indorsements(indorsements, body_font: body_font)
+  }
   
 }
 
