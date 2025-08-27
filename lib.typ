@@ -5,11 +5,42 @@
 #let TWO_SPACES = 0.5em
 #let BLANK_LINE = 1em
 #let LINE_SPACING = 0.5em
-#let INDENT_SIZE = 0.5in
+#let TAB_SIZE = 0.5in
 #let PAR_COUNTER_PREFIX = "par-counter-"
 #let PAR_NUMBERING_FORMATS = ("1.", "a.", "(1)", "(a)", n => underline(str(n)), n => underline(str(n)))
 #let PAR_BLOCK_INDENT = state("BLOCK_INDENT", true)
 
+//==FRONT MATTER
+#let auto-grid(rows, column-gutter: .5em) = {
+  // Convert 1D array to 2D array for consistent processing
+  let normalized_rows = rows
+  if rows.len() > 0 and type(rows.at(0)) != array {
+    // This is a 1D array, convert each element to a single-element row
+    normalized_rows = rows.map(item => (item,))
+  }
+  
+  // Now process as 2D array - columns = max row length
+  let n = calc.max(..normalized_rows.map(r => r.len()))
+
+  // build flat list of cells (row-major)
+  let cells = ()
+  let make-cell = (x) => [#x]   // coerce string/content to a cell
+
+  for row in normalized_rows {
+    let k = row.len()
+    for i in range(0, n) {
+      let v = if i < k { row.at(i) } else { [] }
+      cells.push(make-cell(v))
+    }
+  }
+
+  grid(
+    columns: n,
+    column-gutter: column-gutter,
+    row-gutter: LINE_SPACING,
+    ..cells
+  )
+}
 
 //==CLOSING SECTIONS
 // Render closing section with automatic page break handling
@@ -18,9 +49,15 @@
     [#label]
     parbreak()
     if numbering_style != none { 
-      enum(..items, numbering: numbering_style) 
+      // Ensure items is always an array for enum
+      let item_array = if type(items) == array { items } else { (items,) }
+      enum(..item_array, numbering: numbering_style) 
     } else { 
-      items.join("\n") 
+      if type(items) == array {
+        items.join("\n")
+      } else {
+        items
+      }
     }
   }
   
@@ -189,7 +226,8 @@
     "MEMORANDUM FOR", "",
     align(left)[
       #if type(memo-for) == array {
-        memo-for.join("\n")
+        // Use auto-grid which handles both 1D and 2D arrays
+        auto-grid(memo-for, column-gutter: TAB_SIZE)
       } else {
         memo-for
       }
