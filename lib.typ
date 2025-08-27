@@ -111,7 +111,7 @@
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "AIR FORCE MATERIEL COMMAND",
   letterhead-seal: "assets/dod_seal.png",
-  memo-for: "ORG/SYMBOL",
+  memo-for: ("ORG/SYMBOL",),
   from-block: (
     "ORG/SYMBOL",
     "Organization",
@@ -201,8 +201,14 @@
   v(BLANK_LINE)
   grid(
     columns: (auto, TWO_SPACES, 1fr),
-    "MEMORANDUM FOR", "", // Two spaces between MEMORANDUM FOR and rWecipient
-    align(left)[#memo-for]
+    "MEMORANDUM FOR", "", // Two spaces between MEMORANDUM FOR and recipient
+    align(left)[
+      #if type(memo-for) == array {
+        memo-for.join("\n")
+      } else {
+        memo-for
+      }
+    ]
   )
 
 
@@ -225,7 +231,7 @@
 
 
   // References - AFH 33-337: on the second line below the last line of SUBJECT
-  if references != [] {
+  if references.len() > 0 {
     v(BLANK_LINE)
     grid(
       columns: (auto, TWO_SPACES, 1fr),
@@ -255,7 +261,7 @@
   ]
   
   // Attachments - AFH 33-337: at left margin, third line below signature element
-  if attachments != [] {
+  if attachments.len() > 0 {
     v(3 * LINE_SPACING)
     let num = attachments.len()
     let label = (if num == 1 { "Attachment:" } else { str(num) + " Attachments:" })
@@ -274,14 +280,14 @@
   }
 
   // cc - AFH 33-337: flush left, second line below attachment OR third line below signature
-  if cc != [] {
-    add-closing-spacing(attachments != [], false)
+  if cc.len() > 0 {
+    add-closing-spacing(attachments.len() > 0, false)
     render-closing-section(cc, "cc:")
   }
 
   // Distribution - AFH 33-337: flush left, second line below attachment/cc OR third line below signature
-  if distribution != [] {
-    add-closing-spacing(attachments != [], cc != [])
+  if distribution.len() > 0 {
+    add-closing-spacing(attachments.len() > 0, cc.len() > 0)
     render-closing-section(distribution, "DISTRIBUTION:")
   }
 }
