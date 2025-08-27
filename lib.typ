@@ -1,6 +1,6 @@
 // lib.typ: A Typst template for Tongue and Quill official memorandums.
 
-// Width of two spaces
+//=====Backend=====
 #let TWO_SPACES = .5em
 #let BLANK_LINE = 1em
 #let LINE_SPACING = .5em
@@ -34,8 +34,6 @@
     ]
   }
 }
-
-
 // Base paragraph function: 0 indent, itemizes with numbers
 #let base-par(content) = {
   make-par(0, "1.", content)
@@ -84,6 +82,7 @@
   content
 }
 
+//=====Frontend=====
 #let official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "ORGANIZATION",
@@ -100,9 +99,11 @@
     "AFI 33-360, 18 May 2006, Publications and Forms Management"
   ),
   body,
-  signature-name: "",
-  signature-rank: "",
-  signature-title: "",
+  signature-block: [
+    FIRST M. LAST, Rank, USAF\
+    Duty Title\
+    Organization (if not on letterhead)
+  ],
   attachments: [],
   cc: [],
   distribution: [],
@@ -112,10 +113,22 @@
   set page(
     paper: "us-letter",
     margin: (left: 1in, right: 1in, top: 1in, bottom: 1in),
-    numbering: "1",
   )
   set text(font: "Times New Roman", size: 12pt)
   set par(leading: LINE_SPACING, spacing: LINE_SPACING)
+
+  // AFH 33-337: Page numbering - floating, 0.5-inch from top, flush right
+  // First page never numbered, start with page 2
+  context {
+    if counter(page).get().first() > 1 {
+      place(
+        top + right,
+        dx: 0in,  // Flush with right margin (no offset)
+        dy: -0.5in,
+        text(12pt)[#counter(page).display()]
+      )
+    }
+  }
 
   // DoD Seal - floating in top left corner
   place(
@@ -181,13 +194,13 @@
   set par(justify: true)
   process-body(body)
 
-  // Signature Block
+  // Signature Block - AFH 33-337: 4.5 inches from left edge or 3 spaces right of center
+  // AFH 33-337: Start on fifth line below last line of text
   v(5em)
-  align(right)[
-    #signature-name, #signature-rank \
-    #signature-title
-  ]
-
+  place(
+    dx: 4.5in,
+    signature-block
+  )
   // Attachments
   if attachments != [] {
     v(3em, weak: true)
@@ -213,30 +226,23 @@
   }
 }
 
-// Example usage demonstrating the typst-usaf-memo template functionality
+//=====Example=====
 #official-memorandum()[
 
-Welcome to the tongue2quill typst template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards.
+Welcome to the tongue2quill Typst template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards. Key features include:
 
-Key features of this template include automatic:
+#sub-par[*Paragraph numbering*. Paragraphs are automatically numbered and spaced perfectly so you can focus on content instead of formatting.]
 
-+ DoD seal placement
-+ proper letterhead formatting, standardized spacing and margins, and compliant font usage (Times New Roman 12pt).
+#sub-par[*Hierarchical paragraphs*. Each subpargraph is automatically numbered and indented for compliance.]
 
-*Paragraph Numbering*. The template features automatic paragraph numbering that follows Air Force formatting requirements. Simply write regular paragraphs and they will be numbered sequentially (1., 2., 3., etc.) with proper spacing and indentation.
+#sub-sub-par[Just wrap your content in `sub-par[...]`, `sub-sub-par[...]`, etc..]
 
-#sub-par[Wrap paragraphs in `#sub-par[...]` for hierarchical sub-paragraph. Each subpargraph is automatically numbered and indented to comply with AF 33-337.]
+#sub-par[*Plug and Play*. Just fill out the fields and render a memo with correct letterhead, margins, font, double spaces, and line spacing.]
 
-#sub-sub-par[`#sub-sub-par[...]` and so on creates deeper levels of sub-paragraphs.]
+#sub-par[*Completely customizable*. Use AI to modify any part of the document for your memorandum needs.]
 
-Key features of the typst-usaf-memo template include automatic DoD seal placement, proper letterhead formatting, standardized spacing and margins, and compliant font usage (Times New Roman 12pt).
+#sub-par[*Expanding functionality*. The template currently supports all standard memorandum sections including references, attachments, carbon copy (cc) lists, and distribution lists.]
 
-#sub-par[The template supports all standard memorandum sections including references, attachments, carbon copy (cc) lists, and distribution lists.]
-
-#sub-par[Customization options allow you to modify letterhead titles, organization information, and signature blocks while maintaining formatting compliance.]
-
-To use this template, simply import it into your Typst document and call the `official-memorandum()` function with your content. Regular paragraphs will be automatically numbered, and you can use `sub-par()`, `sub-sub-par()`, and `sub-sub-sub-par()` functions for hierarchical organization.
-
-The template ensures your documents meet Air Force publication standards while leveraging the power and flexibility of the Typst typesetting system.
+Skip the details. Focus on writing.
 
 ]
