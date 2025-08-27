@@ -3,7 +3,7 @@
 #usaf-memo(
   letterhead-title: "STARK INDUSTRIES",
   letterhead-caption: "EXECUTIVE OFFICE",
-  
+  letterhead-seal: "assets/starkindustries_seal.png",
   memo-for: "MR. ANTHONY E. STARK, CEO, STARK INDUSTRIES",
   from-block: (
     "STARK INDUSTRIES",
@@ -18,8 +18,8 @@
     "OSHA 29 CFR 1926, Construction Industry Safety Standards",
     "Stark, A. E., 15 May 2008, 'I Am Iron Man' Public Declaration",
     "USAF Aircraft Accident Investigation Report, F-22 Raptor Incidents, Classified",
-    "Coulson, P., SHIELD Intelligence Brief, 'Unidentified Flying Objects Over Malibu'"
-  ),,
+    "Coulson, P., SHIELD Intelligence Brief, 'Unidentified Flying Objects Over Malibu"
+  ),
   signature-block: (
     "VIRGINIA E. POTTS",
     "Executive Assistant to the CEO", 
@@ -52,8 +52,7 @@
     "Congressional Armed Services Committee",
     "Happy Hogan, Head of Security, Stark Industries"
   )
-)
-[
+)[
 Mr. Stark, following your public declaration of identity as "Iron Man" and subsequent unauthorized flight activities, I have received numerous calls from federal agencies expressing serious concerns regarding regulatory compliance, airspace violations, and workplace safety standards.
 
 This memorandum serves as official consolidation of all the complaints I've fielded from various government officials who seem to think you should follow the same rules as everyone else. Imagine that.
