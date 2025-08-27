@@ -119,29 +119,15 @@
     "City ST 80841-2024"
   ),
   subject: "Format for the Official Memorandum",
-  references: (
-    "AFH 33-337, 27 May 2015, The Tongue and Quill",
-    "AFI 33-360, 18 May 2006, Publications and Forms Management"
-  ),
+  references: (),
   signature-block: (
     "FIRST M. LAST, Rank, USAF",
     "AFIT Masters Student, Carnegie Mellon University",
     "Organization (if not on letterhead)"
   ),
-  attachments: (
-    "SAF/CIO A6 Memo, 12 Oct 2011, Air Force Guidance Memorandum",
-    "AFI 33-360, 18 May 2006, Publications and Forms Management"
-  ),
-  
-  cc: (
-    "HQ AETC/A1",
-    "12 FS/DO (Capt Thomas Moore)"
-  ),
-  distribution: (
-    "HQ USAF/A1",
-    "HQ PACAF/A1",
-    "HQ ACC/A1"
-    ),
+  attachments: (),
+  cc: (),
+  distribution: (),
   letterhead-font: "Arial",
   body-font: "Times New Roman",
   body
