@@ -79,7 +79,7 @@
           #num#h(TWO_SPACES)#content
         ]
       } else {
-        [#h(indent-amount)#num#h(two_spaces)#content]
+        [#h(indent-amount)#num#h(TWO_SPACES)#content]
       }
     ]
   }
