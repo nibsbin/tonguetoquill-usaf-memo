@@ -6,32 +6,31 @@
 #let LINE_SPACING = .5em
 #let INDENT_SIZE = 0.5in
 #let PAR_COUNTER_PREFIX = "par-counter-"
-
 // Extendable for more levels
 #let PAR_NUMBERING_FORMATS = ("1.", "a.", "(1)", "(a)", n=>underline(str(n)), n=>underline(str(n))) 
-
 #let PAR_BLOCK_INDENT = state("BLOCK_INDENT",true)
 
 // Render closing section with automatic page break handling
-#let render-closing-section(items, label, numbering-style: none, continuation-label: none) = {
+#let render_closing_section(items, label, numbering_style: none, continuation_label: none) = {
   let content = {
     [#label]
     parbreak()
-    if numbering-style != none { enum(..items, numbering: numbering-style) } else { items.join("\n") }
+    if numbering_style != none { enum(..items, numbering: numbering_style) } else { items.join("\n") }
   }
   
   context {
     let available_space = page.height - here().position().y - 1in
     if measure(content).height > available_space {
       // Use continuation format
-      if continuation-label != none { continuation-label } else { label + " (listed on next page):" }
+      if continuation_label != none { continuation_label } else { label + " (listed on next page):" }
       pagebreak()
     }
     content
   }
 }
 
-#let get-numbering-format(level) = {
+// Get the numbering format for a level
+#let get_numbering_format(level) = {
   if level < PAR_NUMBERING_FORMATS.len() {
     PAR_NUMBERING_FORMATS.at(level)
   } else {
@@ -39,82 +38,83 @@
   }
 }
 
-#let get-paragraph-indent(level) = {
+// Get the indent width for a level
+#let get_paragraph_indent(level) = {
   if level == 0 {
     0pt
   } else {
     let buffer = ""
     // Loop through levels to build buffer for indentation calculation
     for i in range(0, level){
-      let numbering-format = get-numbering-format(i)
+      let numbering_format = get_numbering_format(i)
       if level > 0 {
         // Add extra space for the TWO_SPACES after each numbering
         buffer += h(TWO_SPACES)
       }
       let _ = counter("paragraph-indent-dummy").update(1)
-      buffer += counter("paragraph-indent-dummy").display(numbering-format)
+      buffer += counter("paragraph-indent-dummy").display(numbering_format)
     }
     measure(buffer).width
   }
 }
 
-#let make-par(level, content) = {
-  let par-counter = counter(PAR_COUNTER_PREFIX+str(level))
-  let numbering-format = get-numbering-format(level)
+#let make_par(level, content) = {
+  let par_counter = counter(PAR_COUNTER_PREFIX+str(level))
+  let numbering_format = get_numbering_format(level)
 
   context {
     // The processed number
-    let num = par-counter.display(numbering-format)
-    par-counter.step()
+    let num = par_counter.display(numbering_format)
+    par_counter.step()
 
     // Reset the child's counter
     counter(PAR_COUNTER_PREFIX+str(level+1)).update(1)
-    let indent-amount = get-paragraph-indent(level)
+    let indent_amount = get_paragraph_indent(level)
 
     // Create the final block with proper cascading indentation
     block[
       #v(BLANK_LINE)
       #if PAR_BLOCK_INDENT.get() {
-        pad(left: indent-amount)[
+        pad(left: indent_amount)[
           #num#h(TWO_SPACES)#content
         ]
       } else {
-        [#h(indent-amount)#num#h(TWO_SPACES)#content]
+        [#h(indent_amount)#num#h(TWO_SPACES)#content]
       }
     ]
   }
 }
 // Base paragraph function: 0 indent, itemizes with numbers
-#let base-par(content) = {
-  make-par(0, content)
+#let base_par(content) = {
+  make_par(0, content)
 }
 
 // Level 1 subparagraph: 1 indent, itemizes with a.
-#let sub-par(content) = {
-  make-par(1, content)
+#let sub_par(content) = {
+  make_par(1, content)
 }
 
 // Level 2 subparagraph: 2 indents, itemizes with (1)
-#let sub-sub-par(content) = {
-  make-par(2, content)
+#let sub_sub_par(content) = {
+  make_par(2, content)
 }
 
 // Level 3 subparagraph: 3 indents, itemizes with (a)
-#let sub-sub-sub-par(content) = {
-  make-par(3, content)
+#let sub_sub_sub_par(content) = {
+  make_par(3, content)
 }
 
 // Level 4 subpagraph: 4 indents, itemizes with underlined 1
-#let sub-sub-sub-sub-par(content) = {
-  make-par(4, content)
+#let sub_sub_sub_sub_par(content) = {
+  make_par(4, content)
 }
 
 // Level 5 subpagraph: 5 indents, itemizes with underlined a
-#let sub-sub-sub-sub-sub-par(content) = {
-  make-par(5, content)
+#let sub_sub_sub_sub_sub_par(content) = {
+  make_par(5, content)
 }
 
-#let process-body(content) = {
+#let process_body(content) = {
   // Reset base paragraph counter
   counter("par-counter-0").update(1)
   
@@ -122,14 +122,14 @@
   show par: it => {
     // Check if this paragraph is aligned/formatted
     let content_str = repr(it.body)
-    let is-processed = content_str.contains("grid(")
+    let is_processed = content_str.contains("grid(")
     
-    if is-processed {
+    if is_processed {
       // This is already a formatted paragraph, pass it through
       it
     } else {
-      // This is a raw paragraph, wrap it with base-par
-      base-par(it.body)
+      // This is a raw paragraph, wrap it with base_par
+      base_par(it.body)
     }
   }
   
@@ -138,12 +138,12 @@
 }
 
 //=====Frontend=====
-#let official-memorandum(
-  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead-caption: "AIR FORCE MATERIEL COMMAND",
-  letterhead-seal: "assets/dod_seal.png",
-  memo-for: ("ORG/SYMBOL",),
-  from-block: (
+#let official_memorandum(
+  letterhead_title: "DEPARTMENT OF THE AIR FORCE",
+  letterhead_caption: "AIR FORCE MATERIEL COMMAND",
+  letterhead_seal: "assets/dod_seal.png",
+  memo_for: ("ORG/SYMBOL",),
+  from_block: (
     "ORG/SYMBOL",
     "Organization",
     "Street Address",
@@ -151,7 +151,7 @@
   ),
   subject: "Format for the Official Memorandum",
   references: (),
-  signature-block: (
+  signature_block: (
     "FIRST M. LAST, Rank, USAF",
     "AFIT Masters Student, Carnegie Mellon University",
     "Organization (if not on letterhead)"
@@ -159,9 +159,9 @@
   attachments: (),
   cc: (),
   distribution: (),
-  letterhead-font: "Arial",
-  body-font: "Times New Roman",
-  block-indent: true,
+  letterhead_font: "Arial",
+  body_font: "Times New Roman",
+  block_indent: true,
   body
 ) = {
   // Set document properties
@@ -170,9 +170,9 @@
     paper: "us-letter",
     margin: (left: 1in, right: 1in, top: 1in, bottom: 1in),
   )
-  set text(font: body-font, size: 12pt)
+  set text(font: body_font, size: 12pt)
   set par(leading: LINE_SPACING, spacing: LINE_SPACING)
-  PAR_BLOCK_INDENT.update(block-indent)
+  PAR_BLOCK_INDENT.update(block_indent)
 
   // AFH 33-337: Page numbering - floating, 0.5-inch from top, flush right
   // First page never numbered, start with page 2
@@ -199,10 +199,10 @@
         center + top,
         [
           #align(center)[
-            #text(12pt, weight: "bold", font: letterhead-font)[#letterhead-title]\
+            #text(12pt, weight: "bold", font: letterhead_font)[#letterhead_title]\
             #text(10.5pt, weight: "bold",
-            font: letterhead-font, fill: luma(24%)
-            )[#letterhead-caption]
+            font: letterhead_font, fill: luma(24%)
+            )[#letterhead_caption]
           ]
         ]
       )
@@ -212,7 +212,7 @@
         left + horizon,
         dx: -.25in,
         dy: -.125in,
-        [#image(letterhead-seal, width: 1in, height: 2in, fit: "contain")]
+        [#image(letterhead_seal, width: 1in, height: 2in, fit: "contain")]
       )
     ]
   )
@@ -226,10 +226,10 @@
     columns: (auto, TWO_SPACES, 1fr),
     "MEMORANDUM FOR", "", // Two spaces between MEMORANDUM FOR and recipient
     align(left)[
-      #if type(memo-for) == array {
-        memo-for.join("\n")
+      #if type(memo_for) == array {
+        memo_for.join("\n")
       } else {
-        memo-for
+        memo_for
       }
     ]
   )
@@ -241,7 +241,7 @@
     columns: (auto, TWO_SPACES, 1fr),
     text(12pt)[FROM:], "", // Two spaces between FROM: and content
     align(left)[
-      #from-block.join("\n")
+      #from_block.join("\n")
     ]
   )
 
@@ -267,7 +267,7 @@
   // AFH 33-337: Begin text on the second line below the subject or references
   // AFH 33-337: Justify text for professional appearance
   set par(justify: true)
-  process-body(body)
+  process_body(body)
 
   // Signature Block - AFH 33-337: 4.5 inches from left edge or 3 spaces right of center
   // AFH 33-337: Start on fifth line below last line of text
@@ -276,8 +276,8 @@
     //4.5in from left edge minus 1in margin
     #pad(left: 4.5in-1in)[
       #text(hyphenate: false)[
-      #for line in signature-block {
-        par(hanging-indent: 1em,justify: false)[#line]
+      #for line in signature_block {
+        par(hanging_indent: 1em,justify: false)[#line]
       }]
     ]
   ]
@@ -289,11 +289,11 @@
     let label = (if num == 1 { "Attachment:" } else { str(num) + " Attachments:" })
     let continuation = (if num == 1 { "Attachment" } else { str(num) + " Attachments" }) + " (listed on next page):"
     
-    render-closing-section(attachments, label, numbering-style: "1.", continuation-label: continuation)
+    render_closing_section(attachments, label, numbering_style: "1.", continuation_label: continuation)
   }
 
   // Helper function to add proper spacing for closing sections
-  let add-closing-spacing(has_attachments, has_cc) = {
+  let add_closing_spacing(has_attachments, has_cc) = {
     if has_attachments or has_cc {
       v(2 * LINE_SPACING) // Second line below previous element
     } else {
@@ -303,37 +303,37 @@
 
   // cc - AFH 33-337: flush left, second line below attachment OR third line below signature
   if cc.len() > 0 {
-    add-closing-spacing(attachments.len() > 0, false)
-    render-closing-section(cc, "cc:")
+    add_closing_spacing(attachments.len() > 0, false)
+    render_closing_section(cc, "cc:")
   }
 
   // Distribution - AFH 33-337: flush left, second line below attachment/cc OR third line below signature
   if distribution.len() > 0 {
-    add-closing-spacing(attachments.len() > 0, cc.len() > 0)
-    render-closing-section(distribution, "DISTRIBUTION:")
+    add_closing_spacing(attachments.len() > 0, cc.len() > 0)
+    render_closing_section(distribution, "DISTRIBUTION:")
   }
 }
 
 //=====Example=====
-#official-memorandum()[
+#official_memorandum()[
 
 Welcome to the Typst USAF Memo template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards. This comprehensive template eliminates the tedious formatting work that typically consumes valuable time when preparing official correspondence.
 
 The template has been meticulously designed to ensure full compliance with Air Force publishing standards while providing a streamlined user experience. Key features and capabilities include:
 
-#sub-par[*Automatic paragraph numbering and formatting*. Paragraphs are automatically numbered using the proper Air Force hierarchy (1., a., (1), (a)) and spaced with precise line spacing. Writers can focus entirely on content while the template handles all formatting requirements including proper indentation, alignment, and spacing between elements.]
+#sub_par[*Automatic paragraph numbering and formatting*. Paragraphs are automatically numbered using the proper Air Force hierarchy (1., a., (1), (a)) and spaced with precise line spacing. Writers can focus entirely on content while the template handles all formatting requirements including proper indentation, alignment, and spacing between elements.]
 
-#sub-par[*Hierarchical document structure*. The template supports multi-level paragraph organization essential for complex policy documents and detailed instructions. Each subparagraph level is automatically numbered and properly indented to maintain visual clarity and regulatory compliance.]
+#sub_par[*Hierarchical document structure*. The template supports multi-level paragraph organization essential for complex policy documents and detailed instructions. Each subparagraph level is automatically numbered and properly indented to maintain visual clarity and regulatory compliance.]
 
-#sub-sub-par[Implementation is straightforward: simply wrap content in the appropriate paragraph function such as `sub-par[...]` for first-level subparagraphs, `sub-sub-par[...]` for second-level, and so forth.]
+#sub_sub_par[Implementation is straightforward: simply wrap content in the appropriate paragraph function such as `sub_par[...]` for first-level subparagraphs, `sub_sub_par[...]` for second-level, and so forth.]
 
-#sub-par[*Smart page break handling*. The template automatically manages page breaks for closing sections (attachments, cc, and distribution lists) according to AFH 33-337 requirements. If a section doesn't fit on the current page, it uses proper continuation formatting with "(listed on next page)" notation, ensuring no orphaned headers or improper splits.]
+#sub_par[*Smart page break handling*. The template automatically manages page breaks for closing sections (attachments, cc, and distribution lists) according to AFH 33-337 requirements. If a section doesn't fit on the current page, it uses proper continuation formatting with "(listed on next page)" notation, ensuring no orphaned headers or improper splits.]
 
-#sub-par[*Complete document formatting automation*. All letterhead elements, margins, fonts, date formatting, signature block positioning, and closing elements are automatically configured according to AFH 33-337 specifications. This includes proper placement of the Department of Defense seal scaled to fit a 1in × 2in box while preserving aspect ratio.]
+#sub_par[*Complete document formatting automation*. All letterhead elements, margins, fonts, date formatting, signature block positioning, and closing elements are automatically configured according to AFH 33-337 specifications. This includes proper placement of the Department of Defense seal scaled to fit a 1in × 2in box while preserving aspect ratio.]
 
-#sub-par[*Flexible content management*. The template accommodates various memorandum types including single addressee, multiple addressee, and distribution lists. Reference citations, attachments, courtesy copies, and distribution lists are all properly formatted and positioned with intelligent page break handling.]
+#sub_par[*Flexible content management*. The template accommodates various memorandum types including single addressee, multiple addressee, and distribution lists. Reference citations, attachments, courtesy copies, and distribution lists are all properly formatted and positioned with intelligent page break handling.]
 
-#sub-par[*Professional presentation standards*. Typography follows Air Force requirements with 12-point Times New Roman font, proper line spacing, justified text alignment, and consistent spacing between document elements. Page numbering, when required, is automatically positioned 0.5 inches from the top of the page and flush with the right margin.]
+#sub_par[*Professional presentation standards*. Typography follows Air Force requirements with 12-point Times New Roman font, proper line spacing, justified text alignment, and consistent spacing between document elements. Page numbering, when required, is automatically positioned 0.5 inches from the top of the page and flush with the right margin.]
 
 Created by #link("https://github.com/snpm")[Nibs].
 
