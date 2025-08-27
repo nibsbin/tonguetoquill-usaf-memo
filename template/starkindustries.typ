@@ -4,12 +4,12 @@
   letterhead-title: "STARK INDUSTRIES",
   letterhead-caption: "EXECUTIVE OFFICE",
   memo-for: "MR. ANTHONY E. STARK, CEO, STARK INDUSTRIES",
-  from-block: [
-    STARK INDUSTRIES\
-    Executive Office\
-    10880 Malibu Point\
-    Malibu CA 90265-4823
-  ],
+  from-block: (
+    "STARK INDUSTRIES",
+    "Executive Office",
+    "10880 Malibu Point",
+    "Malibu CA 90265-4823"
+  ),
   subject: "Immediate Compliance Required: Unauthorized Flight Operations and Workplace Safety Violations",
   references: (
     "FAR Part 91, General Operating and Flight Rules",
@@ -18,9 +18,41 @@
     "Stark, A. E., 15 May 2008, 'I Am Iron Man' Public Declaration",
     "USAF Aircraft Accident Investigation Report, F-22 Raptor Incidents, Classified",
     "Coulson, P., SHIELD Intelligence Brief, 'Unidentified Flying Objects Over Malibu'"
+  ),,
+  signature-block: (
+    "VIRGINIA E. POTTS",
+    "Executive Assistant to the CEO", 
+    "Stark Industries"
   ),
-  [
-
+  attachments: (
+    "FAA Advisory Circular AC 90-89A, Amateur-Built Aircraft Flight Test Area",
+    "OSHA Inspection Report SI-2008-0515, Stark Industries Malibu Facility",
+    "Transcript: Stark, A. E. Congressional Testimony, 'Privatization of World Peace'",
+    "Video Evidence: Iron Man vs. F-22 Raptors, Edwards AFB Security Footage",
+    "Insurance Claims: Progressive Auto, 'Unusual Circumstances - Flying Car Damage'"
+  ),
+  cc: (
+    "USAF/A4 (Logistics)",
+    "AFMC/CC",
+    "Secretary of Defense",
+    "Director, SHIELD (N. Fury)",
+    "FAA Administrator"
+  ),
+  distribution: (
+    "HQ USAF/CC",
+    "SECAF",
+    "Joint Chiefs of Staff",
+    "FBI Counterintelligence Division",
+    "Department of Energy",
+    "Nuclear Regulatory Commission",
+    "Environmental Protection Agency",
+    "Malibu Fire Department (Chief Anderson)",
+    "National Transportation Safety Board",
+    "Congressional Armed Services Committee",
+    "Happy Hogan, Head of Security, Stark Industries"
+  )
+)
+[
 Mr. Stark, following your public declaration of identity as "Iron Man" and subsequent unauthorized flight activities, I have received numerous calls from federal agencies expressing serious concerns regarding regulatory compliance, airspace violations, and workplace safety standards.
 
 This memorandum serves as official consolidation of all the complaints I've fielded from various government officials who seem to think you should follow the same rules as everyone else. Imagine that.
@@ -71,37 +103,4 @@ I understand that your newfound capabilities are exciting, Mr. Stark, but I'm ru
 
 Also, please remind DUM-E that government inspectors are not appropriate targets for fire extinguisher practice, regardless of how "suspicious" they appear.
 
-  ],
-  signature-block: (
-    "VIRGINIA E. POTTS",
-    "Executive Assistant to the CEO", 
-    "Stark Industries"
-  ),
-  attachments: (
-    "FAA Advisory Circular AC 90-89A, Amateur-Built Aircraft Flight Test Area",
-    "OSHA Inspection Report SI-2008-0515, Stark Industries Malibu Facility",
-    "Transcript: Stark, A. E. Congressional Testimony, 'Privatization of World Peace'",
-    "Video Evidence: Iron Man vs. F-22 Raptors, Edwards AFB Security Footage",
-    "Insurance Claims: Progressive Auto, 'Unusual Circumstances - Flying Car Damage'"
-  ),
-  cc: [
-    USAF/A4 (Logistics)\
-    AFMC/CC\
-    Secretary of Defense\
-    Director, SHIELD (N. Fury)\
-    FAA Administrator
-  ],
-  distribution: [
-    HQ USAF/CC\
-    SECAF\
-    Joint Chiefs of Staff\
-    FBI Counterintelligence Division\
-    Department of Energy\
-    Nuclear Regulatory Commission\
-    Environmental Protection Agency\
-    Malibu Fire Department (Chief Anderson)\
-    National Transportation Safety Board\
-    Congressional Armed Services Committee\
-    Happy Hogan, Head of Security, Stark Industries
   ]
-)
