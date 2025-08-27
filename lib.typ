@@ -91,7 +91,7 @@
     ORG/SYMBOL\
     Organization\
     Street Address\
-    City ST 12345-6789
+    City ST 80841-2024
   ],
   subject: "Format for the Official Memorandum",
   references: (
@@ -99,14 +99,25 @@
     "AFI 33-360, 18 May 2006, Publications and Forms Management"
   ),
   body,
-  signature-block: [
-    FIRST M. LAST, Rank, USAF\
-    Duty Title\
-    Organization (if not on letterhead)
+  signature-block: (
+    "FIRST M. LAST, Rank, USAF",
+    "AFIT Masters Student, Carnegie Mellon University",
+    "Organization (if not on letterhead)"
+  ),
+  attachments: (
+    "SAF/CIO A6 Memo, 12 Oct 2011, Air Force Guidance Memorandum",
+    "AFI 33-360, 18 May 2006, Publications and Forms Management"
+  ),
+  
+  cc: [
+    HQ AETC/A1\
+    12 FS/DO (Capt Thomas Moore)
   ],
-  attachments: [],
-  cc: [],
-  distribution: [],
+  distribution: [
+    HQ USAF/A1\
+    HQ PACAF/A1\
+    HQ ACC/A1
+    ],
 ) = {
   // Set document properties
   set document(author: "Typst User", title: subject)
@@ -196,32 +207,49 @@
 
   // Signature Block - AFH 33-337: 4.5 inches from left edge or 3 spaces right of center
   // AFH 33-337: Start on fifth line below last line of text
-  v(5em)
-  place(
-    dx: 4.5in,
-    signature-block
-  )
-  // Attachments
+  v(5em) 
+  align(left)[
+    //4.5in from left edge minus 1in margin
+    #pad(left: 4.5in-1in)[
+      #text(hyphenate: false)[
+      #for line in signature-block {
+        par(hanging-indent: 1em,justify: false)[#line]
+      }]
+    ]
+  ]
+  
+  // Attachments - AFH 33-337: at left margin, third line below signature element
   if attachments != [] {
-    v(3em, weak: true)
-    "Attachment:"
-    v(1em, weak: true)
-    attachments
+    v(3 * LINE_SPACING) // Third line below signature = 3 line spaces
+    let num_attachments = attachments.len()
+    if num_attachments == 1 { "Attachment:" } else { str(num_attachments) + " Attachments:" }
+    parbreak() // No space; just a line break
+    enum(..attachments, numbering: "1.")
   }
 
-  // cc
+  // cc - AFH 33-337: flush left, second line below attachment OR third line below signature
   if cc != [] {
-    v(2em, weak: true)
-    "cc:"
-    v(1em, weak: true)
+    if attachments != [] {
+      v(2 * LINE_SPACING) // Second line below attachment element
+    } else {
+      v(3 * LINE_SPACING) // Third line below signature element if no attachments
+    }
+    [cc:]
+    parbreak()
     cc
   }
 
-  // Distribution
+  // Distribution - AFH 33-337: flush left, second line below attachment/cc OR third line below signature
   if distribution != [] {
-    v(2em, weak: true)
-    "DISTRIBUTION:"
-    v(1em, weak: true)
+    if cc != [] {
+      v(2 * LINE_SPACING) // Second line below cc element
+    } else if attachments != [] {
+      v(2 * LINE_SPACING) // Second line below attachment element
+    } else {
+      v(3 * LINE_SPACING) // Third line below signature element if no attachments or cc
+    }
+    [DISTRIBUTION:]
+    parbreak()
     distribution
   }
 }
@@ -229,20 +257,22 @@
 //=====Example=====
 #official-memorandum()[
 
-Welcome to the tongue2quill Typst template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards. Key features include:
+Welcome to the tongue2quill Typst template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards. This comprehensive template eliminates the tedious formatting work that typically consumes valuable time when preparing official correspondence.
 
-#sub-par[*Paragraph numbering*. Paragraphs are automatically numbered and spaced perfectly so you can focus on content instead of formatting.]
+The template has been meticulously designed to ensure full compliance with Air Force publishing standards while providing a streamlined user experience. Key features and capabilities include:
 
-#sub-par[*Hierarchical paragraphs*. Each subpargraph is automatically numbered and indented for compliance.]
+#sub-par[*Automatic paragraph numbering and formatting*. Paragraphs are automatically numbered using the proper Air Force hierarchy (1., a., (1), (a)) and spaced with precise line spacing. Writers can focus entirely on content while the template handles all formatting requirements including proper indentation, alignment, and spacing between elements.]
 
-#sub-sub-par[Just wrap your content in `sub-par[...]`, `sub-sub-par[...]`, etc..]
+#sub-par[*Hierarchical document structure*. The template supports multi-level paragraph organization essential for complex policy documents and detailed instructions. Each subparagraph level is automatically numbered and properly indented to maintain visual clarity and regulatory compliance.]
 
-#sub-par[*Plug and Play*. Just fill out the fields and render a memo with correct letterhead, margins, font, double spaces, and line spacing.]
+#sub-sub-par[Implementation is straightforward: simply wrap content in the appropriate paragraph function such as `sub-par[...]` for first-level subparagraphs, `sub-sub-par[...]` for second-level, and so forth.]
 
-#sub-par[*Completely customizable*. Use AI to modify any part of the document for your memorandum needs.]
+#sub-par[*Complete document formatting automation*. All letterhead elements, margins, fonts, date formatting, signature block positioning, and closing elements are automatically configured according to AFH 33-337 specifications. This includes proper placement of the Department of Defense seal, organization letterhead, and precise positioning of all document elements.]
 
-#sub-par[*Expanding functionality*. The template currently supports all standard memorandum sections including references, attachments, carbon copy (cc) lists, and distribution lists.]
+#sub-par[*Flexible content management*. The template accommodates various memorandum types including single addressee, multiple addressee, distribution lists, and "IN TURN" coordination formats. Reference citations, attachments, courtesy copies, and distribution lists are all properly formatted and positioned.]
 
-Skip the details. Focus on writing.
+#sub-par[*Professional presentation standards*. Typography follows Air Force requirements with 12-point Times New Roman font, proper line spacing, justified text alignment, and consistent spacing between document elements. Page numbering, when required, is automatically positioned 0.5 inches from the top of the page and flush with the right margin.]
+
+Created by #link("https://github.com/snpm")[Nibs]. Write more. Stress less.
 
 ]
