@@ -1,8 +1,12 @@
 ---
 mode: edit
+description: Double space sentences
+model: GPT-4.1
+
 ---
+Within my current file's OfficialMemorandum and Indorsement content blocks:
 Between every sentence, replace the whitespace with `~ `.
-". New sentence..." becomes ".~ New Sentence..."
-"! " becomes "!~ "
+". " becomes ". " except in abbreviations.
 "? " becomes "?~ "
-Except in edge cases such as abbreviations.
+"! " becomes "!~ "
+"; " does NOT become ";~ "
