@@ -1,7 +1,6 @@
-#import "lib.typ": *
-#import "indorsement.typ": Indorsement
+#import "../lib.typ": *
 
-#OfficialMemorandum(
+#official-memorandum(
   indorsements: (
     Indorsement(
       office_symbol: "31 MXG/CC",
@@ -10,9 +9,8 @@
         "JANE B. DOE, Lt Col, USAF",
         "Commander"
       ),
-      body: [This request has been reviewed and is approved for forwarding to wing level for final approval.],
-      pagebreak: true  // This indorsement will start on a new page
-    ),
+      leading_pagebreak: true  // This indorsement will start on a new page
+    )[This request has been reviewed and is approved for forwarding to wing level for final approval.],
     Indorsement(
       office_symbol: "31 FW/CC", 
       memo_for: "31 MXG/MXQ",
@@ -20,8 +18,7 @@
         "ROBERT C. JOHNSON, Col, USAF",
         "Commander"
       ),
-      body: [Request approved. Please coordinate implementation with all affected units.],
-    )
+    )[Request approved. Please coordinate implementation with all affected units.]
   )
 )[
 

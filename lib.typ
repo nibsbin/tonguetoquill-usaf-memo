@@ -2,6 +2,56 @@
 #import "utils.typ": *
 
 // =============================================================================
+// COMPILER VERSION COMPLIANCE CHECK
+// =============================================================================
+
+// Enforce minimum Typst compiler version for proper functionality
+#let min-version = (0, 13, 0)
+#let current-version = sys.version
+#assert(
+  current-version.at(0) > min-version.at(0) or 
+  (current-version.at(0) == min-version.at(0) and current-version.at(1) >= min-version.at(1)),
+  message: "This template requires Typst compiler version 0.13.0 or higher. " +
+           "Current version: " + str(current-version.at(0)) + "." + str(current-version.at(1)) + ". " +
+           "Please update your Typst installation."
+)
+
+// =============================================================================
+// PARAMETER VALIDATION
+// =============================================================================
+
+/// Validates memorandum parameters for AFH 33-337 compliance
+/// @param params: Dictionary of memorandum parameters
+/// @returns: Validation result (panics on critical errors)
+#let validate-memo-compliance(params) = {
+  // Validate required parameters exist
+  let required-params = ("letterhead-title", "memo-for", "from-block", "subject", "signature-block")
+  for param in required-params {
+    assert(
+      param in params and params.at(param) != none,
+      message: "Required parameter '" + param + "' is missing or empty. " +
+               "AFH 33-337 compliance requires all mandatory elements."
+    )
+  }
+  
+  // Validate font compliance
+  if "body-font" in params {
+    assert(
+      params.at("body-font") == "Times New Roman",
+      message: "AFH 33-337 requires Times New Roman font for body text. " +
+               "Current font: " + str(params.at("body-font"))
+    )
+  }
+  
+  // Validate signature block format
+  let sig-block = params.at("signature-block")
+  assert(
+    type(sig-block) == array and sig-block.len() >= 2,
+    message: "Signature block must contain at least name and title lines per AFH 33-337"
+  )
+}
+
+// =============================================================================
 // USER-FACING PARAGRAPH FUNCTIONS
 // =============================================================================
 
@@ -355,6 +405,17 @@
   force-backmatter-pagebreak: false,
   body
 ) = {
+  // Validate AFH 33-337 compliance before proceeding
+  let params = (
+    letterhead-title: letterhead-title,
+    memo-for: memo-for,
+    from-block: from-block,
+    subject: subject,
+    signature-block: signature-block,
+    body-font: body-font,
+  )
+  validate-memo-compliance(params)
+  
   // Initialize document counters and settings
   counters.indorsement.update(0)
   set page(
@@ -407,59 +468,14 @@
 }
 
 // =============================================================================
-// LEGACY COMPATIBILITY ALIASES
+// DEPRECATED FEATURES REMOVED
 // =============================================================================
 
-/// Legacy parameter interface for backward compatibility
-/// This maintains compatibility with existing templates using hyphenated parameter names
-#let OfficialMemorandum(
-  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead-caption: "AIR FORCE MATERIEL COMMAND", 
-  letterhead-seal: "assets/dod_seal.png",
-  memo-for: ("ORG/SYMBOL",),
-  from-block: (
-    "ORG/SYMBOL",
-    "Organization", 
-    "Street Address",
-    "City ST 80841-2024"
-  ),
-  subject: "Format for the Official Memorandum",
-  references: (),
-  signature-block: (
-    "FIRST M. LAST, Rank, USAF",
-    "AFIT Masters Student, Carnegie Mellon University",
-    "Organization (if not on letterhead)"
-  ),
-  attachments: (),
-  cc: (),
-  distribution: (),
-  indorsements: (),
-  letterhead_font: "Arial",
-  body_font: "Times New Roman",
-  par_block_indent: false,
-  pagebreak_backmatter: false,
-  body
-) = {
-  official-memorandum(
-    letterhead-title: letterhead-title,
-    letterhead-caption: letterhead-caption,
-    letterhead-seal: letterhead-seal,
-    memo-for: memo-for,
-    from-block: from-block,
-    subject: subject,
-    references: references,
-    signature-block: signature-block,
-    attachments: attachments,
-    cc: cc,
-    distribution: distribution,
-    indorsements: indorsements,
-    letterhead-font: letterhead_font,
-    body-font: body_font,
-    paragraph-block-indent: par_block_indent,
-    pagebreak_backmatter: pagebreak_backmatter,
-    body
-  )
-}
+// Legacy compatibility interface has been removed to enforce standard API usage.
+// All templates must now use the standardized parameter naming convention:
+// - Use hyphenated parameter names (letterhead-title, signature-block, etc.)
+// - Use the official-memorandum() function instead of deprecated aliases
+// - Follow AFH 33-337 compliance standards strictly
 
 // =============================================================================
 // EXAMPLE DOCUMENT

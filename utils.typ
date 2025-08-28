@@ -246,25 +246,9 @@
 }
 
 // =============================================================================
-// LEGACY COMPATIBILITY ALIASES
+// DEPRECATED FEATURES REMOVED
 // =============================================================================
 
-/// Legacy function aliases for backward compatibility
-/// These will be deprecated in future versions
-#let auto-grid = create-auto-grid
-#let memo-par = create-numbered-paragraph
-#let process-body = process-document-body
-#let render-backmatter-section = render-backmatter-section
-#let v-backmatter-leading-space = calculate-backmatter-spacing
-#let get-ordinal-suffix = get-ordinal-suffix
-#let format-indorsement-number = format-indorsement-number
-
-/// Legacy constants for backward compatibility
-#let TWO-SPACES = spacing.two-spaces
-#let LINE-SPACING = spacing.line
-#let BLANK-LINE = spacing.paragraph
-#let TAB-SIZE = spacing.tab
-#let PAR-COUNTER-PREFIX = paragraph-config.counter-prefix
-#let PAR-NUMBERING-FORMATS = paragraph-config.numbering-formats
-#let PAR-BLOCK-INDENT = paragraph-config.block-indent-state
-#let INDORSEMENT-COUNTER = counters.indorsement
+// Legacy compatibility aliases have been removed to enforce modern API usage.
+// Use the standard function names instead of legacy aliases.
+// Removed deprecated constants and function aliases for cleaner codebase.

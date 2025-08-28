@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-#OfficialMemorandum(
+#official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "123RD EXAMPLE SQUADRON",
   memo-for: (
@@ -32,7 +32,7 @@
   distribution: (
     "ORG/SYMBOL or Organization Name"
   ),
-  pagebreak_closing: true,
+  force-backmatter-pagebreak: true,
   indorsements: (
     Indorsement(
       office_symbol: "ORG/SYMBOL [Office symbol for 1st Indorsement Official]",
