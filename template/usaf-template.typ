@@ -7,13 +7,6 @@
     ("123 ES/CC", "123 ES/DO", "123 ES/CSS"),
     ("456 ES/CC", "456 ES/DO", "456 ES/CSS"),
   ),
-  // memo-for: (
-  //   "123 ES/CC",
-  //   "123 ES/CSS",
-  //   "456 ES/CC",
-  //   "456 ES/DO",
-  //   "456 ES/CSS"
-  // ),
   from-block: (
     "ORG/SYMBOL",
     "Organization",
