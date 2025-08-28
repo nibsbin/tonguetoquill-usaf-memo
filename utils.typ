@@ -101,28 +101,37 @@
     "1"
   }
 }
+#let _get_par_num(level, counter_value:none, step:false) = {
+  let par_counter = none
+  if counter_value == none {
+    par_counter = counter(PAR_COUNTER_PREFIX + str(level))
+  }
+  else {
+    par_counter = counter("temp-counter")
+    par_counter.update(counter_value)
+  }
+
+  let numbering_format = _get_numbering_format(level)
+  par_counter.display(numbering_format)
+  if step { par_counter.step()}
+}
 
 // Get the indent width for a level
 #let _get_paragraph_indent(level) = {
   if level == 0 { return 0pt }
-  
-  let buffer = ""
-  for i in range(0, level) {
-    let numbering_format = _get_numbering_format(i)
-    buffer += h(TWO_SPACES)
-    let _ = counter("paragraph-indent-dummy").update(1)
-    buffer += counter("paragraph-indent-dummy").display(numbering_format)
-  }
-  measure(buffer).width
+  let parent_level = level - 1
+  let parent_indent = _get_paragraph_indent(parent_level)
+  let parent_val = counter(PAR_COUNTER_PREFIX + str(parent_level)).get().at(0) - 1 // undo the last step
+  let parent_num = _get_par_num(parent_level, counter_value: parent_val)
+
+  let buffer = [#h(parent_indent)#parent_num#h(TWO_SPACES)]
+
+  return measure(buffer).width
 }
 
 #let _make_par(level, content) = {
-  let par_counter = counter(PAR_COUNTER_PREFIX + str(level))
-  let numbering_format = _get_numbering_format(level)
-
   context {
-    let num = par_counter.display(numbering_format)
-    par_counter.step()
+    let num = _get_par_num(level, step:true)
     counter(PAR_COUNTER_PREFIX + str(level + 1)).update(1)
     let indent_amount = _get_paragraph_indent(level)
 
@@ -131,7 +140,7 @@
       #if PAR_BLOCK_INDENT.get() {
         pad(left: indent_amount)[#num#h(TWO_SPACES)#content]
       } else {
-        [#h(indent_amount)#num#h(TWO_SPACES)#content]
+        pad(left:0em)[#h(indent_amount)#num#h(TWO_SPACES)#content]
       }
     ]
   }
