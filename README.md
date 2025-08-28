@@ -6,7 +6,7 @@ A comprehensive Typst template for creating official United States Air Force mem
 
 - **Automatic formatting compliance** with AFH 33-337 standards
 - **Hierarchical paragraph numbering** (1., a., (1), (a)) with proper indentation
-- **Smart page break handling** for closing sections with continuation formatting
+- **Smart page break handling** for backmatter sections with continuation formatting
 - **Professional typography** with Times New Roman font and proper spacing
 - **Complete letterhead automation** including DoD seal placement and scaling
 - **Flexible content management** for various memo types
@@ -42,7 +42,7 @@ typst compile lib.typ --root .
 // When using as a package (future)
 // #import "@preview/usaf-memo:0.0.1": *
 
-#OfficialMemorandum(
+#official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "YOUR ORGANIZATION",
   memo-for: "RECIPIENT ORG/SYMBOL",
@@ -68,6 +68,15 @@ typst compile lib.typ --root .
 ]
 ```
 
+**Breaking Changes in Version 0.0.1:**
+- Removed deprecated `OfficialMemorandum()` function - use `official-memorandum()` instead
+- Removed legacy parameter aliases (e.g., `letterhead_font`, `body_font`) - use hyphenated names
+- Removed deprecated utility function aliases - use standard function names
+- Added strict AFH 33-337 compliance validation with automatic parameter validation
+- Enforced Typst compiler version 0.13.0+ requirement
+- Renamed internal "closing" terminology to "backmatter" for better AFH 33-337 alignment
+- Enhanced paragraph numbering functions for improved compliance
+
 ## Template Parameters
 
 ### Required Parameters
@@ -88,10 +97,10 @@ typst compile lib.typ --root .
 - **cc**: Array of courtesy copy recipients
 - **distribution**: Array of distribution list entries
 - **indorsements**: Array of `Indorsement` objects for memo endorsements
-- **letterhead_font**: Font for letterhead (default: "Arial")
-- **body_font**: Font for body text (default: "Times New Roman")
-- **par_block_indent**: Enable paragraph block indentation (default: false)
-- **pagebreak_closing**: Force page break before closing sections (default: false)
+- **letterhead-font**: Font for letterhead (default: "Arial")
+- **body-font**: Font for body text (default: "Times New Roman", required for AFH 33-337 compliance)
+- **paragraph-block-indent**: Enable paragraph block indentation (default: false)
+- **force-backmatter-pagebreak**: Force page break before backmatter sections (default: false)
 
 ### Complete Examples
 
@@ -123,6 +132,13 @@ Another regular paragraph.
 
 #sub-sub-sub-par[Third-level subparagraphs are numbered (a), (b), (c), etc.]
 ```
+
+### Enhanced Paragraph Functions
+
+The template now includes enhanced paragraph functions with improved AFH 33-337 compliance:
+- Automatic paragraph numbering with proper hierarchical indentation
+- Smart spacing management between paragraphs and sections
+- Improved handling of nested paragraph structures
 
 ## Sentence Spacing
 
@@ -166,7 +182,7 @@ The template automatically handles:
 3. **Header elements**: DoD seal (scaled to 1in × 2in), letterhead, and date positioning
 4. **Body formatting**: Justified text with proper paragraph spacing and numbering
 5. **Signature block**: Positioned 4.5 inches from left edge
-6. **Closing elements**: Attachments, cc, and distribution lists with smart page breaks
+6. **Backmatter elements**: Attachments, cc, and distribution lists with smart page breaks
 7. **Page numbering**: Starts on page 2, positioned 0.5" from top, flush right
 8. **Continuation handling**: Proper "(listed on next page)" formatting for long sections
 
@@ -201,22 +217,36 @@ The `--root .` flag tells Typst to treat the current directory as the root for r
 
 ## Requirements
 
-- **Typst**: Version 0.13.0 or higher
+- **Typst**: Version 0.13.0 or higher (enforced by template)
 - **Assets**: The `assets/dod_seal.png` file must be accessible for the DoD seal
-- **Fonts**: Times New Roman font (typically pre-installed on most systems)
+- **Fonts**: Times New Roman font (required for AFH 33-337 compliance)
+- **Compliance**: All memorandums are automatically validated against AFH 33-337 standards
+
+## Compliance Features
+
+The template enforces strict AFH 33-337 compliance through:
+
+- **Automatic validation** of required parameters and formatting with comprehensive error messages
+- **Font enforcement** - only Times New Roman allowed for body text per regulations
+- **Version checking** - requires Typst 0.13.0+ for proper functionality and modern features
+- **Parameter validation** - ensures all mandatory elements are present before compilation
+- **Signature block validation** - enforces proper format requirements per AFH 33-337
+- **Enhanced spacing constants** - implements precise spacing requirements for professional formatting
+- **Improved backmatter handling** - renamed from "closing" for better terminology alignment
 
 ## Version
 
-Current version: **0.0.1** (under development)
+Current version: **0.0.1** (stable release)
 
-This template is designed for Typst compiler version 0.13.0 or higher.
+This template is designed for Typst compiler version 0.13.0 or higher and includes comprehensive validation to ensure compatibility.
 
 ## File Structure
 
 ```
 typst-usaf-memo/
 ├── lib.typ              # Main template file
-├── utils.typ            # Utility functions
+├── utils.typ            # Utility functions and spacing constants
+├── typst.toml           # Package configuration
 ├── assets/
 │   ├── dod_seal.png     # Department of Defense seal
 │   └── starkindustries_seal.png  # Example organization seal
@@ -225,18 +255,35 @@ typst-usaf-memo/
 │   ├── ussf-template.typ    # Space Force memo template
 │   └── starkindustries.typ  # Example memo with custom branding
 ├── docs/
-│   └── afh33-337_chapter14  # AFH 33-337 Chapter 14 reference
+│   ├── afh33-337_chapter14  # AFH 33-337 Chapter 14 reference
+│   └── example-usaf-memo.pdf  # Example output
 ├── tests/
-│   └── test-indorsements.typ  # Test file for indorsements
+│   └── test-indorsements.typ  # Test file for indorsements functionality
 ├── .github/
 │   └── prompts/         # GitHub Copilot prompts for spacing
+│       ├── double-space-sentence.prompt.md
+│       └── single-space-sentence.prompt.md
 ├── README.md           # This file
 └── LICENSE             # License information
 ```
 
-## Formatting Standards
+## Recent Updates
 
-This template implements the following AFH 33-337 requirements:
+### Version 0.0.1 (August 28, 2025)
+- **Major refactor for AFH 33-337 compliance**: Enhanced paragraph functions, improved spacing constants, and better indorsement rendering logic
+- **Parameter validation system**: Comprehensive validation with detailed error messages for missing or invalid parameters
+- **Deprecated feature removal**: Cleaned up legacy functions and parameter names for consistency
+- **Backmatter terminology**: Renamed internal "closing" references to "backmatter" for better AFH 33-337 alignment
+- **Enhanced templates**: Updated all template examples with latest parameter names and features
+- **Compiler enforcement**: Strict Typst 0.13.0+ requirement with automatic version checking
+
+### Previous Features
+- **Sentence spacing prompts**: GitHub Copilot prompts for consistent double/single space formatting
+- **Template standardization**: Renamed templates for clarity (usaf-template, ussf-template, etc.)
+- **Indorsement improvements**: Better handling of implicit bodies and recursive paragraph indentation
+- **Grid rendering**: Enhanced memo-for field with flexible layout options
+
+## Formatting Standards
 
 - **Margins**: 1 inch on all sides
 - **Font**: Times New Roman, 12 point
@@ -246,7 +293,7 @@ This template implements the following AFH 33-337 requirements:
 - **Signature block**: Positioned according to regulations
 - **Page numbering**: Starts page 2, top right, 0.5" from edge
 - **DoD seal**: Scaled to fit 1in × 2in box while preserving aspect ratio
-- **Page breaks**: Smart handling of closing sections with continuation formatting
+- **Page breaks**: Smart handling of backmatter sections with continuation formatting
 - **Orphan prevention**: No isolated section headers or improper splits
 
 ## Contributing
