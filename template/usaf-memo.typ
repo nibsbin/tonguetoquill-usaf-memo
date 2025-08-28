@@ -40,17 +40,40 @@
     "ORG/SYMBOL or Organization Name"
   ),
   pagebreak_closing: true,
-  // indorsements: (
-  //   Indorsement(
-  //     office_symbol: "ORG/SYMBOL",
-  //     memo_for: "ORG/SYMBOL",
-  //     signature_block: (
-  //       "FIRST M LAST, Rank, USAF",
-  //       "Duty Title"
-  //     ),
-  //     body: [Number each indorsement in sequence (1st Ind, 2d Ind, 3d Ind, …). Begin the first indorsement on the second line below the last element of the official memorandum. Begin subsequent indorsements on the second line below the last element of the previous indorsement. Follow the indorsement number with your office symbol.]
-  //   ),
-  // ),
+  indorsements: (
+    Indorsement(
+      office_symbol: "ORG/SYMBOL",
+      memo_for: "ORG/SYMBOL",
+      signature_block: (
+        "FIRST M LAST, Rank, USAF",
+        "Duty Title"
+      ),
+      body: [
+        Number each indorsement in sequence (1st Ind, 2d Ind, 3d Ind, …). Begin the first indorsement on the second line below the last element of the official memorandum. Begin subsequent indorsements on the second line below the last element of the previous indorsement. Follow the indorsement number with your office symbol.
+        
+        When inserting a new indorsement element (either on the same page or as a separate page), the numbering will need to be reset.  This is accomplished by right-clicking the number on the list, then selecting “Restart at 1”.
+        
+        Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page.  The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
+
+        ]
+    ),
+    Indorsement(
+      office_symbol: "ORG/SYMBOL",
+      memo_for: "ORG/SYMBOL [Originator]",
+      signature_block: (
+        "FIRST M LAST, Rank, USAF",
+        "Duty Title"
+      ),
+      body: [
+        Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page.  The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
+      ],
+      separate_page: true,
+      original_office: "]Originator ORG/SYMBOL]",
+      original_date: "DD Mon YY",
+      original_subject: "Memorandum Subject",
+      leading_pagebreak: true
+    ),
+  ),
 )[
 
 Use only approved organizational letterhead for all correspondence. This applies to all letterhead, both pre-printed and computer generated. Reference (a) details the format and style of official letterhead such as centering the first line of the header 5/8ths of an inch from the top of the page in 12 point Copperplate Gothic Bold font. The second header line is centered 3 points below the first line in 10.5 point Copperplate Gothic Bold font.

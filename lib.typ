@@ -3,7 +3,7 @@
 
 //=====User-Facing Functions=====
 
-// Paragraph functions with automatic numbering
+// Paragraph functions with autom  parblock_indent: true,tic numbering
 #let base-par(content) = _make_par(0, content)
 #let sub-par(content) = _make_par(1, content)
 #let sub-sub-par(content) = _make_par(2, content)
@@ -46,13 +46,15 @@
   )
   
   data.render = (body_font: "Times New Roman") => {
+    // Step counter before entering context
+    INDORSEMENT_COUNTER.step()
+    
     context {
       set text(font: body_font, size: 12pt)
       set par(leading: LINE_SPACING, spacing: .5em, justify: true)
       
-      // Get current indorsement number and increment counter
-      let ind_num = INDORSEMENT_COUNTER.get().first() + 1
-      INDORSEMENT_COUNTER.step()
+      // Get current indorsement number
+      let ind_num = INDORSEMENT_COUNTER.get().first()
       let ind_label = _format_indorsement_number(ind_num)
       
       // Add page break if requested
@@ -161,19 +163,19 @@
   indorsements: (),
   letterhead_font: "Arial",
   body_font: "Times New Roman",
-  block_indent: true,
+  par_block_indent: false,
   pagebreak_closing: false,
   body
 ) = {
-  // Set document properties
-  set document(author: "Typst User", title: subject)
+  // Initialize indorsement counter
+  INDORSEMENT_COUNTER.update(0)
   set page(
     paper: "us-letter",
     margin: (left: 1in, right: 1in, top: 1in, bottom: 1in),
   )
   set text(font: body_font, size: 12pt)
   set par(leading: LINE_SPACING, spacing: LINE_SPACING)
-  PAR_BLOCK_INDENT.update(block_indent)
+  PAR_BLOCK_INDENT.update(par_block_indent)
 
   // Page numbering (starts on page 2)
   context {
