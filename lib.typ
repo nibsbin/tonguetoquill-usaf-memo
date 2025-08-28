@@ -20,10 +20,12 @@
 // PARAMETER VALIDATION
 // =============================================================================
 
-/// Validates memorandum parameters for AFH 33-337 compliance
-/// @param params: Dictionary of memorandum parameters
-/// @returns: Validation result (panics on critical errors)
-#let validate-memo-compliance(params) = {
+/// Validates memorandum parameters for AFH 33-337 compliance.
+/// -> none
+#let validate-memo-compliance(
+  /// Dictionary of memorandum parameters. -> dictionary
+  params
+) = {
   // Validate required parameters exist
   let required-params = ("letterhead-title", "memo-for", "from-block", "subject", "signature-block")
   for param in required-params {
@@ -58,53 +60,73 @@
 /// Paragraph functions with automatic numbering and proper indentation
 /// These provide a convenient interface for hierarchical document structure
 
-/// First-level subparagraph (numbered a., b., c., etc.)
-#let sub-par(content) = create-numbered-paragraph(content, level: 1)
+/// First-level subparagraph (numbered a., b., c., etc.).
+/// -> content
+#let sub-par(
+  /// Paragraph content. -> content
+  content
+) = create-numbered-paragraph(content, level: 1)
 
-/// Second-level subparagraph (numbered (1), (2), (3), etc.)
-#let sub-sub-par(content) = create-numbered-paragraph(content, level: 2)
+/// Second-level subparagraph (numbered (1), (2), (3), etc.).
+/// -> content
+#let sub-sub-par(
+  /// Paragraph content. -> content
+  content
+) = create-numbered-paragraph(content, level: 2)
 
-/// Third-level subparagraph (numbered (a), (b), (c), etc.)
-#let sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 3)
+/// Third-level subparagraph (numbered (a), (b), (c), etc.).
+/// -> content
+#let sub-sub-sub-par(
+  /// Paragraph content. -> content
+  content
+) = create-numbered-paragraph(content, level: 3)
 
-/// Fourth-level subparagraph (numbered with underlined numbers)
-#let sub-sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 4)
+/// Fourth-level subparagraph (numbered with underlined numbers).
+/// -> content
+#let sub-sub-sub-sub-par(
+  /// Paragraph content. -> content
+  content
+) = create-numbered-paragraph(content, level: 4)
 
-/// Fifth-level subparagraph (numbered with underlined letters)
-#let sub-sub-sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 5)
+/// Fifth-level subparagraph (numbered with underlined letters).
+/// -> content
+#let sub-sub-sub-sub-sub-par(
+  /// Paragraph content. -> content
+  content
+) = create-numbered-paragraph(content, level: 5)
 
 // =============================================================================
 // INDORSEMENT DATA STRUCTURE
 // =============================================================================
 
-/// Creates an indorsement object with proper AFH 33-337 formatting
-/// @param office_symbol: Sending organization symbol
-/// @param memo_for: Recipient organization symbol  
-/// @param signature_block: Array of signature lines
-/// @param attachments: Array of attachment descriptions
-/// @param cc: Array of courtesy copy recipients
-/// @param leading_pagebreak: Whether to force page break before indorsement
-/// @param separate_page: Whether to use separate-page indorsement format
-/// @param original_office: Original memo's office symbol (for separate-page format)
-/// @param original_date: Original memo's date (for separate-page format)
-/// @param original_subject: Original memo's subject (for separate-page format)
-/// @param body: Indorsement body content
-/// @returns: Indorsement object with render method
+/// Creates an indorsement object with proper AFH 33-337 formatting.
+/// -> dictionary
 #let Indorsement(
+  /// Sending organization symbol. -> str
   office_symbol: "ORG/SYMBOL",
+  /// Recipient organization symbol. -> str
   memo_for: "ORG/SYMBOL", 
+  /// Array of signature lines. -> array
   signature_block: (
     "FIRST M. LAST, Rank, USAF",
     "Duty Title",
     "Organization (if not on letterhead)"
   ),
+  /// Array of attachment descriptions. -> array
   attachments: (),
+  /// Array of courtesy copy recipients. -> array
   cc: (),
+  /// Whether to force page break before indorsement. -> bool
   leading_pagebreak: false,
+  /// Whether to use separate-page indorsement format. -> bool
   separate_page: false,
+  /// Original memo's office symbol (for separate-page format). -> none | str
   original_office: none,
+  /// Original memo's date (for separate-page format). -> none | str
   original_date: none,
+  /// Original memo's subject (for separate-page format). -> none | str
   original_subject: none,
+  /// Indorsement body content. -> content
   body
 ) = {
   let indorsement-data = (
@@ -121,10 +143,12 @@
     body: body,
   )
   
-  /// Renders the indorsement with proper formatting
-  /// @param body_font: Font to use for body text
-  /// @returns: Formatted indorsement content
-  indorsement-data.render = (body-font: "Times New Roman") => {
+  /// Renders the indorsement with proper formatting.
+  /// -> content
+  indorsement-data.render = (
+    /// Font to use for body text. -> str
+    body-font: "Times New Roman"
+  ) => {
     let current-date = datetime.today().display("[day] [month repr:short] [year]")
     counters.indorsement.step()
     
@@ -215,8 +239,18 @@
 // INTERNAL RENDERING FUNCTIONS
 // =============================================================================
 
-/// Renders the document letterhead section
-#let render-letterhead(title, caption, seal-path, font) = {
+/// Renders the document letterhead section.
+/// -> content
+#let render-letterhead(
+  /// Primary organization title. -> str
+  title, 
+  /// Sub-organization or command. -> str
+  caption, 
+  /// Path to organization seal image. -> str
+  seal-path, 
+  /// Font for letterhead text. -> str
+  font
+) = {
   box(
     width: 100%,
     height: 0.75in,
@@ -241,13 +275,18 @@
   )
 }
 
-/// Renders the date section (right-aligned)
+/// Renders the date section (right-aligned).
+/// -> content
 #let render-date-section() = {
   align(right)[#datetime.today().display("[day] [month repr:long] [year]")]
 }
 
-/// Renders the MEMORANDUM FOR section
-#let render-memo-for-section(recipients) = {
+/// Renders the MEMORANDUM FOR section.
+/// -> content
+#let render-memo-for-section(
+  /// Recipient organization(s). -> str | array
+  recipients
+) = {
   v(spacing.paragraph)
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
@@ -262,8 +301,12 @@
   )
 }
 
-/// Renders the FROM section
-#let render-from-section(from-info) = {
+/// Renders the FROM section.
+/// -> content
+#let render-from-section(
+  /// Sender information array. -> array
+  from-info
+) = {
   v(spacing.paragraph)
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
@@ -272,8 +315,12 @@
   )
 }
 
-/// Renders the SUBJECT section
-#let render-subject-section(subject-text) = {
+/// Renders the SUBJECT section.
+/// -> content
+#let render-subject-section(
+  /// Memorandum subject line. -> str
+  subject-text
+) = {
   v(spacing.paragraph)
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
@@ -281,8 +328,12 @@
   )
 }
 
-/// Renders the optional references section
-#let render-references-section(references) = {
+/// Renders the optional references section.
+/// -> content
+#let render-references-section(
+  /// Array of reference documents. -> array
+  references
+) = {
   if references.len() > 0 {
     v(spacing.paragraph)
     grid(
@@ -292,8 +343,12 @@
   }
 }
 
-/// Renders the signature block with intelligent page break handling
-#let render-signature-block(signature-lines) = {
+/// Renders the signature block with intelligent page break handling.
+/// -> content
+#let render-signature-block(
+  /// Array of signature lines. -> array
+  signature-lines
+) = {
   context {
     let signature-content = {
       v(5em)
@@ -319,11 +374,16 @@
   }
 }
 
-/// Renders all backmatter sections with proper spacing and page breaks
+/// Renders all backmatter sections with proper spacing and page breaks.
+/// -> content
 #let render-backmatter-sections(
+  /// Array of attachment descriptions. -> array
   attachments: (),
+  /// Array of courtesy copy recipients. -> array
   cc: (),
+  /// Array of distribution list entries. -> array
   distribution: (),
+  /// Whether to force page break before backmatter. -> bool
   force-pagebreak: false
 ) = {
   let has-any-backmatter = attachments.len() > 0 or cc.len() > 0 or distribution.len() > 0
@@ -358,51 +418,51 @@
 // MAIN MEMORANDUM TEMPLATE
 // =============================================================================
 
-/// Creates an official memorandum following AFH 33-337 standards
-/// @param letterhead_title: Primary organization title
-/// @param letterhead_caption: Sub-organization or command
-/// @param letterhead_seal: Path to organization seal image
-/// @param memo_for: Recipient(s) - string, array, or nested array for grid layout
-/// @param from_block: Sender information as array of strings
-/// @param subject: Memorandum subject line
-/// @param references: Optional array of reference documents
-/// @param signature_block: Array of signature lines
-/// @param attachments: Array of attachment descriptions
-/// @param cc: Array of courtesy copy recipients
-/// @param distribution: Array of distribution list entries
-/// @param indorsements: Array of Indorsement objects
-/// @param letterhead_font: Font for letterhead text
-/// @param body_font: Font for body text
-/// @param paragraph_block_indent: Enable paragraph block indentation
-/// @param force_backmatter_pagebreak: Force page break before backmatter sections
-/// @param body: Main memorandum content
-/// @returns: Formatted official memorandum
+/// Creates an official memorandum following AFH 33-337 standards.
+/// -> content
 #let official-memorandum(
+  /// Primary organization title. -> str
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
+  /// Sub-organization or command. -> str
   letterhead-caption: "AIR FORCE MATERIEL COMMAND",
+  /// Path to organization seal image. -> str
   letterhead-seal: "assets/dod_seal.png",
+  /// Recipient(s) - string, array, or nested array for grid layout. -> str | array
   memo-for: ("ORG/SYMBOL",),
+  /// Sender information as array of strings. -> array
   from-block: (
     "ORG/SYMBOL",
     "Organization",
     "Street Address",
     "City ST 80841-2024"
   ),
+  /// Memorandum subject line. -> str
   subject: "Format for the Official Memorandum",
+  /// Optional array of reference documents. -> array
   references: (),
+  /// Array of signature lines. -> array
   signature-block: (
     "FIRST M. LAST, Rank, USAF",
     "AFIT Masters Student, Carnegie Mellon University",
     "Organization (if not on letterhead)"
   ),
+  /// Array of attachment descriptions. -> array
   attachments: (),
+  /// Array of courtesy copy recipients. -> array
   cc: (),
+  /// Array of distribution list entries. -> array
   distribution: (),
+  /// Array of @@Indorsement objects. -> array
   indorsements: (),
+  /// Font for letterhead text. -> str
   letterhead-font: "Arial",
+  /// Font for body text. -> str
   body-font: "Times New Roman",
+  /// Enable paragraph block indentation. -> bool
   paragraph-block-indent: false,
+  /// Force page break before backmatter sections. -> bool
   force-backmatter-pagebreak: false,
+  /// Main memorandum content. -> content
   body
 ) = {
   // Validate AFH 33-337 compliance before proceeding
@@ -481,8 +541,9 @@
 // EXAMPLE DOCUMENT
 // =============================================================================
 
-/// Default example memorandum demonstrating template capabilities
-/// This serves as both documentation and a quick-start example
+/// Default example memorandum demonstrating template capabilities.
+/// This serves as both documentation and a quick-start example.
+/// -> content
 #official-memorandum()[
 
 Welcome to the Typst USAF Memo template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards. This comprehensive template eliminates the tedious formatting work that typically consumes valuable time when preparing official correspondence.
@@ -493,7 +554,7 @@ The template has been meticulously designed to ensure full compliance with Air F
 
 #sub-par[*Hierarchical document structure*. The template supports multi-level paragraph organization essential for complex policy documents and detailed instructions. Each subparagraph level is automatically numbered and properly indented to maintain visual clarity and regulatory compliance.]
 
-#sub-sub-par[Implementation is straightforward: simply wrap content in the appropriate paragraph function such as `sub_par[...]` for first-level subparagraphs, `sub_sub_par[...]` for second-level, and so forth.]
+#sub-sub-par[Implementation is straightforward: simply wrap content in the appropriate paragraph function such as `@@sub-par` for first-level subparagraphs, `@@sub-sub-par` for second-level, and so forth.]
 
 #sub-par[*Smart page break handling*. The template automatically manages page breaks for backmatter sections (attachments, cc, and distribution lists) according to AFH 33-337 requirements. If a section doesn't fit on the current page, it uses proper continuation formatting with "(listed on next page)" notation, ensuring no orphaned headers or improper splits.]
 

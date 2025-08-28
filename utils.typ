@@ -4,7 +4,8 @@
 // CONFIGURATION CONSTANTS
 // =============================================================================
 
-/// Spacing constants following AFH 33-337 standards
+/// Spacing constants following AFH 33-337 standards.
+/// -> dictionary
 #let spacing = (
   two-spaces: 0.5em,      // Standard two-space separator
   line: 0.5em,            // Line spacing within paragraphs
@@ -12,14 +13,16 @@
   tab: 0.5in,             // Tab stop for alignment
 )
 
-/// Paragraph numbering configuration
+/// Paragraph numbering configuration dictionary.
+/// -> dictionary
 #let paragraph-config = (
   counter-prefix: "par-counter-",
   numbering-formats: ("1.", "a.", "(1)", "(a)", n => underline(str(n)), n => underline(str(n))),
   block-indent-state: state("BLOCK_INDENT", true),
 )
 
-/// Global counters for document structure
+/// Global counters for document structure.
+/// -> dictionary
 #let counters = (
   indorsement: counter("indorsement"),
 )
@@ -28,11 +31,14 @@
 // GRID LAYOUT UTILITIES
 // =============================================================================
 
-/// Creates an automatic grid layout from 1D or 2D array
-/// @param rows: Array of content (1D or 2D)
-/// @param column_gutter: Space between columns
-/// @returns: Grid with proper formatting
-#let create-auto-grid(rows, column-gutter: .5em) = {
+/// Creates an automatic grid layout from 1D or 2D array.
+/// -> grid
+#let create-auto-grid(
+  /// Array of content (1D or 2D). -> array
+  rows, 
+  /// Space between columns. -> length
+  column-gutter: .5em
+) = {
   // Normalize input to 2D array for consistent processing
   let normalized-rows = if rows.len() > 0 and type(rows.at(0)) != array {
     rows.map(item => (item,))  // Convert 1D to 2D
@@ -64,13 +70,18 @@
 // BACKMATTER SECTION UTILITIES
 // =============================================================================
 
-/// Renders backmatter sections with intelligent page break handling
-/// @param content: Section content to render
-/// @param section_label: Label for the section (e.g., "Attachments:")
-/// @param numbering_style: Optional numbering format for lists
-/// @param continuation_label: Label when content continues on next page
-/// @returns: Properly formatted section with page break handling
-#let render-backmatter-section(content, section-label, numbering-style: none, continuation-label: none) = {
+/// Renders backmatter sections with intelligent page break handling.
+/// -> content
+#let render-backmatter-section(
+  /// Section content to render. -> content
+  content, 
+  /// Label for the section (e.g., "Attachments:"). -> str
+  section-label, 
+  /// Optional numbering format for lists. -> none | str | function
+  numbering-style: none, 
+  /// Label when content continues on next page. -> none | str
+  continuation-label: none
+) = {
   let formatted-content = {
     [#section-label]
     parbreak()
@@ -101,10 +112,12 @@
   }
 }
 
-/// Calculates vertical spacing before backmatter sections
-/// @param is_first_section: Whether this is the first backmatter section
-/// @returns: Appropriate vertical spacing
-#let calculate-backmatter-spacing(is-first-section) = {
+/// Calculates vertical spacing before backmatter sections.
+/// -> content
+#let calculate-backmatter-spacing(
+  /// Whether this is the first backmatter section. -> bool
+  is-first-section
+) = {
   context {
     let space = if is-first-section { 3 * spacing.line } else { 2 * spacing.line }
     v(space, weak: true)
@@ -115,10 +128,12 @@
 // PARAGRAPH NUMBERING UTILITIES
 // =============================================================================
 
-/// Gets the numbering format for a specific paragraph level
-/// @param level: Paragraph nesting level (0-based)
-/// @returns: Numbering format function or string
-#let get-paragraph-numbering-format(level) = {
+/// Gets the numbering format for a specific paragraph level.
+/// -> str | function
+#let get-paragraph-numbering-format(
+  /// Paragraph nesting level (0-based). -> int
+  level
+) = {
   if level < paragraph-config.numbering-formats.len() {
     paragraph-config.numbering-formats.at(level)
   } else {
@@ -126,12 +141,16 @@
   }
 }
 
-/// Generates paragraph number for a given level
-/// @param level: Paragraph nesting level
-/// @param counter_value: Optional explicit counter value
-/// @param increment: Whether to increment the counter
-/// @returns: Formatted paragraph number
-#let generate-paragraph-number(level, counter-value: none, increment: false) = {
+/// Generates paragraph number for a given level.
+/// -> content
+#let generate-paragraph-number(
+  /// Paragraph nesting level. -> int
+  level, 
+  /// Optional explicit counter value. -> none | int
+  counter-value: none, 
+  /// Whether to increment the counter. -> bool
+  increment: false
+) = {
   let paragraph-counter = counter(paragraph-config.counter-prefix + str(level))
   
   if counter-value != none {
@@ -149,10 +168,12 @@
   }
 }
 
-/// Calculates indentation width for a paragraph level
-/// @param level: Paragraph nesting level
-/// @returns: Indentation width measurement
-#let calculate-paragraph-indent(level) = {
+/// Calculates indentation width for a paragraph level.
+/// -> length
+#let calculate-paragraph-indent(
+  /// Paragraph nesting level. -> int
+  level
+) = {
   if level == 0 { 
     return 0pt 
   }
@@ -166,11 +187,14 @@
   return measure(indent-buffer).width
 }
 
-/// Creates a formatted paragraph with automatic numbering and indentation
-/// @param content: Paragraph content
-/// @param level: Nesting level (0 for main paragraphs, 1+ for sub-paragraphs)
-/// @returns: Formatted paragraph block
-#let create-numbered-paragraph(content, level: 0) = {
+/// Creates a formatted paragraph with automatic numbering and indentation.
+/// -> content
+#let create-numbered-paragraph(
+  /// Paragraph content. -> content
+  content, 
+  /// Nesting level (0 for main paragraphs, 1+ for sub-paragraphs). -> int
+  level: 0
+) = {
   context {
     let paragraph-number = generate-paragraph-number(level, increment: true)
     counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
@@ -187,10 +211,12 @@
   }
 }
 
-/// Processes document body content with automatic paragraph numbering
-/// @param content: Document body content
-/// @returns: Processed content with numbered paragraphs
-#let process-document-body(content) = {
+/// Processes document body content with automatic paragraph numbering.
+/// -> content
+#let process-document-body(
+  /// Document body content. -> content
+  content
+) = {
   counter("par-counter-0").update(1)
   
   show par: it => {
@@ -204,11 +230,13 @@
 // INDORSEMENT UTILITIES
 // =============================================================================
 
-/// Converts number to ordinal suffix for indorsements (1st, 2d, 3d, 4th, etc.)
-/// Follows AFH 33-337 numbering conventions
-/// @param number: The indorsement number
-/// @returns: Ordinal suffix string
-#let get-ordinal-suffix(number) = {
+/// Converts number to ordinal suffix for indorsements (1st, 2d, 3d, 4th, etc.).
+/// Follows AFH 33-337 numbering conventions.
+/// -> str
+#let get-ordinal-suffix(
+  /// The indorsement number. -> int
+  number
+) = {
   let last-digit = calc.rem(number, 10)
   let last-two-digits = calc.rem(number, 100)
   
@@ -225,19 +253,24 @@
   }
 }
 
-/// Formats indorsement number according to AFH 33-337 standards
-/// @param number: Indorsement sequence number
-/// @returns: Formatted indorsement label (e.g., "1st Ind", "2d Ind")
-#let format-indorsement-number(number) = {
+/// Formats indorsement number according to AFH 33-337 standards.
+/// -> str
+#let format-indorsement-number(
+  /// Indorsement sequence number. -> int
+  number
+) = {
   let suffix = get-ordinal-suffix(number)
   str(number) + suffix + " Ind"
 }
 
-/// Processes array of indorsements for rendering
-/// @param indorsements: Array of indorsement objects
-/// @param body_font: Font to use for indorsement text
-/// @returns: Rendered indorsements
-#let process-indorsements(indorsements, body-font: "Times New Roman") = {
+/// Processes array of indorsements for rendering.
+/// -> content
+#let process-indorsements(
+  /// Array of indorsement objects. -> array
+  indorsements, 
+  /// Font to use for indorsement text. -> str
+  body-font: "Times New Roman"
+) = {
   if indorsements.len() > 0 {
     for indorsement in indorsements {
       (indorsement.render)(body-font: body-font)
