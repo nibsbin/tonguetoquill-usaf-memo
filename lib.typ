@@ -498,23 +498,10 @@
   process-indorsements(indorsements, body-font: body-font)
 }
 
-// =============================================================================
-// DEPRECATED FEATURES REMOVED
-// =============================================================================
+//==============================================================================
+// EXAMPLE
+// ==============================================================================
 
-// Legacy compatibility interface has been removed to enforce standard API usage.
-// All templates must now use the standardized parameter naming convention:
-// - Use hyphenated parameter names (letterhead-title, signature-block, etc.)
-// - Use the official-memorandum() function instead of deprecated aliases
-// - Follow AFH 33-337 compliance standards strictly
-
-// =============================================================================
-// EXAMPLE DOCUMENT
-// =============================================================================
-
-/// Default example memorandum demonstrating template capabilities.
-/// This serves as both documentation and a quick-start example.
-/// -> content
 #official-memorandum()[
 
 Welcome to the Typst USAF Memo template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards. This comprehensive template eliminates the tedious formatting work that typically consumes valuable time when preparing official correspondence.
