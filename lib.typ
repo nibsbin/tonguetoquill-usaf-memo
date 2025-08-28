@@ -167,7 +167,10 @@
         )
       } else {
         // Standard indorsement format
-        v(spacing.paragraph)
+        // Add spacing only if we didn't just do a pagebreak
+        if not indorsement-data.leading-pagebreak {
+          v(spacing.paragraph)
+        }
         [#indorsement-label, #indorsement-data.office-symbol]
         
         v(spacing.paragraph)
