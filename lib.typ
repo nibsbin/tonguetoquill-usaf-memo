@@ -4,12 +4,11 @@
 //=====User-Facing Functions=====
 
 // Paragraph functions with autom  parblock_indent: true,tic numbering
-#let base-par(content) = _make_par(0, content)
-#let sub-par(content) = _make_par(1, content)
-#let sub-sub-par(content) = _make_par(2, content)
-#let sub-sub-sub-par(content) = _make_par(3, content)
-#let sub-sub-sub-sub-par(content) = _make_par(4, content)
-#let sub-sub-sub-sub-sub-par(content) = _make_par(5, content)
+#let sub-par(content) = memo-par(content,level:1)
+#let sub-sub-par(content) = memo-par(content,level:2)
+#let sub-sub-sub-par(content) = memo-par(content,level:3)
+#let sub-sub-sub-sub-par(content) = memo-par(content,level:4)
+#let sub-sub-sub-sub-sub-par(content) = memo-par(content,level:5)
 
 //=====Data Structures=====
 
@@ -98,7 +97,7 @@
       // Body content (if provided)
       if data.body != none {
         v(BLANK_LINE)
-        _process_body(data.body, base-par)
+        _process_body(data.body)
       }
       
       // Signature Block - AFH 33-337: 4.5 inches from left edge or 3 spaces right of center
@@ -262,7 +261,7 @@
 
   // Body content
   set par(justify: true)
-  _process_body(body, base-par)
+  _process_body(body)
 
   // Signature Block with page break handling
   context {

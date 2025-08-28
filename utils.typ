@@ -129,33 +129,37 @@
   return measure(buffer).width
 }
 
-#let _make_par(level, content) = {
+#let MEMO_PAR_CRIB = "ASDFASDFASDF"
+
+// #let two_sentence_spaces(body) = [
+//   #show ". " : [.~ ]
+//   #show "! " : [!~ ]
+//   #show "? " : [?~ ]
+//   #body
+// ]
+#let memo-par(content,level:0) = {
   context {
     let num = _get_par_num(level, step:true)
     counter(PAR_COUNTER_PREFIX + str(level + 1)).update(1)
     let indent_amount = _get_paragraph_indent(level)
 
+    let formatted = content
     block[
-      #v(BLANK_LINE)
+      #v(BLANK_LINE)      
       #if PAR_BLOCK_INDENT.get() {
-        pad(left: indent_amount)[#num#h(TWO_SPACES)#content]
+        pad(left: indent_amount)[#num#h(TWO_SPACES)#formatted]
       } else {
-        pad(left:0em)[#h(indent_amount)#num#h(TWO_SPACES)#content]
+        pad(left:0em)[#h(indent_amount)#num#h(TWO_SPACES)#formatted]
       }
     ]
   }
 }
 
-#let _process_body(content, base-par) = {
+#let _process_body(content) = {
   counter("par-counter-0").update(1)
   
   show par: it => {
-    let content_str = repr(it.body)
-    if content_str.contains("grid(") {
-      it // Already formatted paragraph
-    } else {
-      base-par(it.body) // Wrap raw paragraph
-    }
+    memo-par(it.body,level:0)
   }
   
   content
