@@ -35,9 +35,9 @@
   force-backmatter-pagebreak: true,
   indorsements: (
     Indorsement(
-      office_symbol: "ORG/SYMBOL [Office symbol for 1st Indorsement Official]",
-      memo_for: "ORG/SYMBOL [Office symbol for 2d Indorsement official]",
-      signature_block: (
+      office-symbol: "ORG/SYMBOL [Office symbol for 1st Indorsement Official]",
+      memo-for: "ORG/SYMBOL [Office symbol for 2d Indorsement official]",
+      signature-block: (
         "FIRST M LAST, Rank, USAF",
         "Duty Title"
       ),
@@ -49,16 +49,16 @@
         Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page. The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
         ],
     Indorsement(
-      office_symbol: "ORG/SYMBOL",
-      memo_for: "ORG/SYMBOL [Originator]",
-      signature_block: (
+      office-symbol: "ORG/SYMBOL",
+      memo-for: "ORG/SYMBOL [Originator]",
+      signature-block: (
         "FIRST M LAST, Rank, USAF",
         "Duty Title"
       ),
-      separate_page: true,
-      original_office: "[Originator ORG/SYMBOL]",
-      original_subject: "Memorandum Subject",
-      leading_pagebreak: true
+      separate-page: true,
+      original-office: "[Originator ORG/SYMBOL]",
+      original-subject: "Memorandum Subject",
+      leading-pagebreak: true
     )[
         Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page. The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
       ],
