@@ -114,7 +114,7 @@
 /// -> content
 #let calculate-backmatter-spacing(is-first-section) = {
   context {
-    let space = if is-first-section { 3 * spacing.line } else { 2 * spacing.line }
+    let space = if is-first-section { 3 * spacing.paragraph } else { 2 * spacing.paragraph }
     v(space, weak: true)
   }
 }
