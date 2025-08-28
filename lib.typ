@@ -1,21 +1,48 @@
-// lib.typ: A Typst template for Tongue and Quill official memorandums.
+// lib.typ: A Typst template for AFH 33-337 compliant official memorandums.
 #import "utils.typ": *
 
-//=====User-Facing Functions=====
+// =============================================================================
+// USER-FACING PARAGRAPH FUNCTIONS
+// =============================================================================
 
-// Paragraph functions with autom  parblock_indent: true,tic numbering
-#let sub-par(content) = memo-par(content,level:1)
-#let sub-sub-par(content) = memo-par(content,level:2)
-#let sub-sub-sub-par(content) = memo-par(content,level:3)
-#let sub-sub-sub-sub-par(content) = memo-par(content,level:4)
-#let sub-sub-sub-sub-sub-par(content) = memo-par(content,level:5)
+/// Paragraph functions with automatic numbering and proper indentation
+/// These provide a convenient interface for hierarchical document structure
 
-//=====Data Structures=====
+/// First-level subparagraph (numbered a., b., c., etc.)
+#let sub-par(content) = create-numbered-paragraph(content, level: 1)
 
-// Indorsement data structure
+/// Second-level subparagraph (numbered (1), (2), (3), etc.)
+#let sub-sub-par(content) = create-numbered-paragraph(content, level: 2)
+
+/// Third-level subparagraph (numbered (a), (b), (c), etc.)
+#let sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 3)
+
+/// Fourth-level subparagraph (numbered with underlined numbers)
+#let sub-sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 4)
+
+/// Fifth-level subparagraph (numbered with underlined letters)
+#let sub-sub-sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 5)
+
+// =============================================================================
+// INDORSEMENT DATA STRUCTURE
+// =============================================================================
+
+/// Creates an indorsement object with proper AFH 33-337 formatting
+/// @param office_symbol: Sending organization symbol
+/// @param memo_for: Recipient organization symbol  
+/// @param signature_block: Array of signature lines
+/// @param attachments: Array of attachment descriptions
+/// @param cc: Array of courtesy copy recipients
+/// @param leading_pagebreak: Whether to force page break before indorsement
+/// @param separate_page: Whether to use separate-page indorsement format
+/// @param original_office: Original memo's office symbol (for separate-page format)
+/// @param original_date: Original memo's date (for separate-page format)
+/// @param original_subject: Original memo's subject (for separate-page format)
+/// @param body: Indorsement body content
+/// @returns: Indorsement object with render method
 #let Indorsement(
   office_symbol: "ORG/SYMBOL",
-  memo_for: "ORG/SYMBOL",
+  memo_for: "ORG/SYMBOL", 
   signature_block: (
     "FIRST M. LAST, Rank, USAF",
     "Duty Title",
@@ -30,120 +57,277 @@
   original_subject: none,
   body
 ) = {
-  let data = (
-    office_symbol: office_symbol,
-    memo_for: memo_for,
-    signature_block: signature_block,
+  let indorsement-data = (
+    office-symbol: office_symbol,
+    memo-for: memo_for,
+    signature-block: signature_block,
     attachments: attachments,
     cc: cc,
-    leading_pagebreak: leading_pagebreak,
-    separate_page: separate_page,
-    original_office: original_office,
-    original_date: original_date,
-    original_subject: original_subject,
+    leading-pagebreak: leading_pagebreak,
+    separate-page: separate_page,
+    original-office: original_office,
+    original-date: original_date,
+    original-subject: original_subject,
     body: body,
   )
   
-  data.render = (body_font: "Times New Roman") => {
-    let date = datetime.today().display("[day] [month repr:short] [year]")
-    // Step counter before entering context
-    INDORSEMENT_COUNTER.step()
+  /// Renders the indorsement with proper formatting
+  /// @param body_font: Font to use for body text
+  /// @returns: Formatted indorsement content
+  indorsement-data.render = (body-font: "Times New Roman") => {
+    let current-date = datetime.today().display("[day] [month repr:short] [year]")
+    counters.indorsement.step()
     
     context {
-      set text(font: body_font, size: 12pt)
-      set par(leading: LINE_SPACING, spacing: .5em, justify: true)
+      set text(font: body-font, size: 12pt)
+      set par(leading: spacing.line, spacing: .5em, justify: true)
       
-      // Get current indorsement number
-      let ind_num = INDORSEMENT_COUNTER.get().first()
-      let ind_label = _format_indorsement_number(ind_num)
+      let indorsement-number = counters.indorsement.get().first()
+      let indorsement-label = format-indorsement-number(indorsement-number)
       
-      // Add page break if requested
-      if data.leading_pagebreak {
+      if indorsement-data.leading-pagebreak {
         pagebreak()
       }
       
-      // Check if this is a separate-page indorsement
-      if data.separate_page and data.original_office != none {
-        // AFH 33-337: Separate-page indorsement format
-        [#ind_label to #data.original_office, #date, #data.original_subject]
+      if indorsement-data.separate-page and indorsement-data.original-office != none {
+        // Separate-page indorsement format per AFH 33-337
+        [#indorsement-label to #indorsement-data.original-office, #current-date, #indorsement-data.original-subject]
         
-        v(BLANK_LINE)
+        v(spacing.paragraph)
         grid(
           columns: (auto, 1fr),
-          data.office_symbol,
-          align(right)[#date]
+          indorsement-data.office-symbol,
+          align(right)[#current-date]
         )
         
-        v(BLANK_LINE)
+        v(spacing.paragraph)
         grid(
-          columns: (auto, TWO_SPACES, 1fr),
-          "MEMORANDUM FOR", "", data.memo_for
+          columns: (auto, spacing.two-spaces, 1fr),
+          "MEMORANDUM FOR", "", indorsement-data.memo-for
         )
       } else {
-        // AFH 33-337: Begin indorsement on second line below last element
-        v(BLANK_LINE)
+        // Standard indorsement format
+        v(spacing.paragraph)
+        [#indorsement-label, #indorsement-data.office-symbol]
         
-        // Indorsement header: "1st Ind, ORG/SYMBOL"
-        [#ind_label, #data.office_symbol]
-        
-        // AFH 33-337: MEMORANDUM FOR on next line
-        v(BLANK_LINE)
+        v(spacing.paragraph)
         grid(
-          columns: (auto, TWO_SPACES, 1fr),
-          "MEMORANDUM FOR", "", data.memo_for
+          columns: (auto, spacing.two-spaces, 1fr),
+          "MEMORANDUM FOR", "", indorsement-data.memo-for
         )
       }
       
-      // Body content (if provided)
-      if data.body != none {
-        v(BLANK_LINE)
-        _process_body(data.body)
+      // Render body content if provided
+      if indorsement-data.body != none {
+        v(spacing.paragraph)
+        process-document-body(indorsement-data.body)
       }
       
-      // Signature Block - AFH 33-337: 4.5 inches from left edge or 3 spaces right of center
-      // AFH 33-337: Start on fifth line below last line of text
+      // Signature block positioning per AFH 33-337
       v(5em)
       align(left)[
-        // 4.5in from left edge minus 1in margin
         #pad(left: 4.5in - 1in)[
           #text(hyphenate: false)[
-            #for line in data.signature_block {
+            #for line in indorsement-data.signature-block {
               par(hanging-indent: 1em, justify: false)[#line]
             }
           ]
         ]
       ]
       
-      // Attachments - AFH 33-337: at left margin, third line below signature element
-      if data.attachments.len() > 0 {
-        let leading_space = v_closing_leading_space(true, false)
-        v(leading_space)
-        let num = data.attachments.len()
-        let label = (if num == 1 { "Attachment:" } else { str(num) + " Attachments:" })
+      // Attachments section
+      if indorsement-data.attachments.len() > 0 {
+        calculate-closing-spacing(true)
+        let attachment-count = indorsement-data.attachments.len()
+        let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
         
-        [#label]
+        [#section-label]
         parbreak()
-        enum(..data.attachments, numbering: "1.")
+        enum(..indorsement-data.attachments, numbering: "1.")
       }
       
-      // cc - AFH 33-337: flush left, second line below attachment OR third line below signature
-      if data.cc.len() > 0 {
-        let leading_space = v_closing_leading_space(not data.attachments.len() > 0, data.attachments.len() > 0)
-        v(leading_space)
+      // Courtesy copies section
+      if indorsement-data.cc.len() > 0 {
+        calculate-closing-spacing(indorsement-data.attachments.len() == 0)
         [cc:]
         parbreak()
-        data.cc.join("\n")
+        indorsement-data.cc.join("\n")
       }
     }
   }
   
-  return data
+  return indorsement-data
 }
 
 
 
-//=====Main Template=====
-#let OfficialMemorandum(
+// =============================================================================
+// INTERNAL RENDERING FUNCTIONS
+// =============================================================================
+
+/// Renders the document letterhead section
+#let render-letterhead(title, caption, seal-path, font) = {
+  box(
+    width: 100%,
+    height: 0.75in,
+    fill: none,
+    stroke: none,
+    [
+      #place(
+        center + top,
+        align(center)[
+          #text(12pt, weight: "bold", font: font)[#title]\
+          #text(10.5pt, weight: "bold", font: font, fill: luma(24%))[#caption]
+        ]
+      )
+      
+      #place(
+        left + horizon,
+        dx: -0.25in,
+        dy: -0.125in,
+        image(seal-path, width: 1in, height: 2in, fit: "contain")
+      )
+    ]
+  )
+}
+
+/// Renders the date section (right-aligned)
+#let render-date-section() = {
+  align(right)[#datetime.today().display("[day] [month repr:long] [year]")]
+}
+
+/// Renders the MEMORANDUM FOR section
+#let render-memo-for-section(recipients) = {
+  v(spacing.paragraph)
+  grid(
+    columns: (auto, spacing.two-spaces, 1fr),
+    "MEMORANDUM FOR", "",
+    align(left)[
+      #if type(recipients) == array {
+        create-auto-grid(recipients, column-gutter: spacing.tab)
+      } else {
+        recipients
+      }
+    ]
+  )
+}
+
+/// Renders the FROM section
+#let render-from-section(from-info) = {
+  v(spacing.paragraph)
+  grid(
+    columns: (auto, spacing.two-spaces, 1fr),
+    "FROM:", "",
+    align(left)[#from-info.join("\n")]
+  )
+}
+
+/// Renders the SUBJECT section
+#let render-subject-section(subject-text) = {
+  v(spacing.paragraph)
+  grid(
+    columns: (auto, spacing.two-spaces, 1fr),
+    "SUBJECT:", "", [#subject-text]
+  )
+}
+
+/// Renders the optional references section
+#let render-references-section(references) = {
+  if references.len() > 0 {
+    v(spacing.paragraph)
+    grid(
+      columns: (auto, spacing.two-spaces, 1fr),
+      "References:", "", enum(..references, numbering: "(a)")
+    )
+  }
+}
+
+/// Renders the signature block with intelligent page break handling
+#let render-signature-block(signature-lines) = {
+  context {
+    let signature-content = {
+      v(5em)
+      align(left)[
+        #pad(left: 4.5in - 1in)[
+          #text(hyphenate: false)[
+            #for line in signature-lines {
+              par(hanging-indent: 1em, justify: false)[#line]
+            }
+          ]
+        ]
+      ]
+    }
+    
+    let available-space = page.height - here().position().y - 1in
+    let signature-height = measure(signature-content).height
+    
+    if signature-height > available-space {
+      pagebreak(weak: true)
+    }
+    
+    signature-content
+  }
+}
+
+/// Renders all closing sections with proper spacing and page breaks
+#let render-closing-sections(
+  attachments: (),
+  cc: (),
+  distribution: (),
+  force-pagebreak: false
+) = {
+  let has-any-closing = attachments.len() > 0 or cc.len() > 0 or distribution.len() > 0
+  
+  if force-pagebreak and has-any-closing {
+    pagebreak(weak: true)
+  }
+  
+  // Attachments section
+  if attachments.len() > 0 {
+    calculate-closing-spacing(true)
+    let attachment-count = attachments.len()
+    let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
+    let continuation-label = (if attachment-count == 1 { "Attachment" } else { str(attachment-count) + " Attachments" }) + " (listed on next page):"
+    render-closing-section(attachments, section-label, numbering-style: "1.", continuation-label: continuation-label)
+  }
+
+  // Courtesy copies section
+  if cc.len() > 0 {
+    calculate-closing-spacing(attachments.len() == 0)
+    render-closing-section(cc, "cc:")
+  }
+
+  // Distribution section
+  if distribution.len() > 0 {
+    calculate-closing-spacing(attachments.len() == 0 and cc.len() == 0)
+    render-closing-section(distribution, "DISTRIBUTION:")
+  }
+}
+
+// =============================================================================
+// MAIN MEMORANDUM TEMPLATE
+// =============================================================================
+
+/// Creates an official memorandum following AFH 33-337 standards
+/// @param letterhead_title: Primary organization title
+/// @param letterhead_caption: Sub-organization or command
+/// @param letterhead_seal: Path to organization seal image
+/// @param memo_for: Recipient(s) - string, array, or nested array for grid layout
+/// @param from_block: Sender information as array of strings
+/// @param subject: Memorandum subject line
+/// @param references: Optional array of reference documents
+/// @param signature_block: Array of signature lines
+/// @param attachments: Array of attachment descriptions
+/// @param cc: Array of courtesy copy recipients
+/// @param distribution: Array of distribution list entries
+/// @param indorsements: Array of Indorsement objects
+/// @param letterhead_font: Font for letterhead text
+/// @param body_font: Font for body text
+/// @param paragraph_block_indent: Enable paragraph block indentation
+/// @param force_closing_pagebreak: Force page break before closing sections
+/// @param body: Main memorandum content
+/// @returns: Formatted official memorandum
+#let official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "AIR FORCE MATERIEL COMMAND",
   letterhead-seal: "assets/dod_seal.png",
@@ -165,23 +349,23 @@
   cc: (),
   distribution: (),
   indorsements: (),
-  letterhead_font: "Arial",
-  body_font: "Times New Roman",
-  par_block_indent: false,
-  pagebreak_closing: false,
+  letterhead-font: "Arial",
+  body-font: "Times New Roman",
+  paragraph-block-indent: false,
+  force-closing-pagebreak: false,
   body
 ) = {
-  // Initialize indorsement counter
-  INDORSEMENT_COUNTER.update(0)
+  // Initialize document counters and settings
+  counters.indorsement.update(0)
   set page(
     paper: "us-letter",
     margin: (left: 1in, right: 1in, top: 1in, bottom: 1in),
   )
-  set text(font: body_font, size: 12pt)
-  set par(leading: LINE_SPACING, spacing: LINE_SPACING)
-  PAR_BLOCK_INDENT.update(par_block_indent)
+  set text(font: body-font, size: 12pt)
+  set par(leading: spacing.line, spacing: spacing.line)
+  paragraph-config.block-indent-state.update(paragraph-block-indent)
 
-  // Page numbering (starts on page 2)
+  // Page numbering starting from page 2
   context {
     if counter(page).get().first() > 1 {
       place(
@@ -193,142 +377,97 @@
     }
   }
 
-  // Letterhead
-  box(
-    width: 100%,
-    height: 0.75in,
-    fill: none,
-    stroke: none,
-    [
-      #place(
-        center + top,
-        align(center)[
-          #text(12pt, weight: "bold", font: letterhead_font)[#letterhead-title]\
-          #text(10.5pt, weight: "bold", font: letterhead_font, fill: luma(24%))[#letterhead-caption]
-        ]
-      )
-      
-      #place(
-        left + horizon,
-        dx: -0.25in,
-        dy: -0.125in,
-        image(letterhead-seal, width: 1in, height: 2in, fit: "contain")
-      )
-    ]
-  )
+  // Document letterhead
+  render-letterhead(letterhead-title, letterhead-caption, letterhead-seal, letterhead-font)
 
-  // Date (AFH 33-337: 1.75 inches from top, flush right)
-  align(right)[#datetime.today().display("[day] [month repr:long] [year]")]
+  // Document header sections
+  render-date-section()
+  render-memo-for-section(memo-for)
+  render-from-section(from-block)
+  render-subject-section(subject)
+  render-references-section(references)
 
-  // MEMORANDUM FOR block
-  v(BLANK_LINE)
-  grid(
-    columns: (auto, TWO_SPACES, 1fr),
-    "MEMORANDUM FOR", "",
-    align(left)[
-      #if type(memo-for) == array {
-        // Use auto-grid which handles both 1D and 2D arrays
-        auto-grid(memo-for, column-gutter: TAB_SIZE)
-      } else {
-        memo-for
-      }
-    ]
-  )
-
-  // FROM block
-  v(BLANK_LINE)
-  grid(
-    columns: (auto, TWO_SPACES, 1fr),
-    "FROM:", "",
-    align(left)[#from-block.join("\n")]
-  )
-
-  // SUBJECT block
-  v(BLANK_LINE)
-  grid(
-    columns: (auto, TWO_SPACES, 1fr),
-    "SUBJECT:", "", [#subject]
-  )
-
-  // References (optional)
-  if references.len() > 0 {
-    v(BLANK_LINE)
-    grid(
-      columns: (auto, TWO_SPACES, 1fr),
-      "References:", "", enum(..references, numbering: "(a)")
-    )
-  }
-
-  // Body content
+  // Main document body
   set par(justify: true)
-  _process_body(body)
+  process-document-body(body)
 
-  // Signature Block with page break handling
-  context {
-    let signature_content = {
-      v(5em)
-      align(left)[
-        #pad(left: 4.5in - 1in)[
-          #text(hyphenate: false)[
-            #for line in signature-block {
-              par(hanging-indent: 1em, justify: false)[#line]
-            }
-          ]
-        ]
-      ]
-    }
-    
-    let available_space = page.height - here().position().y - 1in
-    let signature_height = measure(signature_content).height
-    
-    if signature_height > available_space {
-      pagebreak(weak: true)
-    }
-    
-    signature_content
-  }
-  // Closing sections
-  let has_attachments = attachments.len() > 0
-  let has_cc = cc.len() > 0
-  let has_distribution = distribution.len() > 0
-
-  if pagebreak_closing and (has_attachments or has_cc or has_distribution) {
-    pagebreak(weak:true)
-  }
+  // Signature block with intelligent page break handling
+  render-signature-block(signature-block)
   
-  // Attachments
-  if has_attachments {
-    let leading_space = v_closing_leading_space(true)
-    v_closing_leading_space(true)
-    let num = attachments.len()
-    let label = if num == 1 { "Attachment:" } else { str(num) + " Attachments:" }
-    let continuation = (if num == 1 { "Attachment" } else { str(num) + " Attachments" }) + " (listed on next page):"
-    _render_closing_section(attachments, label, numbering_style: "1.", continuation_label: continuation)
-  }
-
-  // cc
-  if has_cc {
-    v_closing_leading_space(not has_attachments)
-    _render_closing_section(cc, "cc:")
-  }
-
-  // Distribution
-  if has_distribution {
-    v_closing_leading_space(not (has_attachments or has_cc))
-    _render_closing_section(distribution, "DISTRIBUTION:")
-  }
+  // Closing sections with proper spacing and page breaks
+  render-closing-sections(
+    attachments: attachments,
+    cc: cc,
+    distribution: distribution,
+    force-pagebreak: force-closing-pagebreak
+  )
 
   // Indorsements
-  if indorsements.len() > 0 {
-    for indorsement in indorsements {
-      (indorsement.render)(body_font: body_font)
-    }
-  }
-  
+  process-indorsements(indorsements, body-font: body-font)
 }
 
-//=====Example=====
-#OfficialMemorandum()[
+// =============================================================================
+// LEGACY COMPATIBILITY ALIASES
+// =============================================================================
+
+/// Legacy parameter interface for backward compatibility
+/// This maintains compatibility with existing templates using hyphenated parameter names
+#let OfficialMemorandum(
+  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
+  letterhead-caption: "AIR FORCE MATERIEL COMMAND", 
+  letterhead-seal: "assets/dod_seal.png",
+  memo-for: ("ORG/SYMBOL",),
+  from-block: (
+    "ORG/SYMBOL",
+    "Organization", 
+    "Street Address",
+    "City ST 80841-2024"
+  ),
+  subject: "Format for the Official Memorandum",
+  references: (),
+  signature-block: (
+    "FIRST M. LAST, Rank, USAF",
+    "AFIT Masters Student, Carnegie Mellon University",
+    "Organization (if not on letterhead)"
+  ),
+  attachments: (),
+  cc: (),
+  distribution: (),
+  indorsements: (),
+  letterhead_font: "Arial",
+  body_font: "Times New Roman",
+  par_block_indent: false,
+  pagebreak_closing: false,
+  body
+) = {
+  official-memorandum(
+    letterhead-title: letterhead-title,
+    letterhead-caption: letterhead-caption,
+    letterhead-seal: letterhead-seal,
+    memo-for: memo-for,
+    from-block: from-block,
+    subject: subject,
+    references: references,
+    signature-block: signature-block,
+    attachments: attachments,
+    cc: cc,
+    distribution: distribution,
+    indorsements: indorsements,
+    letterhead-font: letterhead_font,
+    body-font: body_font,
+    paragraph-block-indent: par_block_indent,
+    force-closing-pagebreak: pagebreak_closing,
+    body
+  )
+}
+
+// =============================================================================
+// EXAMPLE DOCUMENT
+// =============================================================================
+
+/// Default example memorandum demonstrating template capabilities
+/// This serves as both documentation and a quick-start example
+#official-memorandum()[
 
 Welcome to the Typst USAF Memo template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards. This comprehensive template eliminates the tedious formatting work that typically consumes valuable time when preparing official correspondence.
 
