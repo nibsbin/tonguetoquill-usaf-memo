@@ -83,145 +83,6 @@
 /// -> content
 #let sub-sub-sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 5)
 
-// =============================================================================
-// INDORSEMENT DATA STRUCTURE
-// =============================================================================
-
-/// Creates an indorsement object with proper AFH 33-337 formatting.
-/// - office-symbol (str): Sending organization symbol.
-/// - memo-for (str): Recipient organization symbol.
-/// - signature-block (array): Array of signature lines.
-/// - attachments (array): Array of attachment descriptions.
-/// - cc (array): Array of courtesy copy recipients.
-/// - leading-pagebreak (bool): Whether to force page break before indorsement.
-/// - separate-page (bool): Whether to use separate-page indorsement format.
-/// - original-office (none | str): Original memo's office symbol (for separate-page format).
-/// - original-date (none | str): Original memo's date (for separate-page format).
-/// - original-subject (none | str): Original memo's subject (for separate-page format).
-/// - body (content): Indorsement body content.
-/// -> dictionary
-#let Indorsement(
-  office-symbol: "ORG/SYMBOL",
-  memo-for: "ORG/SYMBOL", 
-  signature-block: (
-    "FIRST M. LAST, Rank, USAF",
-    "Duty Title",
-    "Organization (if not on letterhead)"
-  ),
-  attachments: (),
-  cc: (),
-  leading-pagebreak: false,
-  separate-page: false,
-  original-office: none,
-  original-date: none,
-  original-subject: none,
-  body
-) = {
-  let indorsement-data = (
-    office-symbol: office-symbol,
-    memo-for: memo-for,
-    signature-block: signature-block,
-    attachments: attachments,
-    cc: cc,
-    leading-pagebreak: leading-pagebreak,
-    separate-page: separate-page,
-    original-office: original-office,
-    original-date: original-date,
-    original-subject: original-subject,
-    body: body,
-  )
-  
-  /// Renders the indorsement with proper formatting.
-  /// - body-font (str): Font to use for body text.
-  /// -> content
-  indorsement-data.render = (body-font: "Times New Roman") => {
-    let current-date = datetime.today().display("[day] [month repr:short] [year]")
-    counters.indorsement.step()
-    
-    context {
-      set text(font: body-font, size: 12pt)
-      set par(leading: spacing.line, spacing: .5em, justify: true)
-      
-      let indorsement-number = counters.indorsement.get().first()
-      let indorsement-label = format-indorsement-number(indorsement-number)
-      
-      if indorsement-data.leading-pagebreak {
-        pagebreak()
-      }
-      
-      if indorsement-data.separate-page and indorsement-data.original-office != none {
-        // Separate-page indorsement format per AFH 33-337
-        [#indorsement-label to #indorsement-data.original-office, #current-date, #indorsement-data.original-subject]
-        
-        v(spacing.paragraph)
-        grid(
-          columns: (auto, 1fr),
-          indorsement-data.office-symbol,
-          align(right)[#current-date]
-        )
-        
-        v(spacing.paragraph)
-        grid(
-          columns: (auto, spacing.two-spaces, 1fr),
-          "MEMORANDUM FOR", "", indorsement-data.memo-for
-        )
-      } else {
-        // Standard indorsement format
-        // Add spacing only if we didn't just do a pagebreak
-        if not indorsement-data.leading-pagebreak {
-          v(spacing.paragraph)
-        }
-        [#indorsement-label, #indorsement-data.office-symbol]
-        
-        v(spacing.paragraph)
-        grid(
-          columns: (auto, spacing.two-spaces, 1fr),
-          "MEMORANDUM FOR", "", indorsement-data.memo-for
-        )
-      }
-      
-      // Render body content if provided
-      if indorsement-data.body != none {
-        process-document-body(indorsement-data.body)
-      }
-      
-      // Signature block positioning per AFH 33-337
-      v(5em)
-      align(left)[
-        #pad(left: 4.5in - 1in)[
-          #text(hyphenate: false)[
-            #for line in indorsement-data.signature-block {
-              par(hanging-indent: 1em, justify: false)[#line]
-            }
-          ]
-        ]
-      ]
-      
-      // Attachments section
-      if indorsement-data.attachments.len() > 0 {
-        calculate-backmatter-spacing(true)
-        let attachment-count = indorsement-data.attachments.len()
-        let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
-        
-        [#section-label]
-        parbreak()
-        enum(..indorsement-data.attachments, numbering: "1.")
-      }
-      
-      // Courtesy copies section
-      if indorsement-data.cc.len() > 0 {
-        calculate-backmatter-spacing(indorsement-data.attachments.len() == 0)
-        [cc:]
-        parbreak()
-        indorsement-data.cc.join("\n")
-      }
-    }
-  }
-  
-  return indorsement-data
-}
-
-
 
 // =============================================================================
 // INTERNAL RENDERING FUNCTIONS
@@ -318,7 +179,8 @@
   }
 }
 
-/// Renders the signature block with intelligent page break handling.
+/// Renders a signature block with proper AFH 33-337 formatting and orphan prevention.
+/// Per AFH 33-337: "The signature block is never on a page by itself."
 /// - signature-lines (array): Array of signature lines.
 /// -> content
 #let render-signature-block(signature-lines) = {
@@ -336,15 +198,152 @@
       ]
     }
     
+    // Calculate available space more precisely, accounting for minimum text requirements
     let available-space = page.height - here().position().y - 1in
     let signature-height = measure(signature-content).height
     
-    if signature-height > available-space {
+    // AFH 33-337 requires at least 2 lines of body text before signature block
+    // Convert spacing.line (em) to points using current font size
+    let line-spacing-pt = measure([#v(spacing.line)]).height
+    let min-body-text-height = 2 * (12pt + line-spacing-pt)
+    let required-space = signature-height + min-body-text-height
+    
+    // Only break page if we have insufficient space for both minimum text and signature
+    if required-space > available-space {
       pagebreak(weak: true)
     }
     
     signature-content
   }
+}
+
+// =============================================================================
+// INDORSEMENT DATA STRUCTURE
+// =============================================================================
+
+/// Creates an indorsement object with proper AFH 33-337 formatting.
+/// - office-symbol (str): Sending organization symbol.
+/// - memo-for (str): Recipient organization symbol.
+/// - signature-block (array): Array of signature lines.
+/// - attachments (array): Array of attachment descriptions.
+/// - cc (array): Array of courtesy copy recipients.
+/// - leading-pagebreak (bool): Whether to force page break before indorsement.
+/// - separate-page (bool): Whether to use separate-page indorsement format.
+/// - original-office (none | str): Original memo's office symbol (for separate-page format).
+/// - original-date (none | str): Original memo's date (for separate-page format).
+/// - original-subject (none | str): Original memo's subject (for separate-page format).
+/// - body (content): Indorsement body content.
+/// -> dictionary
+#let Indorsement(
+  office-symbol: "ORG/SYMBOL",
+  memo-for: "ORG/SYMBOL", 
+  signature-block: (
+    "FIRST M. LAST, Rank, USAF",
+    "Duty Title",
+    "Organization (if not on letterhead)"
+  ),
+  attachments: (),
+  cc: (),
+  leading-pagebreak: false,
+  separate-page: false,
+  original-office: none,
+  original-date: none,
+  original-subject: none,
+  body
+) = {
+  let indorsement-data = (
+    office-symbol: office-symbol,
+    memo-for: memo-for,
+    signature-block: signature-block,
+    attachments: attachments,
+    cc: cc,
+    leading-pagebreak: leading-pagebreak,
+    separate-page: separate-page,
+    original-office: original-office,
+    original-date: original-date,
+    original-subject: original-subject,
+    body: body,
+  )
+  
+  /// Renders the indorsement with proper formatting.
+  /// - body-font (str): Font to use for body text.
+  /// -> content
+  indorsement-data.render = (body-font: "Times New Roman") => {
+    let current-date = datetime.today().display("[day] [month repr:short] [year]")
+    counters.indorsement.step()
+    
+    context {
+      set text(font: body-font, size: 12pt)
+      set par(leading: spacing.line, spacing: .5em, justify: true)
+      
+      let indorsement-number = counters.indorsement.get().first()
+      let indorsement-label = format-indorsement-number(indorsement-number)
+      
+      if indorsement-data.leading-pagebreak or separate-page {
+        pagebreak()
+      }
+      
+      if indorsement-data.separate-page and indorsement-data.original-office != none {
+        // Separate-page indorsement format per AFH 33-337
+        [#indorsement-label to #indorsement-data.original-office, #current-date, #indorsement-data.original-subject]
+        
+        v(spacing.paragraph)
+        grid(
+          columns: (auto, 1fr),
+          indorsement-data.office-symbol,
+          align(right)[#current-date]
+        )
+        
+        v(spacing.paragraph)
+        grid(
+          columns: (auto, spacing.two-spaces, 1fr),
+          "MEMORANDUM FOR", "", indorsement-data.memo-for
+        )
+      } else {
+        // Standard indorsement format
+        // Add spacing only if we didn't just do a pagebreak
+        if not indorsement-data.leading-pagebreak {
+          v(spacing.paragraph)
+        }
+        [#indorsement-label, #indorsement-data.office-symbol]
+        
+        v(spacing.paragraph)
+        grid(
+          columns: (auto, spacing.two-spaces, 1fr),
+          "MEMORANDUM FOR", "", indorsement-data.memo-for
+        )
+      }
+      
+      // Render body content if provided
+      if indorsement-data.body != none {
+        process-document-body(indorsement-data.body)
+      }
+      
+      // Signature block positioning per AFH 33-337
+      render-signature-block(indorsement-data.signature-block)
+      
+      // Attachments section
+      if indorsement-data.attachments.len() > 0 {
+        calculate-backmatter-spacing(true)
+        let attachment-count = indorsement-data.attachments.len()
+        let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
+        
+        [#section-label]
+        parbreak()
+        enum(..indorsement-data.attachments, numbering: "1.")
+      }
+      
+      // Courtesy copies section
+      if indorsement-data.cc.len() > 0 {
+        calculate-backmatter-spacing(indorsement-data.attachments.len() == 0)
+        [cc:]
+        parbreak()
+        indorsement-data.cc.join("\n")
+      }
+    }
+  }
+  
+  return indorsement-data
 }
 
 /// Renders all backmatter sections with proper spacing and page breaks.
