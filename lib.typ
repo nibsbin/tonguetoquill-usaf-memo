@@ -23,12 +23,12 @@
   ),
   attachments: (),
   cc: (),
-  body: none,
   leading_pagebreak: false,
   separate_page: false,
   original_office: none,
   original_date: none,
-  original_subject: none
+  original_subject: none,
+  body
 ) = {
   let data = (
     office_symbol: office_symbol,
@@ -36,12 +36,12 @@
     signature_block: signature_block,
     attachments: attachments,
     cc: cc,
-    body: body,
     leading_pagebreak: leading_pagebreak,
     separate_page: separate_page,
     original_office: original_office,
     original_date: original_date,
-    original_subject: original_subject
+    original_subject: original_subject,
+    body: body,
   )
   
   data.render = (body_font: "Times New Roman") => {
