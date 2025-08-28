@@ -31,16 +31,16 @@ typst compile lib.typ --root .
 ```typst
 #import "lib.typ": *
 
-#usaf-memo(
+#OfficialMemorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "YOUR ORGANIZATION",
   memo-for: "RECIPIENT ORG/SYMBOL",
-  from-block: [
-    YOUR-ORG/SYMBOL\
-    Your Organization Name\
-    Street Address\
-    City ST 12345-6789
-  ],
+  from-block: (
+    "YOUR-ORG/SYMBOL",
+    "Your Organization Name",
+    "Street Address",
+    "City ST 12345-6789"
+  ),
   subject: "Your Memo Subject",
   signature-block: (
     "FIRST M. LAST, Rank, USAF",
@@ -62,59 +62,36 @@ typst compile lib.typ --root .
 ### Required Parameters
 
 - **letterhead-title**: Organization title (e.g., "DEPARTMENT OF THE AIR FORCE")
-- **letterhead-caption**: Sub-organization (e.g., "42D OPERATIONS SQUADRON")
-- **memo-for**: Recipient designation
-- **from-block**: Sender information block
+- **letterhead-caption**: Sub-organization (e.g., "42D OPERATIONS SQUADRON")  
+- **memo-for**: Recipient designation (can be string, array, or nested array for grid layout)
+- **from-block**: Sender information as array of strings
 - **subject**: Memo subject line
 - **signature-block**: Array of signature lines
 - **body**: Main memo content (positional parameter)
 
 ### Optional Parameters
 
-- **references**: Array of reference documents
-- **attachments**: Array of attachment descriptions  
-- **cc**: Courtesy copy recipients
-- **distribution**: Distribution list
+- **letterhead-seal**: Path to organization seal image (default: "assets/dod_seal.png")
+- **references**: Array of reference documents  
+- **attachments**: Array of attachment descriptions
+- **cc**: Array of courtesy copy recipients
+- **distribution**: Array of distribution list entries
+- **indorsements**: Array of `Indorsement` objects for memo endorsements
+- **letterhead_font**: Font for letterhead (default: "Arial")
+- **body_font**: Font for body text (default: "Times New Roman")
+- **par_block_indent**: Enable paragraph block indentation (default: false)
+- **pagebreak_closing**: Force page break before closing sections (default: false)
 
-### Example with All Parameters
+### Complete Examples
 
-```typst
-#usaf-memo(
-  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead-caption: "42D OPERATIONS SQUADRON (AETC)",
-  memo-for: "ALL SQUADRON PERSONNEL",
-  from-block: [
-    42 OPS/CC\
-    42d Operations Squadron\
-    50 LeMay Plaza South\
-    Maxwell AFB AL 36112-6334
-  ],
-  subject: "Updated Safety Procedures",
-  references: (
-    "AFI 91-202, 8 Aug 2020, The US Air Force Mishap Prevention Program",
-    "AFMAN 91-203, 6 July 2018, Air Force Occupational Safety, Fire, and Health Standards"
-  ),
-  signature-block: (
-    "JOHN A. SMITH, Colonel, USAF",
-    "Commander",
-    "42d Operations Squadron"
-  ),
-  attachments: (
-    "Safety Checklist, Updated Procedures",
-    "Emergency Contact Information"
-  ),
-  cc: [
-    42 ABW/CC\
-    42 MSG/CC
-  ],
-  distribution: [
-    HQ AETC/A3\
-    All Flight Commanders\
-    Safety Office
-  ]
-)[
-  // Memo content here
-]
+For comprehensive examples with all parameters, see:
+- **Standard Air Force memo**: `template/usaf-memo.typ` - Shows proper formatting with references, attachments, cc, distribution, and indorsements
+- **Custom organization memo**: `template/starkindustries.typ` - Demonstrates custom letterhead and extensive use of all optional parameters
+
+To view these examples:
+```bash
+typst compile template/usaf-memo.typ --root .
+typst compile template/starkindustries.typ --root .
 ```
 
 ## Paragraph Numbering
