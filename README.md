@@ -17,6 +17,13 @@ A comprehensive Typst template for creating official United States Air Force mem
 
 ### Installation
 
+#### Option 1: Package Installation (Recommended)
+```bash
+# Install as a Typst package (when published)
+# typst package install usaf-memo
+```
+
+#### Option 2: Clone Repository
 ```bash
 # Clone the repository
 git clone https://github.com/SnpM/typst-usaf-memo.git
@@ -29,7 +36,11 @@ typst compile lib.typ --root .
 ### Basic Usage
 
 ```typst
+// When using as a cloned repository
 #import "lib.typ": *
+
+// When using as a package (future)
+// #import "@preview/usaf-memo:0.0.1": *
 
 #OfficialMemorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
@@ -85,12 +96,14 @@ typst compile lib.typ --root .
 ### Complete Examples
 
 For comprehensive examples with all parameters, see:
-- **Standard Air Force memo**: `template/usaf-memo.typ` - Shows proper formatting with references, attachments, cc, distribution, and indorsements
+- **Standard Air Force memo**: `template/usaf-template.typ` - Shows proper formatting with references, attachments, cc, distribution, and indorsements
+- **Space Force memo**: `template/ussf-template.typ` - Space Force memorandum variant with proper formatting
 - **Custom organization memo**: `template/starkindustries.typ` - Demonstrates custom letterhead and extensive use of all optional parameters
 
 To view these examples:
 ```bash
-typst compile template/usaf-memo.typ --root .
+typst compile template/usaf-template.typ --root .
+typst compile template/ussf-template.typ --root .
 typst compile template/starkindustries.typ --root .
 ```
 
@@ -110,6 +123,15 @@ Another regular paragraph.
 
 #sub-sub-sub-par[Third-level subparagraphs are numbered (a), (b), (c), etc.]
 ```
+
+## Sentence Spacing
+
+The project includes GitHub Copilot prompts in `.github/prompts/` to help with sentence spacing formatting:
+
+- **double-space-sentence.prompt.md**: Converts single spaces after sentences to double spaces (`~ `) within memo content
+- **single-space-sentence.prompt.md**: Converts double spaces back to single spaces within memo content
+
+These prompts help ensure consistent spacing formatting in your memorandums according to your organization's preferred style.
 
 ## Smart Page Break Handling
 
@@ -152,14 +174,14 @@ The template automatically handles:
 
 The `template/` directory contains sample memorandums demonstrating various use cases:
 
-- **usaf-memo.typ**: Standard Air Force memorandum template
-- **ussf-memo.typ**: Space Force memorandum variant
+- **usaf-template.typ**: Standard Air Force memorandum template
+- **ussf-template.typ**: Space Force memorandum variant  
 - **starkindustries.typ**: A humorous memo featuring Iron Man regulatory compliance issues
 
 To compile an example:
 
 ```bash
-typst compile template/usaf-memo.typ --root .
+typst compile template/usaf-template.typ --root .
 ```
 
 **Note**: The `--root .` flag is required when compiling templates that reference files from the root directory.
@@ -170,8 +192,8 @@ When compiling templates that reference files from the root directory (such as t
 
 ```bash
 # Compile any template file
-typst compile template/usaf-memo.typ --root .
-typst compile template/ussf-memo.typ --root .
+typst compile template/usaf-template.typ --root .
+typst compile template/ussf-template.typ --root .
 typst compile template/starkindustries.typ --root .
 ```
 
@@ -183,20 +205,31 @@ The `--root .` flag tells Typst to treat the current directory as the root for r
 - **Assets**: The `assets/dod_seal.png` file must be accessible for the DoD seal
 - **Fonts**: Times New Roman font (typically pre-installed on most systems)
 
+## Version
+
+Current version: **0.0.1** (under development)
+
+This template is designed for Typst compiler version 0.13.0 or higher.
+
 ## File Structure
 
 ```
 typst-usaf-memo/
 ├── lib.typ              # Main template file
+├── utils.typ            # Utility functions
 ├── assets/
 │   ├── dod_seal.png     # Department of Defense seal
 │   └── starkindustries_seal.png  # Example organization seal
 ├── template/
-│   ├── usaf-memo.typ    # Standard USAF memo template
-│   ├── ussf-memo.typ    # Space Force memo template
+│   ├── usaf-template.typ    # Standard USAF memo template
+│   ├── ussf-template.typ    # Space Force memo template
 │   └── starkindustries.typ  # Example memo with custom branding
 ├── docs/
 │   └── afh33-337_chapter14  # AFH 33-337 Chapter 14 reference
+├── tests/
+│   └── test-indorsements.typ  # Test file for indorsements
+├── .github/
+│   └── prompts/         # GitHub Copilot prompts for spacing
 ├── README.md           # This file
 └── LICENSE             # License information
 ```
