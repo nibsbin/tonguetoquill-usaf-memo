@@ -2,8 +2,8 @@
 
 //=====Configuration=====
 #let TWO_SPACES = 0.5em
+#let LINE_SPACING = 0.6em
 #let BLANK_LINE = 1em
-#let LINE_SPACING = 0.5em
 #let TAB_SIZE = 0.5in
 #let PAR_COUNTER_PREFIX = "par-counter-"
 #let PAR_NUMBERING_FORMATS = ("1.", "a.", "(1)", "(a)", n => underline(str(n)), n => underline(str(n)))

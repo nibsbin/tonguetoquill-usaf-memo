@@ -46,6 +46,7 @@
   )
   
   data.render = (body_font: "Times New Roman") => {
+    let date = datetime.today().display("[day] [month repr:short] [year]")
     // Step counter before entering context
     INDORSEMENT_COUNTER.step()
     
@@ -65,10 +66,14 @@
       // Check if this is a separate-page indorsement
       if data.separate_page and data.original_office != none {
         // AFH 33-337: Separate-page indorsement format
-        [#ind_label to #data.original_office, #data.original_date, #data.original_subject]
+        [#ind_label to #data.original_office, #date, #data.original_subject]
         
         v(BLANK_LINE)
-        [#data.office_symbol#h(TWO_SPACES)#datetime.today().display("[day] [month repr:short] [year]")]
+        grid(
+          columns: (auto, 1fr),
+          data.office_symbol,
+          align(right)[#date]
+        )
         
         v(BLANK_LINE)
         grid(
