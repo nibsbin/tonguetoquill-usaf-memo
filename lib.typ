@@ -21,11 +21,9 @@
 // =============================================================================
 
 /// Validates memorandum parameters for AFH 33-337 compliance.
+/// - params (dictionary): Dictionary of memorandum parameters.
 /// -> none
-#let validate-memo-compliance(
-  /// Dictionary of memorandum parameters. -> dictionary
-  params
-) = {
+#let validate-memo-compliance(params) = {
   // Validate required parameters exist
   let required-params = ("letterhead-title", "memo-for", "from-block", "subject", "signature-block")
   for param in required-params {
@@ -61,72 +59,62 @@
 /// These provide a convenient interface for hierarchical document structure
 
 /// First-level subparagraph (numbered a., b., c., etc.).
+/// - content (content): Paragraph content.
 /// -> content
-#let sub-par(
-  /// Paragraph content. -> content
-  content
-) = create-numbered-paragraph(content, level: 1)
+#let sub-par(content) = create-numbered-paragraph(content, level: 1)
 
 /// Second-level subparagraph (numbered (1), (2), (3), etc.).
+/// - content (content): Paragraph content.
 /// -> content
-#let sub-sub-par(
-  /// Paragraph content. -> content
-  content
-) = create-numbered-paragraph(content, level: 2)
+#let sub-sub-par(content) = create-numbered-paragraph(content, level: 2)
 
 /// Third-level subparagraph (numbered (a), (b), (c), etc.).
+/// - content (content): Paragraph content.
 /// -> content
-#let sub-sub-sub-par(
-  /// Paragraph content. -> content
-  content
-) = create-numbered-paragraph(content, level: 3)
+#let sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 3)
 
 /// Fourth-level subparagraph (numbered with underlined numbers).
+/// - content (content): Paragraph content.
 /// -> content
-#let sub-sub-sub-sub-par(
-  /// Paragraph content. -> content
-  content
-) = create-numbered-paragraph(content, level: 4)
+#let sub-sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 4)
 
 /// Fifth-level subparagraph (numbered with underlined letters).
+/// - content (content): Paragraph content.
 /// -> content
-#let sub-sub-sub-sub-sub-par(
-  /// Paragraph content. -> content
-  content
-) = create-numbered-paragraph(content, level: 5)
+#let sub-sub-sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 5)
 
 // =============================================================================
 // INDORSEMENT DATA STRUCTURE
 // =============================================================================
 
 /// Creates an indorsement object with proper AFH 33-337 formatting.
+/// - office_symbol (str): Sending organization symbol.
+/// - memo_for (str): Recipient organization symbol.
+/// - signature_block (array): Array of signature lines.
+/// - attachments (array): Array of attachment descriptions.
+/// - cc (array): Array of courtesy copy recipients.
+/// - leading_pagebreak (bool): Whether to force page break before indorsement.
+/// - separate_page (bool): Whether to use separate-page indorsement format.
+/// - original_office (none | str): Original memo's office symbol (for separate-page format).
+/// - original_date (none | str): Original memo's date (for separate-page format).
+/// - original_subject (none | str): Original memo's subject (for separate-page format).
+/// - body (content): Indorsement body content.
 /// -> dictionary
 #let Indorsement(
-  /// Sending organization symbol. -> str
   office_symbol: "ORG/SYMBOL",
-  /// Recipient organization symbol. -> str
   memo_for: "ORG/SYMBOL", 
-  /// Array of signature lines. -> array
   signature_block: (
     "FIRST M. LAST, Rank, USAF",
     "Duty Title",
     "Organization (if not on letterhead)"
   ),
-  /// Array of attachment descriptions. -> array
   attachments: (),
-  /// Array of courtesy copy recipients. -> array
   cc: (),
-  /// Whether to force page break before indorsement. -> bool
   leading_pagebreak: false,
-  /// Whether to use separate-page indorsement format. -> bool
   separate_page: false,
-  /// Original memo's office symbol (for separate-page format). -> none | str
   original_office: none,
-  /// Original memo's date (for separate-page format). -> none | str
   original_date: none,
-  /// Original memo's subject (for separate-page format). -> none | str
   original_subject: none,
-  /// Indorsement body content. -> content
   body
 ) = {
   let indorsement-data = (
@@ -144,11 +132,9 @@
   )
   
   /// Renders the indorsement with proper formatting.
+  /// - body-font (str): Font to use for body text.
   /// -> content
-  indorsement-data.render = (
-    /// Font to use for body text. -> str
-    body-font: "Times New Roman"
-  ) => {
+  indorsement-data.render = (body-font: "Times New Roman") => {
     let current-date = datetime.today().display("[day] [month repr:short] [year]")
     counters.indorsement.step()
     
@@ -240,17 +226,12 @@
 // =============================================================================
 
 /// Renders the document letterhead section.
+/// - title (str): Primary organization title.
+/// - caption (str): Sub-organization or command.
+/// - seal-path (str): Path to organization seal image.
+/// - font (str): Font for letterhead text.
 /// -> content
-#let render-letterhead(
-  /// Primary organization title. -> str
-  title, 
-  /// Sub-organization or command. -> str
-  caption, 
-  /// Path to organization seal image. -> str
-  seal-path, 
-  /// Font for letterhead text. -> str
-  font
-) = {
+#let render-letterhead(title, caption, seal-path, font) = {
   box(
     width: 100%,
     height: 0.75in,
@@ -282,11 +263,9 @@
 }
 
 /// Renders the MEMORANDUM FOR section.
+/// - recipients (str | array): Recipient organization(s).
 /// -> content
-#let render-memo-for-section(
-  /// Recipient organization(s). -> str | array
-  recipients
-) = {
+#let render-memo-for-section(recipients) = {
   v(spacing.paragraph)
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
@@ -302,11 +281,9 @@
 }
 
 /// Renders the FROM section.
+/// - from-info (array): Sender information array.
 /// -> content
-#let render-from-section(
-  /// Sender information array. -> array
-  from-info
-) = {
+#let render-from-section(from-info) = {
   v(spacing.paragraph)
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
@@ -316,11 +293,9 @@
 }
 
 /// Renders the SUBJECT section.
+/// - subject-text (str): Memorandum subject line.
 /// -> content
-#let render-subject-section(
-  /// Memorandum subject line. -> str
-  subject-text
-) = {
+#let render-subject-section(subject-text) = {
   v(spacing.paragraph)
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
@@ -329,11 +304,9 @@
 }
 
 /// Renders the optional references section.
+/// - references (array): Array of reference documents.
 /// -> content
-#let render-references-section(
-  /// Array of reference documents. -> array
-  references
-) = {
+#let render-references-section(references) = {
   if references.len() > 0 {
     v(spacing.paragraph)
     grid(
@@ -344,11 +317,9 @@
 }
 
 /// Renders the signature block with intelligent page break handling.
+/// - signature-lines (array): Array of signature lines.
 /// -> content
-#let render-signature-block(
-  /// Array of signature lines. -> array
-  signature-lines
-) = {
+#let render-signature-block(signature-lines) = {
   context {
     let signature-content = {
       v(5em)
@@ -375,15 +346,15 @@
 }
 
 /// Renders all backmatter sections with proper spacing and page breaks.
+/// - attachments (array): Array of attachment descriptions.
+/// - cc (array): Array of courtesy copy recipients.
+/// - distribution (array): Array of distribution list entries.
+/// - force-pagebreak (bool): Whether to force page break before backmatter.
 /// -> content
 #let render-backmatter-sections(
-  /// Array of attachment descriptions. -> array
   attachments: (),
-  /// Array of courtesy copy recipients. -> array
   cc: (),
-  /// Array of distribution list entries. -> array
   distribution: (),
-  /// Whether to force page break before backmatter. -> bool
   force-pagebreak: false
 ) = {
   let has-any-backmatter = attachments.len() > 0 or cc.len() > 0 or distribution.len() > 0
@@ -419,50 +390,50 @@
 // =============================================================================
 
 /// Creates an official memorandum following AFH 33-337 standards.
+/// - letterhead-title (str): Primary organization title.
+/// - letterhead-caption (str): Sub-organization or command.
+/// - letterhead-seal (str): Path to organization seal image.
+/// - memo-for (str | array): Recipient(s) - string, array, or nested array for grid layout.
+/// - from-block (array): Sender information as array of strings.
+/// - subject (str): Memorandum subject line.
+/// - references (array): Optional array of reference documents.
+/// - signature-block (array): Array of signature lines.
+/// - attachments (array): Array of attachment descriptions.
+/// - cc (array): Array of courtesy copy recipients.
+/// - distribution (array): Array of distribution list entries.
+/// - indorsements (array): Array of @@Indorsement objects.
+/// - letterhead-font (str): Font for letterhead text.
+/// - body-font (str): Font for body text.
+/// - paragraph-block-indent (bool): Enable paragraph block indentation.
+/// - force-backmatter-pagebreak (bool): Force page break before backmatter sections.
+/// - body (content): Main memorandum content.
 /// -> content
 #let official-memorandum(
-  /// Primary organization title. -> str
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
-  /// Sub-organization or command. -> str
   letterhead-caption: "AIR FORCE MATERIEL COMMAND",
-  /// Path to organization seal image. -> str
   letterhead-seal: "assets/dod_seal.png",
-  /// Recipient(s) - string, array, or nested array for grid layout. -> str | array
   memo-for: ("ORG/SYMBOL",),
-  /// Sender information as array of strings. -> array
   from-block: (
     "ORG/SYMBOL",
     "Organization",
     "Street Address",
     "City ST 80841-2024"
   ),
-  /// Memorandum subject line. -> str
   subject: "Format for the Official Memorandum",
-  /// Optional array of reference documents. -> array
   references: (),
-  /// Array of signature lines. -> array
   signature-block: (
     "FIRST M. LAST, Rank, USAF",
     "AFIT Masters Student, Carnegie Mellon University",
     "Organization (if not on letterhead)"
   ),
-  /// Array of attachment descriptions. -> array
   attachments: (),
-  /// Array of courtesy copy recipients. -> array
   cc: (),
-  /// Array of distribution list entries. -> array
   distribution: (),
-  /// Array of @@Indorsement objects. -> array
   indorsements: (),
-  /// Font for letterhead text. -> str
   letterhead-font: "Arial",
-  /// Font for body text. -> str
   body-font: "Times New Roman",
-  /// Enable paragraph block indentation. -> bool
   paragraph-block-indent: false,
-  /// Force page break before backmatter sections. -> bool
   force-backmatter-pagebreak: false,
-  /// Main memorandum content. -> content
   body
 ) = {
   // Validate AFH 33-337 compliance before proceeding

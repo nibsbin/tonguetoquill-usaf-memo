@@ -32,13 +32,10 @@
 // =============================================================================
 
 /// Creates an automatic grid layout from 1D or 2D array.
+/// - rows (array): Array of content (1D or 2D).
+/// - column-gutter (length): Space between columns.
 /// -> grid
-#let create-auto-grid(
-  /// Array of content (1D or 2D). -> array
-  rows, 
-  /// Space between columns. -> length
-  column-gutter: .5em
-) = {
+#let create-auto-grid(rows, column-gutter: .5em) = {
   // Normalize input to 2D array for consistent processing
   let normalized-rows = if rows.len() > 0 and type(rows.at(0)) != array {
     rows.map(item => (item,))  // Convert 1D to 2D
@@ -71,15 +68,15 @@
 // =============================================================================
 
 /// Renders backmatter sections with intelligent page break handling.
+/// - content (content): Section content to render.
+/// - section-label (str): Label for the section (e.g., "Attachments:").
+/// - numbering-style (none | str | function): Optional numbering format for lists.
+/// - continuation-label (none | str): Label when content continues on next page.
 /// -> content
 #let render-backmatter-section(
-  /// Section content to render. -> content
   content, 
-  /// Label for the section (e.g., "Attachments:"). -> str
   section-label, 
-  /// Optional numbering format for lists. -> none | str | function
   numbering-style: none, 
-  /// Label when content continues on next page. -> none | str
   continuation-label: none
 ) = {
   let formatted-content = {
@@ -113,11 +110,9 @@
 }
 
 /// Calculates vertical spacing before backmatter sections.
+/// - is-first-section (bool): Whether this is the first backmatter section.
 /// -> content
-#let calculate-backmatter-spacing(
-  /// Whether this is the first backmatter section. -> bool
-  is-first-section
-) = {
+#let calculate-backmatter-spacing(is-first-section) = {
   context {
     let space = if is-first-section { 3 * spacing.line } else { 2 * spacing.line }
     v(space, weak: true)
@@ -129,11 +124,9 @@
 // =============================================================================
 
 /// Gets the numbering format for a specific paragraph level.
+/// - level (int): Paragraph nesting level (0-based).
 /// -> str | function
-#let get-paragraph-numbering-format(
-  /// Paragraph nesting level (0-based). -> int
-  level
-) = {
+#let get-paragraph-numbering-format(level) = {
   if level < paragraph-config.numbering-formats.len() {
     paragraph-config.numbering-formats.at(level)
   } else {
@@ -142,15 +135,11 @@
 }
 
 /// Generates paragraph number for a given level.
+/// - level (int): Paragraph nesting level.
+/// - counter-value (none | int): Optional explicit counter value.
+/// - increment (bool): Whether to increment the counter.
 /// -> content
-#let generate-paragraph-number(
-  /// Paragraph nesting level. -> int
-  level, 
-  /// Optional explicit counter value. -> none | int
-  counter-value: none, 
-  /// Whether to increment the counter. -> bool
-  increment: false
-) = {
+#let generate-paragraph-number(level, counter-value: none, increment: false) = {
   let paragraph-counter = counter(paragraph-config.counter-prefix + str(level))
   
   if counter-value != none {
@@ -169,11 +158,9 @@
 }
 
 /// Calculates indentation width for a paragraph level.
+/// - level (int): Paragraph nesting level.
 /// -> length
-#let calculate-paragraph-indent(
-  /// Paragraph nesting level. -> int
-  level
-) = {
+#let calculate-paragraph-indent(level) = {
   if level == 0 { 
     return 0pt 
   }
@@ -188,13 +175,10 @@
 }
 
 /// Creates a formatted paragraph with automatic numbering and indentation.
+/// - content (content): Paragraph content.
+/// - level (int): Nesting level (0 for main paragraphs, 1+ for sub-paragraphs).
 /// -> content
-#let create-numbered-paragraph(
-  /// Paragraph content. -> content
-  content, 
-  /// Nesting level (0 for main paragraphs, 1+ for sub-paragraphs). -> int
-  level: 0
-) = {
+#let create-numbered-paragraph(content, level: 0) = {
   context {
     let paragraph-number = generate-paragraph-number(level, increment: true)
     counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
@@ -212,11 +196,9 @@
 }
 
 /// Processes document body content with automatic paragraph numbering.
+/// - content (content): Document body content.
 /// -> content
-#let process-document-body(
-  /// Document body content. -> content
-  content
-) = {
+#let process-document-body(content) = {
   counter("par-counter-0").update(1)
   
   show par: it => {
@@ -232,11 +214,9 @@
 
 /// Converts number to ordinal suffix for indorsements (1st, 2d, 3d, 4th, etc.).
 /// Follows AFH 33-337 numbering conventions.
+/// - number (int): The indorsement number.
 /// -> str
-#let get-ordinal-suffix(
-  /// The indorsement number. -> int
-  number
-) = {
+#let get-ordinal-suffix(number) = {
   let last-digit = calc.rem(number, 10)
   let last-two-digits = calc.rem(number, 100)
   
@@ -254,34 +234,21 @@
 }
 
 /// Formats indorsement number according to AFH 33-337 standards.
+/// - number (int): Indorsement sequence number.
 /// -> str
-#let format-indorsement-number(
-  /// Indorsement sequence number. -> int
-  number
-) = {
+#let format-indorsement-number(number) = {
   let suffix = get-ordinal-suffix(number)
   str(number) + suffix + " Ind"
 }
 
 /// Processes array of indorsements for rendering.
+/// - indorsements (array): Array of indorsement objects.
+/// - body-font (str): Font to use for indorsement text.
 /// -> content
-#let process-indorsements(
-  /// Array of indorsement objects. -> array
-  indorsements, 
-  /// Font to use for indorsement text. -> str
-  body-font: "Times New Roman"
-) = {
+#let process-indorsements(indorsements, body-font: "Times New Roman") = {
   if indorsements.len() > 0 {
     for indorsement in indorsements {
       (indorsement.render)(body-font: body-font)
     }
   }
 }
-
-// =============================================================================
-// DEPRECATED FEATURES REMOVED
-// =============================================================================
-
-// Legacy compatibility aliases have been removed to enforce modern API usage.
-// Use the standard function names instead of legacy aliases.
-// Removed deprecated constants and function aliases for cleaner codebase.
