@@ -30,14 +30,27 @@
     "Duty Title"
   ),
   attachments: (
-    "Attachment description, date"
+    "Attachment description, date",
+    "Additional attachment description, date"
   ),
   cc: (
     "Rank and name, ORG/SYMBOL, or both"
   ),
   distribution: (
     "ORG/SYMBOL or Organization Name"
-  )
+  ),
+  pagebreak_closing: true,
+  // indorsements: (
+  //   Indorsement(
+  //     office_symbol: "ORG/SYMBOL",
+  //     memo_for: "ORG/SYMBOL",
+  //     signature_block: (
+  //       "FIRST M LAST, Rank, USAF",
+  //       "Duty Title"
+  //     ),
+  //     body: [Number each indorsement in sequence (1st Ind, 2d Ind, 3d Ind, …). Begin the first indorsement on the second line below the last element of the official memorandum. Begin subsequent indorsements on the second line below the last element of the previous indorsement. Follow the indorsement number with your office symbol.]
+  //   ),
+  // ),
 )[
 
 Use only approved organizational letterhead for all correspondence. This applies to all letterhead, both pre-printed and computer generated. Reference (a) details the format and style of official letterhead such as centering the first line of the header 5/8ths of an inch from the top of the page in 12 point Copperplate Gothic Bold font. The second header line is centered 3 points below the first line in 10.5 point Copperplate Gothic Bold font.

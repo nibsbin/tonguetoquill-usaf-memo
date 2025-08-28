@@ -1,124 +1,8 @@
 // lib.typ: A Typst template for Tongue and Quill official memorandums.
-#import "indorsement.typ": render_indorsements, Indorsement
+#import "utils.typ": *
 
-//=====Configuration=====
-#let TWO_SPACES = 0.5em
-#let BLANK_LINE = 1em
-#let LINE_SPACING = 0.5em
-#let TAB_SIZE = 0.5in
-#let PAR_COUNTER_PREFIX = "par-counter-"
-#let PAR_NUMBERING_FORMATS = ("1.", "a.", "(1)", "(a)", n => underline(str(n)), n => underline(str(n)))
-#let PAR_BLOCK_INDENT = state("BLOCK_INDENT", true)
+//=====User-Facing Functions=====
 
-//==FRONT MATTER
-#let auto-grid(rows, column-gutter: .5em) = {
-  // Convert 1D array to 2D array for consistent processing
-  let normalized_rows = rows
-  if rows.len() > 0 and type(rows.at(0)) != array {
-    // This is a 1D array, convert each element to a single-element row
-    normalized_rows = rows.map(item => (item,))
-  }
-  
-  // Now process as 2D array - columns = max row length
-  let n = calc.max(..normalized_rows.map(r => r.len()))
-
-  // build flat list of cells (row-major)
-  let cells = ()
-  let make-cell = (x) => [#x]   // coerce string/content to a cell
-
-  for row in normalized_rows {
-    let k = row.len()
-    for i in range(0, n) {
-      let v = if i < k { row.at(i) } else { [] }
-      cells.push(make-cell(v))
-    }
-  }
-
-  grid(
-    columns: n,
-    column-gutter: column-gutter,
-    row-gutter: LINE_SPACING,
-    ..cells
-  )
-}
-
-//==CLOSING SECTIONS
-// Render closing section with automatic page break handling
-#let _render_closing_section(items, label, numbering_style: none, continuation_label: none) = {
-  let content = {
-    [#label]
-    parbreak()
-    if numbering_style != none { 
-      // Ensure items is always an array for enum
-      let item_array = if type(items) == array { items } else { (items,) }
-      enum(..item_array, numbering: numbering_style) 
-    } else { 
-      if type(items) == array {
-        items.join("\n")
-      } else {
-        items
-      }
-    }
-  }
-  
-  context {
-    let available_space = page.height - here().position().y - 1in
-    if measure(content).height > available_space {
-      if continuation_label != none { 
-        continuation_label 
-      } else { 
-        label + " (listed on next page):" 
-      }
-      pagebreak()
-    }
-    content
-  }
-}
-
-//==BODY PARAGRAPHS
-// Get the numbering format for a level
-#let _get_numbering_format(level) = {
-  if level < PAR_NUMBERING_FORMATS.len() {
-    PAR_NUMBERING_FORMATS.at(level)
-  } else {
-    "1"
-  }
-}
-
-// Get the indent width for a level
-#let _get_paragraph_indent(level) = {
-  if level == 0 { return 0pt }
-  
-  let buffer = ""
-  for i in range(0, level) {
-    let numbering_format = _get_numbering_format(i)
-    buffer += h(TWO_SPACES)
-    let _ = counter("paragraph-indent-dummy").update(1)
-    buffer += counter("paragraph-indent-dummy").display(numbering_format)
-  }
-  measure(buffer).width
-}
-
-#let _make_par(level, content) = {
-  let par_counter = counter(PAR_COUNTER_PREFIX + str(level))
-  let numbering_format = _get_numbering_format(level)
-
-  context {
-    let num = par_counter.display(numbering_format)
-    par_counter.step()
-    counter(PAR_COUNTER_PREFIX + str(level + 1)).update(1)
-    let indent_amount = _get_paragraph_indent(level)
-
-    block[
-      #v(BLANK_LINE)
-      #if PAR_BLOCK_INDENT.get() {
-        pad(left: indent_amount)[#num#h(TWO_SPACES)#content]
-      } else {
-        [#h(indent_amount)#num#h(TWO_SPACES)#content]
-      }
-    ]
-  }
-}
 // Paragraph functions with automatic numbering
 #let base-par(content) = _make_par(0, content)
 #let sub-par(content) = _make_par(1, content)
@@ -127,22 +11,132 @@
 #let sub-sub-sub-sub-par(content) = _make_par(4, content)
 #let sub-sub-sub-sub-sub-par(content) = _make_par(5, content)
 
-#let _process_body(content) = {
-  counter("par-counter-0").update(1)
+//=====Data Structures=====
+
+// Indorsement data structure
+#let Indorsement(
+  office_symbol: "ORG/SYMBOL",
+  memo_for: "ORG/SYMBOL",
+  signature_block: (
+    "FIRST M. LAST, Rank, USAF",
+    "Duty Title",
+    "Organization (if not on letterhead)"
+  ),
+  attachments: (),
+  cc: (),
+  body: none,
+  leading_pagebreak: false,
+  separate_page: false,
+  original_office: none,
+  original_date: none,
+  original_subject: none
+) = {
+  let data = (
+    office_symbol: office_symbol,
+    memo_for: memo_for,
+    signature_block: signature_block,
+    attachments: attachments,
+    cc: cc,
+    body: body,
+    leading_pagebreak: leading_pagebreak,
+    separate_page: separate_page,
+    original_office: original_office,
+    original_date: original_date,
+    original_subject: original_subject
+  )
   
-  show par: it => {
-    let content_str = repr(it.body)
-    if content_str.contains("grid(") {
-      it // Already formatted paragraph
-    } else {
-      base-par(it.body) // Wrap raw paragraph
+  data.render = (body_font: "Times New Roman") => {
+    context {
+      set text(font: body_font, size: 12pt)
+      set par(leading: LINE_SPACING, spacing: .5em, justify: true)
+      
+      // Get current indorsement number and increment counter
+      let ind_num = INDORSEMENT_COUNTER.get().first() + 1
+      INDORSEMENT_COUNTER.step()
+      let ind_label = _format_indorsement_number(ind_num)
+      
+      // Add page break if requested
+      if data.leading_pagebreak {
+        pagebreak()
+      }
+      
+      // Check if this is a separate-page indorsement
+      if data.separate_page and data.original_office != none {
+        // AFH 33-337: Separate-page indorsement format
+        [#ind_label to #data.original_office, #data.original_date, #data.original_subject]
+        
+        v(BLANK_LINE)
+        [#data.office_symbol#h(TWO_SPACES)#datetime.today().display("[day] [month repr:short] [year]")]
+        
+        v(BLANK_LINE)
+        grid(
+          columns: (auto, TWO_SPACES, 1fr),
+          "MEMORANDUM FOR", "", data.memo_for
+        )
+      } else {
+        // AFH 33-337: Begin indorsement on second line below last element
+        v(BLANK_LINE)
+        
+        // Indorsement header: "1st Ind, ORG/SYMBOL"
+        [#ind_label, #data.office_symbol]
+        
+        // AFH 33-337: MEMORANDUM FOR on next line
+        v(BLANK_LINE)
+        grid(
+          columns: (auto, TWO_SPACES, 1fr),
+          "MEMORANDUM FOR", "", data.memo_for
+        )
+      }
+      
+      // Body content (if provided)
+      if data.body != none {
+        v(BLANK_LINE)
+        _process_body(data.body, base-par)
+      }
+      
+      // Signature Block - AFH 33-337: 4.5 inches from left edge or 3 spaces right of center
+      // AFH 33-337: Start on fifth line below last line of text
+      v(5em)
+      align(left)[
+        // 4.5in from left edge minus 1in margin
+        #pad(left: 4.5in - 1in)[
+          #text(hyphenate: false)[
+            #for line in data.signature_block {
+              par(hanging-indent: 1em, justify: false)[#line]
+            }
+          ]
+        ]
+      ]
+      
+      // Attachments - AFH 33-337: at left margin, third line below signature element
+      if data.attachments.len() > 0 {
+        let leading_space = v_closing_leading_space(true, false)
+        v(leading_space)
+        let num = data.attachments.len()
+        let label = (if num == 1 { "Attachment:" } else { str(num) + " Attachments:" })
+        
+        [#label]
+        parbreak()
+        enum(..data.attachments, numbering: "1.")
+      }
+      
+      // cc - AFH 33-337: flush left, second line below attachment OR third line below signature
+      if data.cc.len() > 0 {
+        let leading_space = v_closing_leading_space(not data.attachments.len() > 0, data.attachments.len() > 0)
+        v(leading_space)
+        [cc:]
+        parbreak()
+        data.cc.join("\n")
+      }
     }
   }
   
-  content
+  return data
 }
 
-//=====Frontend=====
+
+
+//=====Main Template=====
 #let OfficialMemorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "AIR FORCE MATERIEL COMMAND",
@@ -168,6 +162,7 @@
   letterhead_font: "Arial",
   body_font: "Times New Roman",
   block_indent: true,
+  pagebreak_closing: false,
   body
 ) = {
   // Set document properties
@@ -260,7 +255,7 @@
 
   // Body content
   set par(justify: true)
-  _process_body(body)
+  _process_body(body, base-par)
 
   // Signature Block with page break handling
   context {
@@ -290,10 +285,15 @@
   let has_attachments = attachments.len() > 0
   let has_cc = cc.len() > 0
   let has_distribution = distribution.len() > 0
+
+  if pagebreak_closing and (has_attachments or has_cc or has_distribution) {
+    pagebreak(weak:true)
+  }
   
   // Attachments
   if has_attachments {
-    v(3 * LINE_SPACING)
+    let leading_space = v_closing_leading_space(true)
+    v_closing_leading_space(true)
     let num = attachments.len()
     let label = if num == 1 { "Attachment:" } else { str(num) + " Attachments:" }
     let continuation = (if num == 1 { "Attachment" } else { str(num) + " Attachments" }) + " (listed on next page):"
@@ -302,19 +302,21 @@
 
   // cc
   if has_cc {
-    v(if has_attachments { 2 * LINE_SPACING } else { 3 * LINE_SPACING })
+    v_closing_leading_space(not has_attachments)
     _render_closing_section(cc, "cc:")
   }
 
   // Distribution
   if has_distribution {
-    v(if has_attachments or has_cc { 2 * LINE_SPACING } else { 3 * LINE_SPACING })
+    v_closing_leading_space(not (has_attachments or has_cc))
     _render_closing_section(distribution, "DISTRIBUTION:")
   }
 
   // Indorsements
   if indorsements.len() > 0 {
-    render_indorsements(indorsements, body_font: body_font)
+    for indorsement in indorsements {
+      (indorsement.render)(body_font: body_font)
+    }
   }
   
 }
