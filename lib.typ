@@ -88,46 +88,46 @@
 // =============================================================================
 
 /// Creates an indorsement object with proper AFH 33-337 formatting.
-/// - office_symbol (str): Sending organization symbol.
-/// - memo_for (str): Recipient organization symbol.
-/// - signature_block (array): Array of signature lines.
+/// - office-symbol (str): Sending organization symbol.
+/// - memo-for (str): Recipient organization symbol.
+/// - signature-block (array): Array of signature lines.
 /// - attachments (array): Array of attachment descriptions.
 /// - cc (array): Array of courtesy copy recipients.
-/// - leading_pagebreak (bool): Whether to force page break before indorsement.
-/// - separate_page (bool): Whether to use separate-page indorsement format.
-/// - original_office (none | str): Original memo's office symbol (for separate-page format).
-/// - original_date (none | str): Original memo's date (for separate-page format).
-/// - original_subject (none | str): Original memo's subject (for separate-page format).
+/// - leading-pagebreak (bool): Whether to force page break before indorsement.
+/// - separate-page (bool): Whether to use separate-page indorsement format.
+/// - original-office (none | str): Original memo's office symbol (for separate-page format).
+/// - original-date (none | str): Original memo's date (for separate-page format).
+/// - original-subject (none | str): Original memo's subject (for separate-page format).
 /// - body (content): Indorsement body content.
 /// -> dictionary
 #let Indorsement(
-  office_symbol: "ORG/SYMBOL",
-  memo_for: "ORG/SYMBOL", 
-  signature_block: (
+  office-symbol: "ORG/SYMBOL",
+  memo-for: "ORG/SYMBOL", 
+  signature-block: (
     "FIRST M. LAST, Rank, USAF",
     "Duty Title",
     "Organization (if not on letterhead)"
   ),
   attachments: (),
   cc: (),
-  leading_pagebreak: false,
-  separate_page: false,
-  original_office: none,
-  original_date: none,
-  original_subject: none,
+  leading-pagebreak: false,
+  separate-page: false,
+  original-office: none,
+  original-date: none,
+  original-subject: none,
   body
 ) = {
   let indorsement-data = (
-    office-symbol: office_symbol,
-    memo-for: memo_for,
-    signature-block: signature_block,
+    office-symbol: office-symbol,
+    memo-for: memo-for,
+    signature-block: signature-block,
     attachments: attachments,
     cc: cc,
-    leading-pagebreak: leading_pagebreak,
-    separate-page: separate_page,
-    original-office: original_office,
-    original-date: original_date,
-    original-subject: original_subject,
+    leading-pagebreak: leading-pagebreak,
+    separate-page: separate-page,
+    original-office: original-office,
+    original-date: original-date,
+    original-subject: original-subject,
     body: body,
   )
   
