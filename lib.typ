@@ -182,7 +182,6 @@
       
       // Render body content if provided
       if indorsement-data.body != none {
-        v(spacing.paragraph)
         process-document-body(indorsement-data.body)
       }
       
