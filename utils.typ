@@ -131,12 +131,6 @@
 
 #let MEMO_PAR_CRIB = "ASDFASDFASDF"
 
-// #let two_sentence_spaces(body) = [
-//   #show ". " : [.~ ]
-//   #show "! " : [!~ ]
-//   #show "? " : [?~ ]
-//   #body
-// ]
 #let memo-par(content,level:0) = {
   context {
     let num = _get_par_num(level, step:true)
