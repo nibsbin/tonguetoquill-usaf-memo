@@ -137,7 +137,7 @@
       
       // Attachments section
       if indorsement-data.attachments.len() > 0 {
-        calculate-closing-spacing(true)
+        calculate-backmatter-spacing(true)
         let attachment-count = indorsement-data.attachments.len()
         let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
         
@@ -148,7 +148,7 @@
       
       // Courtesy copies section
       if indorsement-data.cc.len() > 0 {
-        calculate-closing-spacing(indorsement-data.attachments.len() == 0)
+        calculate-backmatter-spacing(indorsement-data.attachments.len() == 0)
         [cc:]
         parbreak()
         indorsement-data.cc.join("\n")
@@ -269,38 +269,38 @@
   }
 }
 
-/// Renders all closing sections with proper spacing and page breaks
-#let render-closing-sections(
+/// Renders all backmatter sections with proper spacing and page breaks
+#let render-backmatter-sections(
   attachments: (),
   cc: (),
   distribution: (),
   force-pagebreak: false
 ) = {
-  let has-any-closing = attachments.len() > 0 or cc.len() > 0 or distribution.len() > 0
+  let has-any-backmatter = attachments.len() > 0 or cc.len() > 0 or distribution.len() > 0
   
-  if force-pagebreak and has-any-closing {
+  if force-pagebreak and has-any-backmatter {
     pagebreak(weak: true)
   }
   
   // Attachments section
   if attachments.len() > 0 {
-    calculate-closing-spacing(true)
+    calculate-backmatter-spacing(true)
     let attachment-count = attachments.len()
     let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
     let continuation-label = (if attachment-count == 1 { "Attachment" } else { str(attachment-count) + " Attachments" }) + " (listed on next page):"
-    render-closing-section(attachments, section-label, numbering-style: "1.", continuation-label: continuation-label)
+    render-backmatter-section(attachments, section-label, numbering-style: "1.", continuation-label: continuation-label)
   }
 
   // Courtesy copies section
   if cc.len() > 0 {
-    calculate-closing-spacing(attachments.len() == 0)
-    render-closing-section(cc, "cc:")
+    calculate-backmatter-spacing(attachments.len() == 0)
+    render-backmatter-section(cc, "cc:")
   }
 
   // Distribution section
   if distribution.len() > 0 {
-    calculate-closing-spacing(attachments.len() == 0 and cc.len() == 0)
-    render-closing-section(distribution, "DISTRIBUTION:")
+    calculate-backmatter-spacing(attachments.len() == 0 and cc.len() == 0)
+    render-backmatter-section(distribution, "DISTRIBUTION:")
   }
 }
 
@@ -324,7 +324,7 @@
 /// @param letterhead_font: Font for letterhead text
 /// @param body_font: Font for body text
 /// @param paragraph_block_indent: Enable paragraph block indentation
-/// @param force_closing_pagebreak: Force page break before closing sections
+/// @param force_backmatter_pagebreak: Force page break before backmatter sections
 /// @param body: Main memorandum content
 /// @returns: Formatted official memorandum
 #let official-memorandum(
@@ -352,7 +352,7 @@
   letterhead-font: "Arial",
   body-font: "Times New Roman",
   paragraph-block-indent: false,
-  force-closing-pagebreak: false,
+  force-backmatter-pagebreak: false,
   body
 ) = {
   // Initialize document counters and settings
@@ -394,12 +394,12 @@
   // Signature block with intelligent page break handling
   render-signature-block(signature-block)
   
-  // Closing sections with proper spacing and page breaks
-  render-closing-sections(
+  // Backmatter sections with proper spacing and page breaks
+  render-backmatter-sections(
     attachments: attachments,
     cc: cc,
     distribution: distribution,
-    force-pagebreak: force-closing-pagebreak
+    force-pagebreak: force-backmatter-pagebreak
   )
 
   // Indorsements
@@ -437,7 +437,7 @@
   letterhead_font: "Arial",
   body_font: "Times New Roman",
   par_block_indent: false,
-  pagebreak_closing: false,
+  pagebreak_backmatter: false,
   body
 ) = {
   official-memorandum(
@@ -456,7 +456,7 @@
     letterhead-font: letterhead_font,
     body-font: body_font,
     paragraph-block-indent: par_block_indent,
-    force-closing-pagebreak: pagebreak_closing,
+    pagebreak_backmatter: pagebreak_backmatter,
     body
   )
 }
@@ -479,9 +479,9 @@ The template has been meticulously designed to ensure full compliance with Air F
 
 #sub-sub-par[Implementation is straightforward: simply wrap content in the appropriate paragraph function such as `sub_par[...]` for first-level subparagraphs, `sub_sub_par[...]` for second-level, and so forth.]
 
-#sub-par[*Smart page break handling*. The template automatically manages page breaks for closing sections (attachments, cc, and distribution lists) according to AFH 33-337 requirements. If a section doesn't fit on the current page, it uses proper continuation formatting with "(listed on next page)" notation, ensuring no orphaned headers or improper splits.]
+#sub-par[*Smart page break handling*. The template automatically manages page breaks for backmatter sections (attachments, cc, and distribution lists) according to AFH 33-337 requirements. If a section doesn't fit on the current page, it uses proper continuation formatting with "(listed on next page)" notation, ensuring no orphaned headers or improper splits.]
 
-#sub-par[*Complete document formatting automation*. All letterhead elements, margins, fonts, date formatting, signature block positioning, and closing elements are automatically configured according to AFH 33-337 specifications. This includes proper placement of the Department of Defense seal scaled to fit a 1in × 2in box while preserving aspect ratio.]
+#sub-par[*Complete document formatting automation*. All letterhead elements, margins, fonts, date formatting, signature block positioning, and backmatter elements are automatically configured according to AFH 33-337 specifications. This includes proper placement of the Department of Defense seal scaled to fit a 1in × 2in box while preserving aspect ratio.]
 
 #sub-par[*Flexible content management*. The template accommodates various memorandum types including single addressee, multiple addressee, and distribution lists. Reference citations, attachments, courtesy copies, and distribution lists are all properly formatted and positioned with intelligent page break handling.]
 

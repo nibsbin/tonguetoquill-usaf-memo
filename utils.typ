@@ -61,16 +61,16 @@
 }
 
 // =============================================================================
-// CLOSING SECTION UTILITIES
+// BACKMATTER SECTION UTILITIES
 // =============================================================================
 
-/// Renders closing sections with intelligent page break handling
+/// Renders backmatter sections with intelligent page break handling
 /// @param content: Section content to render
 /// @param section_label: Label for the section (e.g., "Attachments:")
 /// @param numbering_style: Optional numbering format for lists
 /// @param continuation_label: Label when content continues on next page
 /// @returns: Properly formatted section with page break handling
-#let render-closing-section(content, section-label, numbering-style: none, continuation-label: none) = {
+#let render-backmatter-section(content, section-label, numbering-style: none, continuation-label: none) = {
   let formatted-content = {
     [#section-label]
     parbreak()
@@ -101,10 +101,10 @@
   }
 }
 
-/// Calculates vertical spacing before closing sections
-/// @param is_first_section: Whether this is the first closing section
+/// Calculates vertical spacing before backmatter sections
+/// @param is_first_section: Whether this is the first backmatter section
 /// @returns: Appropriate vertical spacing
-#let calculate-closing-spacing(is-first-section) = {
+#let calculate-backmatter-spacing(is-first-section) = {
   context {
     let space = if is-first-section { 3 * spacing.line } else { 2 * spacing.line }
     v(space, weak: true)
@@ -254,8 +254,8 @@
 #let auto-grid = create-auto-grid
 #let memo-par = create-numbered-paragraph
 #let process-body = process-document-body
-#let render-closing-section = render-closing-section
-#let v-closing-leading-space = calculate-closing-spacing
+#let render-backmatter-section = render-backmatter-section
+#let v-backmatter-leading-space = calculate-backmatter-spacing
 #let get-ordinal-suffix = get-ordinal-suffix
 #let format-indorsement-number = format-indorsement-number
 
