@@ -2,7 +2,7 @@
 
 //=====Configuration=====
 #let TWO_SPACES = 0.5em
-#let LINE_SPACING = 0.6em
+#let LINE_SPACING = 0.5em
 #let BLANK_LINE = 1em
 #let TAB_SIZE = 0.5in
 #let PAR_COUNTER_PREFIX = "par-counter-"
