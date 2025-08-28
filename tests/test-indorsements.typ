@@ -3,18 +3,17 @@
 #official-memorandum(
   indorsements: (
     Indorsement(
-      office_symbol: "31 MXG/CC",
-      memo_for: "31 FW/CC",
-      signature_block: (
+      office-symbol: "31 MXG/CC",
+      memo-for: "31 FW/CC",
+      signature-block: (
         "JANE B. DOE, Lt Col, USAF",
         "Commander"
       ),
-      leading_pagebreak: true  // This indorsement will start on a new page
     )[This request has been reviewed and is approved for forwarding to wing level for final approval.],
     Indorsement(
-      office_symbol: "31 FW/CC", 
-      memo_for: "31 MXG/MXQ",
-      signature_block: (
+      office-symbol: "31 FW/CC", 
+      memo-for: "31 MXG/MXQ",
+      signature-block: (
         "ROBERT C. JOHNSON, Col, USAF",
         "Commander"
       ),

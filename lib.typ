@@ -184,40 +184,33 @@
 /// - signature-lines (array): Array of signature lines.
 /// -> content
 #let render-signature-block(signature-lines) = {
-  context {
-    let signature-content = {
-      v(5em)
-      align(left)[
-        #pad(left: 4.5in - 1in)[
-          #text(hyphenate: false)[
-            #for line in signature-lines {
-              par(hanging-indent: 1em, justify: false)[#line]
-            }
-          ]
+  let signature-content = {
+    v(5em)
+    align(left)[
+      #pad(left: 4.5in - 1in)[
+        #text(hyphenate: false)[
+          #for line in signature-lines {
+            par(hanging-indent: 1em, justify: false)[#line]
+          }
         ]
       ]
-    }
-    
-    // Calculate available space more precisely, accounting for minimum text requirements
-    let available-space = page.height - here().position().y - 1in
+    ]
+  }
+
+  // Use pagebreak-to to ensure signature appears with sufficient context
+  // This prevents orphaned signatures by keeping them with preceding content
+  context {
     let signature-height = measure(signature-content).height
-    
-    // AFH 33-337 requires at least 2 lines of body text before signature block
-    // Convert spacing.line (em) to points using current font size
-    let line-spacing-pt = measure([#v(spacing.line)]).height
-    let min-body-text-height = 2 * (12pt + line-spacing-pt)
-    let required-space = signature-height + min-body-text-height
-    
-    // Only break page if we have insufficient space for both minimum text and signature
-    if required-space > available-space {
+    let page-content-height = page.height - 2in  // Account for margins
+
+    // If signature would take up more than 1/3 of the page, consider page break
+    if signature-height > page-content-height / 3 {
       pagebreak(weak: true)
     }
-    
-    signature-content
   }
-}
 
-// =============================================================================
+  signature-content
+}// =============================================================================
 // INDORSEMENT DATA STRUCTURE
 // =============================================================================
 

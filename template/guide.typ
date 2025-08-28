@@ -78,7 +78,6 @@
         "[REVIEWER NAME], [Rank], USAF",
         "[REVIEWER TITLE]"
       ),
-      leading-pagebreak: true               // Force page break before this indorsement
     )[
       [First indorsement body text. This is where the reviewing office adds their comments, recommendations, or approval. Indorsements are automatically numbered as "1st Ind", "2d Ind", etc.]
     ],
@@ -93,7 +92,6 @@
       separate-page: true,                   // Use separate page format (common for final authority)
       original-office: "[ORIGINAL/SENDER]", // Original memo office symbol
       original-subject: "[Original Subject]", // Original memo subject
-      leading-pagebreak: true               // Force page break before this indorsement
     )[
       [Final indorsement text. This indorsement uses separate page format, commonly used when returning to the original sender with final approval or disapproval.]
     ]

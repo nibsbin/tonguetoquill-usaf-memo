@@ -58,7 +58,6 @@
       separate-page: true,
       original-office: "[Originator ORG/SYMBOL]",
       original-subject: "Memorandum Subject",
-      leading-pagebreak: true
     )[
         Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page. The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
       ],
