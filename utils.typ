@@ -195,19 +195,6 @@
   }
 }
 
-/// Processes document body content with automatic paragraph numbering.
-/// - content (content): Document body content.
-/// -> content
-#let process-document-body(content) = {
-  counter("par-counter-0").update(1)
-  
-  show par: it => {
-    create-numbered-paragraph(it.body, level: 0)
-  }
-  
-  content
-}
-
 // =============================================================================
 // INDORSEMENT UTILITIES
 // =============================================================================

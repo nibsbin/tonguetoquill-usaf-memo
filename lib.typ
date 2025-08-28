@@ -197,20 +197,48 @@
     ]
   }
 
-  // Use pagebreak-to to ensure signature appears with sufficient context
-  // This prevents orphaned signatures by keeping them with preceding content
+  block(breakable:false,signature-content)
+}
+
+/// Processes document body content with automatic paragraph numbering.
+/// - content (content): Document body content.
+/// -> content
+#let render-body(content) = {
+  set par(justify: true)
+  counter("par-counter-0").update(1)
+  let s = state("par-count", 0)
+
+  // Compute the number of paragraphs in body with a counter
   context {
-    let signature-height = measure(signature-content).height
-    let page-content-height = page.height - 2in  // Account for margins
-
-    // If signature would take up more than 1/3 of the page, consider page break
-    if signature-height > page-content-height / 3 {
-      pagebreak(weak: true)
-    }
+    let par-counter = counter("par-id-counter")
+    par-counter.update(0)
+    show par: it => {
+        par-counter.step()
+      }
+    content
   }
-
-  signature-content
-}// =============================================================================
+  
+  context {
+    let par-counter = counter("par-id-counter")
+    let par_count = par-counter.get().at(0) // Retrieved from previous pass
+    par-counter.update(1)
+    show par: it => {
+      context {
+        par-counter.step()
+        let cur_count = par-counter.get().at(0)
+        //Check if this is the last paragraph
+        if cur_count >= par_count{
+          //Make last par stick to signature
+          block(breakable:false,sticky:true)[#create-numbered-paragraph(it.body, level: 0)]
+        }else {
+          create-numbered-paragraph(it.body, level: 0)
+        }
+      }
+    }
+    content
+  }
+}
+// =============================================================================
 // INDORSEMENT DATA STRUCTURE
 // =============================================================================
 
@@ -306,14 +334,12 @@
           "MEMORANDUM FOR", "", indorsement-data.memo-for
         )
       }
-      
-      // Render body content if provided
-      if indorsement-data.body != none {
-        process-document-body(indorsement-data.body)
-      }
+      // Render body content
+      render-body(indorsement-data.body)
       
       // Signature block positioning per AFH 33-337
       render-signature-block(indorsement-data.signature-block)
+
       
       // Attachments section
       if indorsement-data.attachments.len() > 0 {
@@ -474,10 +500,10 @@
   render-references-section(references)
 
   // Main document body
-  set par(justify: true)
-  process-document-body(body)
-
-  // Signature block with intelligent page break handling
+  // Render body content
+  render-body(body)
+  
+  // Signature block positioning per AFH 33-337
   render-signature-block(signature-block)
   
   // Backmatter sections with proper spacing and page breaks
