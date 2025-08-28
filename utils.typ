@@ -1,4 +1,4 @@
-// utils.typ: Utility functions and backend code for Typst USAF memo template.
+// utils.typ: Utility functions and backend code for Typst usaf-memo package.
 
 // =============================================================================
 // CONFIGURATION CONSTANTS
