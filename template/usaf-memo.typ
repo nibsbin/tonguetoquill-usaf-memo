@@ -42,8 +42,8 @@
   pagebreak_closing: true,
   indorsements: (
     Indorsement(
-      office_symbol: "ORG/SYMBOL",
-      memo_for: "ORG/SYMBOL",
+      office_symbol: "ORG/SYMBOL [Office symbol for 1st Indorsement Official]",
+      memo_for: "ORG/SYMBOL [Office symbol for 2d Indorsement official]",
       signature_block: (
         "FIRST M LAST, Rank, USAF",
         "Duty Title"
@@ -68,8 +68,7 @@
         Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page.  The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
       ],
       separate_page: true,
-      original_office: "]Originator ORG/SYMBOL]",
-      original_date: "DD Mon YY",
+      original_office: "[Originator ORG/SYMBOL]",
       original_subject: "Memorandum Subject",
       leading_pagebreak: true
     ),
