@@ -22,8 +22,8 @@ A comprehensive Typst template for creating official United States Air Force mem
 git clone https://github.com/SnpM/typst-usaf-memo.git
 cd typst-usaf-memo
 
-# Compile the example
-typst compile lib.typ
+# Compile the example (note: --root flag is required for templates that reference the root)
+typst compile lib.typ --root .
 ```
 
 ### Basic Usage
@@ -182,8 +182,23 @@ The `template/` directory contains sample memorandums demonstrating various use 
 To compile an example:
 
 ```bash
+typst compile template/usaf-memo.typ --root .
+```
+
+**Note**: The `--root .` flag is required when compiling templates that reference files from the root directory.
+
+## Compilation
+
+When compiling templates that reference files from the root directory (such as the main library file `lib.typ`), you must use the `--root` flag:
+
+```bash
+# Compile any template file
+typst compile template/usaf-memo.typ --root .
+typst compile template/ussf-memo.typ --root .
 typst compile template/starkindustries.typ --root .
 ```
+
+The `--root .` flag tells Typst to treat the current directory as the root for resolving file imports, which is necessary for the templates to correctly find and import the main library file.
 
 ## Requirements
 
