@@ -11,6 +11,7 @@
   line: 0.5em,            // Line spacing within paragraphs
   paragraph: 1em,         // Blank line between paragraphs
   tab: 0.5in,             // Tab stop for alignment
+  margin:1in            // Standard page margin
 )
 
 /// Paragraph numbering configuration dictionary.

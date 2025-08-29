@@ -3,7 +3,8 @@
 #OfficialMemorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "123RD EXAMPLE SQUADRON",
-  //letterhead-font: "copperhead gothic" // Requires manual installation; default font is Arial
+  //letterhead-font: "copperhead gothicap" // Requires manual installation; default font is Arial
+  letterhead-font: "Copperplate CC",
   memo-for: (
     ("123 ES/CC", "123 ES/DO", "123 ES/CSS"),
     ("456 ES/CC", "456 ES/DO", "456 ES/CSS"),

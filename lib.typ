@@ -95,27 +95,29 @@
 /// - font (str): Font for letterhead text.
 /// -> content
 #let render-letterhead(title, caption, seal-path, font) = {
-  box(
-    width: 100%,
-    height: 0.75in,
-    fill: none,
-    stroke: none,
-    [
-      #place(
-        center + top,
-        align(center)[
-          #text(12pt, weight: "bold", font: font)[#title]\
-          #text(10.5pt, weight: "bold", font: font, fill: luma(24%))[#caption]
-        ]
-      )
-      
-      #place(
-        left + horizon,
-        dx: -0.25in,
-        dy: -0.125in,
-        image(seal-path, width: 1in, height: 2in, fit: "contain")
-      )
-    ]
+  place(
+    dy: 0.625in - spacing.margin, // 5/8in from top of page
+    box(
+      width: 100%,
+      //height: 1.75in - .625in, // 1.75in from top of page minus 5/8in from top margin
+      fill: none,
+      stroke: none,
+      [
+        #place(
+          center + top,
+          align(center)[
+            #text(12pt, font: font)[#title]\
+            #text(10.5pt, font: font, fill: luma(24%))[#caption]
+          ]
+        )
+      ]
+    )
+  )
+  place(
+    left + top,
+    dx: -0.5in,
+    dy: -1in,
+    image(seal-path, width: 1in, height: 2in, fit: "contain")
   )
 }
 
@@ -187,7 +189,7 @@
   let signature-content = {
     v(5 * spacing.paragraph)
     align(left)[
-      #pad(left: 4.5in - 1in)[
+      #pad(left: 4.5in - spacing.margin)[
         #text(hyphenate: false)[
           #for line in signature-lines {
             par(hanging-indent: 1em, justify: false)[#line]
@@ -472,7 +474,7 @@
   counters.indorsement.update(0)
   set page(
     paper: "us-letter",
-    margin: (left: 1in, right: 1in, top: 1in, bottom: 1in),
+    margin: (left: spacing.margin, right: spacing.margin, top: spacing.margin, bottom: spacing.margin),
   )
   set text(font: body-font, size: 12pt)
   set par(leading: spacing.line, spacing: spacing.line)
@@ -494,6 +496,7 @@
   render-letterhead(letterhead-title, letterhead-caption, letterhead-seal, letterhead-font)
 
   // Document header sections
+  v(1.75in - spacing.margin) // 1.75in from top of the page
   render-date-section()
   render-memo-for-section(memo-for)
   render-from-section(from-block)
