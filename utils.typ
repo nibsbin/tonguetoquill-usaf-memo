@@ -245,7 +245,7 @@
 /// - body-font (str): Font to use for indorsement text.
 /// -> content
 #let process-indorsements(indorsements, body-font: "Times New Roman") = {
-  if indorsements != none and indorsements.len() > 0 {
+  if not falsey(indorsements) {
     for indorsement in indorsements {
       (indorsement.render)(body-font: body-font)
     }
