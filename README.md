@@ -20,21 +20,14 @@ A comprehensive Typst template for creating official United States Air Force mem
 
 ### Installation
 
-#### Option 1: Package Installation (Recommended)
+1. [Install Typst](*https://github.com/typst/typst?tab=readme-ov-file#installation).
+
+2. Initialize template from Typst Universe
 ```bash
-# Install as a Typst package (when published)
-typst package install usaf-memo
+typst init @preview/usaf-memo:0.0.1
 ```
 
-#### Option 2: Clone Repository
-```bash
-# Clone the repository
-git clone https://github.com/SnpM/typst-usaf-memo.git
-cd typst-usaf-memo
-
-# Compile all examples and the library (requires bash)
-./build.sh
-```
+Alternatively, you can clone this repository directly. See [build.sh](build.sh) for an example build script.
 
 ### Basic Usage
 
