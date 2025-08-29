@@ -429,7 +429,7 @@
 /// - leading-backmatter-pagebreak (bool): Force page break before backmatter sections.
 /// - body (content): Main memorandum content.
 /// -> content
-#let official-memorandum(
+#let OfficialMemorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "AIR FORCE MATERIEL COMMAND",
   letterhead-seal: "assets/dod_seal.png",
@@ -523,7 +523,7 @@
 // EXAMPLE
 // ==============================================================================
 
-#official-memorandum()[
+#OfficialMemorandum()[
 
 Welcome to the Typst USAF Memo template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards. This comprehensive template eliminates the tedious formatting work that typically consumes valuable time when preparing official correspondence.
 

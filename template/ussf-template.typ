@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-#official-memorandum(
+#OfficialMemorandum(
   letterhead-title: "DEPARTMENT OF THE SPACE FORCE",
   letterhead-caption: "1ST SPACE OPERATIONS SQUADRON",
   memo-for: "SPACECOM/CC",

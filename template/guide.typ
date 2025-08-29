@@ -3,7 +3,7 @@
 #set page(margin: 0.75in)
 #set text(size: 10pt)
 
-#official-memorandum(
+#OfficialMemorandum(
   // LETTERHEAD CONFIGURATION
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "[YOUR SQUADRON/UNIT NAME]",
