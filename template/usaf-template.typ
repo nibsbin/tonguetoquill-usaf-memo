@@ -32,7 +32,6 @@
   distribution: (
     "ORG/SYMBOL or Organization Name"
   ),
-  force-backmatter-pagebreak: true,
   indorsements: (
     Indorsement(
       office-symbol: "ORG/SYMBOL [Office symbol for 1st Indorsement Official]",
@@ -62,8 +61,8 @@
         Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page. The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
       ],
   ),
+  //leading-backmatter-pagebreak: true, // Forces a break before backmatter sections (attachments, cc, distribution)
 )[
-
 Use only approved organizational letterhead for all correspondence.~ This applies to all letterhead, both pre-printed and computer generated.~ Reference (a) details the format and style of official letterhead such as centering the first line of the header 5/8ths of an inch from the top of the page in 12 point Copperplate Gothic Bold font.~ The second header line is centered 3 points below the first line in 10.5 point Copperplate Gothic Bold font.
 
 Note that this template provides proper formatting for various elements via Typst functions.~ The recipient line uses proper grid formatting, the body uses automatic paragraph numbering, the signature block uses precise positioning, and so on.~ The template handles all AFH 33-337 formatting requirements automatically.
@@ -82,7 +81,10 @@ Body text begins on the second line below the last line in the subject element a
 
 Follow the spacing guidance between the text, signature block, attachment element, courtesy copy element, and distribution lists carefully.~ The signature block starts on the fifth line below the body text – this spacing is handled automatically by the template.~ Never separate the text from the signature block: the signature page must include body text above the signature block.~ Also, the first element below the signature block begins on the third line below the last line of the duty title; this applies to attachments, courtesy copies, and distribution lists, whichever is used first.
 
-The template provides automatic formatting for all elements of the Official Memorandum.~ The paragraph numbering, spacing, margins, fonts, and positioning all comply with AFH 33-337 standards automatically.
+Elements of the Official Memorandum can be inserted as templated parts in MS Word.~ Select the “Insert” menu, “Quick Parts”, and then select the desired element.~ Follow the formatting instructions provided with the element template.
+
+#sub-par[To add classification banner markings (including FOUO markings), click on the header or footer, and in the “Header & Footer Tools” tab, select the Header / Footer dropdown menus on the left side.~ Use the pre-generated headers and footers – note that the first page is different from the second page onward, and so the second page header and footer must be applied separately. ]
+
 
 The example of this memorandum applies to many official memorandums that Airmen may be tasked to prepare; however, there are additional elements for special uses of the official memorandum.~ Refer to the Tongue and Quill discussion on the official memorandum for more details, or consult published guidance applicable to your duties.
 ]

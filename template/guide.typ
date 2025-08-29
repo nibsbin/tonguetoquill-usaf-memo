@@ -67,7 +67,7 @@
   letterhead-font: "Arial",                    // Letterhead font (Arial recommended)
   body-font: "Times New Roman",               // Body text font (TNR for AFH 33-337)
   paragraph-block-indent: false,             // true = indent paragraphs, false = block style
-  force-backmatter-pagebreak: false,         // true = force page break before attachments/cc
+  leading-backmatter-pagebreak: false,         // true = force page break before attachments/cc
   
   // INDORSEMENTS - For routing through multiple offices
   indorsements: (
