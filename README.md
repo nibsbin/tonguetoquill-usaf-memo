@@ -31,14 +31,14 @@ Alternatively, you can clone this repository directly. See [build.sh](build.sh) 
 
 ### Basic Usage
 
-Import the template and use the `OfficialMemorandum()` function with required parameters. See [`template/usaf-template.typ`](template/usaf-template.typ) for a complete example.
+Import the template and use the `official-memorandum()` function with required parameters. See [`template/usaf-template.typ`](template/usaf-template.typ) for a complete example.
 
-## OfficialMemorandum Parameters
+## official-memorandum Parameters
 
 ### Core Parameters
 
 - **letterhead-title** (string): Primary organization title (default: `"DEPARTMENT OF THE AIR FORCE"`)
-- **letterhead-caption** (string): Sub-organization name (default: `"AIR FORCE MATERIEL COMMAND"`)
+- **letterhead-caption** (string): Sub-organization name (default: `"AIR FORCE EDUCATION COMMAND"`)
 - **letterhead-seal** (string): Path to seal image (default: `"assets/dod_seal.png"`)
 - **memo-for** (string | array): Recipient designation(s) (default: `("ORG/SYMBOL",)`). Can be:
   - Single recipient: `"ORG/SYMBOL"`
@@ -63,7 +63,29 @@ Import the template and use the `OfficialMemorandum()` function with required pa
 
 ## Indorsement Parameters
 
+The `indorsement()` function creates indorsement objects that can be passed to the `indorsements` parameter of `official-memorandum()`. Indorsements follow AFH 33-337 formatting standards for memorandum endorsements.
 
+### Core Parameters
+
+- **office-symbol** (string): Sending organization symbol (default: `"ORG/SYMBOL"`)
+- **memo-for** (string): Recipient organization symbol (default: `"ORG/SYMBOL"`)
+- **signature-block** (array): Array of signature lines (default: `("FIRST M. LAST, Rank, USAF", "Duty Title", "Organization (if not on letterhead)")`)
+- **body** (content): Indorsement body content (required, no default)
+
+### Optional Parameters
+
+- **attachments** (array): Array of attachment descriptions (default: `none`)
+- **cc** (array): Array of courtesy copy recipients (default: `none`)
+- **leading-pagebreak** (boolean): Whether to force page break before indorsement (default: `false`)
+- **separate-page** (boolean): Whether to use separate-page indorsement format per AFH 33-337 (default: `false`)
+
+### Separate-Page Format Parameters
+
+When `separate-page` is `true`, these parameters control the separate-page indorsement format:
+
+- **original-office** (string): Original memo's office symbol (default: `none`)
+- **original-date** (string): Original memo's date (default: `none`)
+- **original-subject** (string): Original memo's subject (default: `none`)
 
 ### Complete Examples
 
@@ -132,7 +154,7 @@ The `template/` directory contains sample memorandums demonstrating various use 
 - **usaf-template.typ**: Standard Air Force memorandum template
 - **ussf-template.typ**: Space Force memorandum variant  
 - **starkindustries.typ**: Pepper notifies Tony about regulatory issues for Iron Man suits.
-- **guide.typ**: Comprehensive guide for using the OfficialMemorandum template
+- **guide.typ**: Comprehensive guide for using the official-memorandum template
 
 ## Compilation
 

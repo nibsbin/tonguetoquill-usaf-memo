@@ -434,7 +434,7 @@
 /// -> content
 #let official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead-caption: "AIR FORCE MATERIEL COMMAND",
+  letterhead-caption: "AIR FORCE EDUCATION COMMAND",
   letterhead-seal: "assets/dod_seal.png",
   memo-for: ("ORG/SYMBOL",),
   from-block: (
