@@ -28,6 +28,16 @@
 )
 
 // =============================================================================
+// MISC UTILITIES
+// =============================================================================
+
+/// Checks if a value is "falsey" (none, false, empty array, or empty string).
+/// - value (any): The value to check.
+#let falsey(value) = {
+  value == none or value == false or (type(value) == array and value.len() == 0) or (type(value) == str and value == "")
+}
+
+// =============================================================================
 // GRID LAYOUT UTILITIES
 // =============================================================================
 
@@ -235,7 +245,7 @@
 /// - body-font (str): Font to use for indorsement text.
 /// -> content
 #let process-indorsements(indorsements, body-font: "Times New Roman") = {
-  if indorsements.len() > 0 {
+  if indorsements != none and indorsements.len() > 0 {
     for indorsement in indorsements {
       (indorsement.render)(body-font: body-font)
     }

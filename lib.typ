@@ -170,7 +170,7 @@
 /// - references (array): Array of reference documents.
 /// -> content
 #let render-references-section(references) = {
-  if references.len() > 0 {
+  if not falsey(references) {
     v(spacing.paragraph)
     grid(
       columns: (auto, spacing.two-spaces, 1fr),
@@ -264,8 +264,8 @@
     "Duty Title",
     "Organization (if not on letterhead)"
   ),
-  attachments: (),
-  cc: (),
+  attachments: none,
+  cc: none,
   leading-pagebreak: false,
   separate-page: false,
   original-office: none,
@@ -343,7 +343,7 @@
 
       
       // Attachments section
-      if indorsement-data.attachments.len() > 0 {
+      if not falsey(indorsement-data.attachments) {
         calculate-backmatter-spacing(true)
         let attachment-count = indorsement-data.attachments.len()
         let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
@@ -354,8 +354,8 @@
       }
       
       // Courtesy copies section
-      if indorsement-data.cc.len() > 0 {
-        calculate-backmatter-spacing(indorsement-data.attachments.len() == 0)
+      if not falsey((indorsement-data.cc)) {
+        calculate-backmatter-spacing(falsey(indorsement-data.attachments))
         [cc:]
         parbreak()
         indorsement-data.cc.join("\n")
@@ -373,19 +373,19 @@
 /// - leading-backmatter-pagebreak (bool): Whether to force page break before backmatter.
 /// -> content
 #let render-backmatter-sections(
-  attachments: (),
-  cc: (),
-  distribution: (),
+  attachments: none,
+  cc: none,
+  distribution: none,
   leading-backmatter-pagebreak: false
 ) = {
-  let has-backmatter = attachments.len() > 0 or cc.len() > 0 or distribution.len() > 0
+  let has-backmatter = (attachments != none and attachments.len() > 0) or (cc != none and cc.len() > 0) or (distribution != none and distribution.len() > 0)
   
   if leading-backmatter-pagebreak and has-backmatter {
     pagebreak(weak: true)
   }
   
   // Attachments section
-  if attachments.len() > 0 {
+  if attachments != none and attachments.len() > 0 {
     calculate-backmatter-spacing(true)
     let attachment-count = attachments.len()
     let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
@@ -394,14 +394,14 @@
   }
 
   // Courtesy copies section
-  if cc.len() > 0 {
-    calculate-backmatter-spacing(attachments.len() == 0)
+  if cc != none and cc.len() > 0 {
+    calculate-backmatter-spacing(attachments == none or attachments.len() == 0)
     render-backmatter-section(cc, "cc:")
   }
 
   // Distribution section
-  if distribution.len() > 0 {
-    calculate-backmatter-spacing(attachments.len() == 0 and cc.len() == 0)
+  if distribution != none and distribution.len() > 0 {
+    calculate-backmatter-spacing((attachments == none or attachments.len() == 0) and (cc == none or cc.len() == 0))
     render-backmatter-section(distribution, "DISTRIBUTION:")
   }
 }
@@ -441,16 +441,16 @@
     "City ST 80841-2024"
   ),
   subject: "Format for the Official Memorandum",
-  references: (),
+  references: none,
   signature-block: (
     "FIRST M. LAST, Rank, USAF",
     "AFIT Masters Student, Carnegie Mellon University",
     "Organization (if not on letterhead)"
   ),
-  attachments: (),
-  cc: (),
-  distribution: (),
-  indorsements: (),
+  attachments: none,
+  cc: none,
+  distribution: none,
+  indorsements: none,
   letterhead-font: "Arial",
   body-font: "Times New Roman",
   paragraph-block-indent: false,
