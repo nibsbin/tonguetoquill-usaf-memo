@@ -1,3 +1,6 @@
+
+[![github-repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/SnpM/typst-usaf-memo)
+
 # USAF Memo Template for Typst
 
 A comprehensive Typst template for creating official United States Air Force memorandums that comply with AFH 33-337 "The Tongue and Quill" formatting standards.
