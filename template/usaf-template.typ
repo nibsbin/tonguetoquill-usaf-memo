@@ -1,6 +1,6 @@
 #import "@preview/usaf-memo:0.0.1": *
 
-#official-memorandum(
+#OfficialMemorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "123RD EXAMPLE SQUADRON",
   memo-for: (
