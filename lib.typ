@@ -106,8 +106,9 @@
         #place(
           center + top,
           align(center)[
-            #text(12pt, font: font)[#title]\
-            #text(10.5pt, font: font, fill: luma(24%))[#caption]
+            // Use Arial as the backup font
+            #text(12pt, font: (font,"Arial"))[#title]\
+            #text(10.5pt, font: (font,"Arial"), fill: luma(24%))[#caption]
           ]
         )
       ]
