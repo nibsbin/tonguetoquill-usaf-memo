@@ -1,4 +1,4 @@
-#import "../lib.typ": *
+#import "@preview/usaf-memo:0.0.1": *
 
 #official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
