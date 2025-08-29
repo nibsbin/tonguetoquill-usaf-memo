@@ -1,7 +1,7 @@
 #import "../lib.typ": *
 
 #OfficialMemorandum(
-  letterhead-title: "STARK INDUSTRIES",
+   letterhead-title: "STARK INDUSTRIES",
   letterhead-caption: "EXECUTIVE OFFICE",
   letterhead-seal: "assets/starkindustries_seal.png",
   memo-for: (
