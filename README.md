@@ -20,7 +20,7 @@ A comprehensive Typst template for creating official United States Air Force mem
 #### Option 1: Package Installation (Recommended)
 ```bash
 # Install as a Typst package (when published)
-# typst package install usaf-memo
+typst package install usaf-memo
 ```
 
 #### Option 2: Clone Repository
