@@ -1,8 +1,8 @@
 #import "../lib.typ": *
 
-#OfficialMemorandum(
+#official-memorandum(
   indorsements: (
-    Indorsement(
+    indorsement(
       office-symbol: "31 MXG/CC",
       memo-for: "31 FW/CC",
       signature-block: (
@@ -10,7 +10,7 @@
         "Commander"
       ),
     )[This request has been reviewed and is approved for forwarding to wing level for final approval.],
-    Indorsement(
+    indorsement(
       office-symbol: "31 FW/CC", 
       memo-for: "31 MXG/MXQ",
       signature-block: (

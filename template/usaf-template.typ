@@ -1,6 +1,6 @@
 #import "@preview/usaf-memo:0.0.1": *
 
-#OfficialMemorandum(
+#official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "123RD EXAMPLE SQUADRON",
   letterhead-font: "Copperplate CC",
@@ -34,7 +34,7 @@
     "ORG/SYMBOL or Organization Name"
   ),
   indorsements: (
-    Indorsement(
+    indorsement(
       office-symbol: "ORG/SYMBOL [Office symbol for 1st Indorsement Official]",
       memo-for: "ORG/SYMBOL [Office symbol for 2d Indorsement official]",
       signature-block: (
@@ -48,7 +48,7 @@
         
         Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page. The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
         ],
-    Indorsement(
+    indorsement(
       office-symbol: "ORG/SYMBOL",
       memo-for: "ORG/SYMBOL [Originator]",
       signature-block: (

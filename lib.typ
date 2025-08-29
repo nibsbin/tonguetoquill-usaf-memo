@@ -259,7 +259,7 @@
 /// - original-subject (none | str): Original memo's subject (for separate-page format).
 /// - body (content): Indorsement body content.
 /// -> dictionary
-#let Indorsement(
+#let indorsement(
   office-symbol: "ORG/SYMBOL",
   memo-for: "ORG/SYMBOL", 
   signature-block: (
@@ -276,7 +276,7 @@
   original-subject: none,
   body
 ) = {
-  let indorsement-data = (
+  let ind = (
     office-symbol: office-symbol,
     memo-for: memo-for,
     signature-block: signature-block,
@@ -293,7 +293,7 @@
   /// Renders the indorsement with proper formatting.
   /// - body-font (str): Font to use for body text.
   /// -> content
-  indorsement-data.render = (body-font: "Times New Roman") => {
+  ind.render = (body-font: "Times New Roman") => {
     let current-date = datetime.today().display("[day] [month repr:short] [year]")
     counters.indorsement.step()
     
@@ -304,69 +304,69 @@
       let indorsement-number = counters.indorsement.get().first()
       let indorsement-label = format-indorsement-number(indorsement-number)
       
-      if indorsement-data.leading-pagebreak or separate-page {
+      if ind.leading-pagebreak or separate-page {
         pagebreak()
       }
       
-      if indorsement-data.separate-page and indorsement-data.original-office != none {
+      if ind.separate-page and ind.original-office != none {
         // Separate-page indorsement format per AFH 33-337
-        [#indorsement-label to #indorsement-data.original-office, #current-date, #indorsement-data.original-subject]
+        [#indorsement-label to #ind.original-office, #current-date, #ind.original-subject]
         
         v(spacing.paragraph)
         grid(
           columns: (auto, 1fr),
-          indorsement-data.office-symbol,
+          ind.office-symbol,
           align(right)[#current-date]
         )
         
         v(spacing.paragraph)
         grid(
           columns: (auto, spacing.two-spaces, 1fr),
-          "MEMORANDUM FOR", "", indorsement-data.memo-for
+          "MEMORANDUM FOR", "", ind.memo-for
         )
       } else {
         // Standard indorsement format
         // Add spacing only if we didn't just do a pagebreak
-        if not indorsement-data.leading-pagebreak {
+        if not ind.leading-pagebreak {
           v(spacing.paragraph)
         }
-        [#indorsement-label, #indorsement-data.office-symbol]
+        [#indorsement-label, #ind.office-symbol]
         
         v(spacing.paragraph)
         grid(
           columns: (auto, spacing.two-spaces, 1fr),
-          "MEMORANDUM FOR", "", indorsement-data.memo-for
+          "MEMORANDUM FOR", "", ind.memo-for
         )
       }
       // Render body content
-      render-body(indorsement-data.body)
+      render-body(ind.body)
       
       // Signature block positioning per AFH 33-337
-      render-signature-block(indorsement-data.signature-block)
+      render-signature-block(ind.signature-block)
 
       
       // Attachments section
-      if not falsey(indorsement-data.attachments) {
+      if not falsey(ind.attachments) {
         calculate-backmatter-spacing(true)
-        let attachment-count = indorsement-data.attachments.len()
+        let attachment-count = ind.attachments.len()
         let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
         
         [#section-label]
         parbreak()
-        enum(..indorsement-data.attachments, numbering: "1.")
+        enum(..ind.attachments, numbering: "1.")
       }
       
       // Courtesy copies section
-      if not falsey((indorsement-data.cc)) {
-        calculate-backmatter-spacing(falsey(indorsement-data.attachments))
+      if not falsey((ind.cc)) {
+        calculate-backmatter-spacing(falsey(ind.attachments))
         [cc:]
         parbreak()
-        indorsement-data.cc.join("\n")
+        ind.cc.join("\n")
       }
     }
   }
   
-  return indorsement-data
+  return ind
 }
 
 /// Renders all backmatter sections with proper spacing and page breaks.
@@ -432,7 +432,7 @@
 /// - leading-backmatter-pagebreak (bool): Force page break before backmatter sections.
 /// - body (content): Main memorandum content.
 /// -> content
-#let OfficialMemorandum(
+#let official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "AIR FORCE MATERIEL COMMAND",
   letterhead-seal: "assets/dod_seal.png",
@@ -527,7 +527,7 @@
 // EXAMPLE
 // ==============================================================================
 
-#OfficialMemorandum()[
+#official-memorandum()[
 
 Welcome to the Typst USAF Memo template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards. This comprehensive template eliminates the tedious formatting work that typically consumes valuable time when preparing official correspondence.
 

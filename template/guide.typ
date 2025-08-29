@@ -3,7 +3,7 @@
 #set page(margin: 0.75in)
 #set text(size: 10pt)
 
-#OfficialMemorandum(
+#official-memorandum(
   // LETTERHEAD CONFIGURATION
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "[YOUR SQUADRON/UNIT NAME]",
@@ -71,7 +71,7 @@
   
   // INDORSEMENTS - For routing through multiple offices
   indorsements: (
-    Indorsement(
+    indorsement(
       office-symbol: "[REVIEWING/OFFICE]",
       memo-for: "[NEXT/OFFICE]",
       signature-block: (
@@ -82,7 +82,7 @@
       [First indorsement body text. This is where the reviewing office adds their comments, recommendations, or approval. Indorsements are automatically numbered as "1st Ind", "2d Ind", etc.]
     ],
     
-    Indorsement(
+    indorsement(
       office-symbol: "[FINAL/AUTHORITY]",
       memo-for: "[ORIGINAL/SENDER]",
       signature-block: (
