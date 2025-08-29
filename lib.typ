@@ -185,7 +185,7 @@
 /// -> content
 #let render-signature-block(signature-lines) = {
   let signature-content = {
-    v(5em)
+    v(5 * spacing.paragraph)
     align(left)[
       #pad(left: 4.5in - 1in)[
         #text(hyphenate: false)[
