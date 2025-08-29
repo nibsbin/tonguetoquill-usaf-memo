@@ -48,10 +48,14 @@
 /// -> grid
 #let create-auto-grid(rows, column-gutter: .5em) = {
   // Normalize input to 2D array for consistent processing
-  let normalized-rows = if rows.len() > 0 and type(rows.at(0)) != array {
-    rows.map(item => (item,))  // Convert 1D to 2D
-  } else {
-    rows
+  let normalized-rows = {
+    let buffer = rows  
+    if rows.len() > 0 and type(rows.at(0)) != array {
+      buffer = rows.map(item => (item,))  // Convert 1D to 2D
+    }
+    //Add empty column for proper spacing
+    buffer = buffer.map(row => row + ("",))
+    buffer
   }
   
   // Calculate maximum column count
@@ -68,7 +72,7 @@
 
   grid(
     columns: max-columns,
-    column-gutter: column-gutter,
+    column-gutter: .1fr,
     row-gutter: spacing.line,
     ..cells
   )
