@@ -29,6 +29,16 @@ typst init @preview/usaf-memo:0.0.1
 
 Alternatively, you can clone this repository directly. See [build.sh](build.sh) for example commands to build the template files.
 
+### Fonts
+
+usaf-template.typ and ussf-template.typ use Copperplate CC for the letterhead which is an open-source clone of Copperhead Gothic Bold. The `.otf` font file is included in the `assets/fonts/`. Typst can recursively discover the font like so:
+
+```bash
+typst compile --root . --font-path . template/usaf-template.typ pdfs/usaf-template.pdf
+```
+
+If you are using the Typst web app, you can upload the font to your project and the app will automatically detect it.
+
 ### Basic Usage
 
 Import the template and use the `official-memorandum()` function with required parameters. See [`template/usaf-template.typ`](template/usaf-template.typ) for a complete example.
