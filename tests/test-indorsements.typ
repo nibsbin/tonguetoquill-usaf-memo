@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-#official-memorandum(
+#OfficialMemorandum(
   indorsements: (
     Indorsement(
       office-symbol: "31 MXG/CC",
