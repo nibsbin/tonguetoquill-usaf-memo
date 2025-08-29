@@ -32,109 +32,61 @@ typst package install usaf-memo
 git clone https://github.com/SnpM/typst-usaf-memo.git
 cd typst-usaf-memo
 
-# Compile the example (note: --root flag is required for templates that reference the root)
-typst compile lib.typ --root .
+# Compile all examples and the library (requires bash)
+./build.sh
 ```
 
 ### Basic Usage
 
-```typst
-// When using as a cloned repository
-#import "lib.typ": *
+Import the template and use the `OfficialMemorandum()` function with required parameters. See [`template/usaf-template.typ`](template/usaf-template.typ) for a complete example.
 
-// When using as a package (future)
-// #import "@preview/usaf-memo:0.0.1": *
+## OfficialMemorandum Parameters
 
-#official-memorandum(
-  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead-caption: "YOUR ORGANIZATION",
-  memo-for: "RECIPIENT ORG/SYMBOL",
-  from-block: (
-    "YOUR-ORG/SYMBOL",
-    "Your Organization Name",
-    "Street Address",
-    "City ST 12345-6789"
-  ),
-  subject: "Your Memo Subject",
-  signature-block: (
-    "FIRST M. LAST, Rank, USAF",
-    "Your Title",
-    "Your Organization"
-  )
-)[
-  // Your memo content goes here
-  This is the main body of your memorandum.
-  
-  #sub-par[This is a first-level subparagraph with automatic numbering.]
-  
-  #sub-sub-par[This is a second-level subparagraph.]
-]
-```
+### Core Parameters
 
-**Breaking Changes in Version 0.0.1:**
-- Removed deprecated `OfficialMemorandum()` function - use `official-memorandum()` instead
-- Removed legacy parameter aliases (e.g., `letterhead_font`, `body_font`) - use hyphenated names
-- Removed deprecated utility function aliases - use standard function names
-- Added strict AFH 33-337 compliance validation with automatic parameter validation
-- Enforced Typst compiler version 0.13.0+ requirement
-- Renamed internal "closing" terminology to "backmatter" for better AFH 33-337 alignment
-- Enhanced paragraph numbering functions for improved compliance
+- **letterhead-title** (string): Primary organization title (default: `"DEPARTMENT OF THE AIR FORCE"`)
+- **letterhead-caption** (string): Sub-organization name (default: `"AIR FORCE MATERIEL COMMAND"`)
+- **letterhead-seal** (string): Path to seal image (default: `"assets/dod_seal.png"`)
+- **memo-for** (string | array): Recipient designation(s) (default: `("ORG/SYMBOL",)`). Can be:
+  - Single recipient: `"ORG/SYMBOL"`
+  - Multiple recipients: `("ORG1/SYMBOL", "ORG2/SYMBOL")`
+  - Grid layout: `(("ORG1", "ORG2"), ("ORG3", "ORG4"))`
+- **from-block** (array): Sender information (default: `("ORG/SYMBOL", "Organization", "Street Address", "City ST 80841-2024")`)
+- **subject** (string): Memorandum subject line (default: `"Format for the Official Memorandum"`)
+- **signature-block** (array): Signature lines (default: `("FIRST M. LAST, Rank, USAF", "AFIT Masters Student, Carnegie Mellon University", "Organization (if not on letterhead)")`)
+- **references** (array): Reference documents (default: `none`)
+- **attachments** (array): Attachment descriptions (default: `none`)
+- **cc** (array): Courtesy copy recipients (default: `none`)
+- **distribution** (array): Distribution list (default: `none`)
+- **indorsements** (array): Indorsement objects (default: `none`)
+- **body** (content): Main memorandum content (required, no default)
 
-## Template Parameters
+### Style Parameters
 
-### Required Parameters
+- **letterhead-font** (string): Letterhead font (default: `"Arial"`)
+- **body-font** (string): Body font - must be Times New Roman (default: `"Times New Roman"`)
+- **paragraph-block-indent** (boolean): Enable block indentation (default: `false`)
+- **leading-backmatter-pagebreak** (boolean): Force page break before backmatter (default: `false`)
 
-- **letterhead-title**: Organization title (e.g., "DEPARTMENT OF THE AIR FORCE")
-- **letterhead-caption**: Sub-organization (e.g., "42D OPERATIONS SQUADRON")  
-- **memo-for**: Recipient designation (can be string, array, or nested array for grid layout)
-- **from-block**: Sender information as array of strings
-- **subject**: Memo subject line
-- **signature-block**: Array of signature lines
-- **body**: Main memo content (positional parameter)
+## Indorsement Parameters
 
-### Optional Parameters
 
-- **letterhead-seal**: Path to organization seal image (default: "assets/dod_seal.png")
-- **references**: Array of reference documents  
-- **attachments**: Array of attachment descriptions
-- **cc**: Array of courtesy copy recipients
-- **distribution**: Array of distribution list entries
-- **indorsements**: Array of `Indorsement` objects for memo endorsements
-- **letterhead-font**: Font for letterhead (default: "Arial")
-- **body-font**: Font for body text (default: "Times New Roman", required for AFH 33-337 compliance)
-- **paragraph-block-indent**: Enable paragraph block indentation (default: false)
-- **force-backmatter-pagebreak**: Force page break before backmatter sections (default: false)
 
 ### Complete Examples
 
 For comprehensive examples with all parameters, see:
+- **Guide**: `template/guide.typ` - Comprehensive guide showing all parameters and features
 - **Standard Air Force memo**: `template/usaf-template.typ` - Shows proper formatting with references, attachments, cc, distribution, and indorsements
 - **Space Force memo**: `template/ussf-template.typ` - Space Force memorandum variant with proper formatting
 - **Custom organization memo**: `template/starkindustries.typ` - Demonstrates custom letterhead and extensive use of all optional parameters
 
-To view these examples:
-```bash
-typst compile template/usaf-template.typ --root .
-typst compile template/ussf-template.typ --root .
-typst compile template/starkindustries.typ --root .
-```
-
 ## Paragraph Numbering
 
 The template provides automatic hierarchical paragraph numbering following AFH 33-337 standards:
-
-```typst
-// Regular paragraphs are automatically numbered as 1., 2., 3., etc.
-This is a regular paragraph.
-
-Another regular paragraph.
-
-#sub-par[First-level subparagraphs are numbered a., b., c., etc.]
-
-#sub-sub-par[Second-level subparagraphs are numbered (1), (2), (3), etc.]
-
-#sub-sub-sub-par[Third-level subparagraphs are numbered (a), (b), (c), etc.]
-```
+- Regular paragraphs: 1., 2., 3., etc.
+- First-level subparagraphs: a., b., c., etc.
+- Second-level subparagraphs: (1), (2), (3), etc.
+- Third-level subparagraphs: (a), (b), (c), etc.
 
 ### Enhanced Paragraph Functions
 
@@ -167,15 +119,6 @@ The template automatically manages page breaks for closing sections according to
 3. **Clean breaks**: Moves entire sections to avoid orphaned headers
 4. **Compliant formatting**: Follows exact AFH 33-337 continuation requirements
 
-Example output:
-```
-Attachments (listed on next page):
-[page break]
-Attachments:
-1. Document A
-2. Document B
-```
-
 ## Document Structure
 
 The template automatically handles:
@@ -195,28 +138,12 @@ The `template/` directory contains sample memorandums demonstrating various use 
 
 - **usaf-template.typ**: Standard Air Force memorandum template
 - **ussf-template.typ**: Space Force memorandum variant  
-- **starkindustries.typ**: A humorous memo featuring Iron Man regulatory compliance issues
-
-To compile an example:
-
-```bash
-typst compile template/usaf-template.typ --root .
-```
-
-**Note**: The `--root .` flag is required when compiling templates that reference files from the root directory.
+- **starkindustries.typ**: Pepper notifies Tony about regulatory issues for Iron Man suits.
+- **guide.typ**: Comprehensive guide for using the OfficialMemorandum template
 
 ## Compilation
 
-When compiling templates that reference files from the root directory (such as the main library file `lib.typ`), you must use the `--root` flag:
-
-```bash
-# Compile any template file
-typst compile template/usaf-template.typ --root .
-typst compile template/ussf-template.typ --root .
-typst compile template/starkindustries.typ --root .
-```
-
-The `--root .` flag tells Typst to treat the current directory as the root for resolving file imports, which is necessary for the templates to correctly find and import the main library file.
+When compiling templates that reference files from the root directory (such as the main library file `lib.typ`), you must use the `--root .` flag to tell Typst to treat the current directory as the root for resolving file imports.
 
 ## Requirements
 
@@ -237,77 +164,15 @@ The template enforces strict AFH 33-337 compliance through:
 - **Enhanced spacing constants** - implements precise spacing requirements for professional formatting
 - **Improved backmatter handling** - renamed from "closing" for better terminology alignment
 
-## Version
-
-Current version: **0.0.1** (stable release)
-
-This template is designed for Typst compiler version 0.13.0 or higher and includes comprehensive validation to ensure compatibility.
-
-## File Structure
-
-```
-typst-usaf-memo/
-├── lib.typ              # Main template file
-├── utils.typ            # Utility functions and spacing constants
-├── typst.toml           # Package configuration
-├── assets/
-│   ├── dod_seal.png     # Department of Defense seal
-│   └── starkindustries_seal.png  # Example organization seal
-├── template/
-│   ├── usaf-template.typ    # Standard USAF memo template
-│   ├── ussf-template.typ    # Space Force memo template
-│   └── starkindustries.typ  # Example memo with custom branding
-├── docs/
-│   ├── afh33-337_chapter14  # AFH 33-337 Chapter 14 reference
-│   └── example-usaf-memo.pdf  # Example output
-├── tests/
-│   └── test-indorsements.typ  # Test file for indorsements functionality
-├── .github/
-│   └── prompts/         # GitHub Copilot prompts for spacing
-│       ├── double-space-sentence.prompt.md
-│       └── single-space-sentence.prompt.md
-├── README.md           # This file
-└── LICENSE             # License information
-```
-
-## Recent Updates
-
-### Version 0.0.1 (August 28, 2025)
-- **Major refactor for AFH 33-337 compliance**: Enhanced paragraph functions, improved spacing constants, and better indorsement rendering logic
-- **Parameter validation system**: Comprehensive validation with detailed error messages for missing or invalid parameters
-- **Deprecated feature removal**: Cleaned up legacy functions and parameter names for consistency
-- **Backmatter terminology**: Renamed internal "closing" references to "backmatter" for better AFH 33-337 alignment
-- **Enhanced templates**: Updated all template examples with latest parameter names and features
-- **Compiler enforcement**: Strict Typst 0.13.0+ requirement with automatic version checking
-
-### Previous Features
-- **Sentence spacing prompts**: GitHub Copilot prompts for consistent double/single space formatting
-- **Template standardization**: Renamed templates for clarity (usaf-template, ussf-template, etc.)
-- **Indorsement improvements**: Better handling of implicit bodies and recursive paragraph indentation
-- **Grid rendering**: Enhanced memo-for field with flexible layout options
-
-## Formatting Standards
-
-- **Margins**: 1 inch on all sides
-- **Font**: Times New Roman, 12 point
-- **Line spacing**: Proper spacing between elements
-- **Paragraph numbering**: Standard Air Force hierarchy with automatic indentation
-- **Date format**: Right-aligned, spelled out format
-- **Signature block**: Positioned according to regulations
-- **Page numbering**: Starts page 2, top right, 0.5" from edge
-- **DoD seal**: Scaled to fit 1in × 2in box while preserving aspect ratio
-- **Page breaks**: Smart handling of backmatter sections with continuation formatting
-- **Orphan prevention**: No isolated section headers or improper splits
-
 ## Contributing
 
-Contributions are welcome! Please feel free to submit issues or pull requests to improve the template.
+Contributions are welcome! Please feel free to submit issues or pull requests to the [GitHub repository](https://github.com/SnpM/typst-usaf-memo).
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Assets used in this project:
+External assets used in this project:
 
 - `assets/dod_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Seal_of_the_United_States_Department_of_Defense_(2001%E2%80%932022).svg).
 
