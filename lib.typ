@@ -422,7 +422,7 @@
 /// - attachments (array): Array of attachment descriptions.
 /// - cc (array): Array of courtesy copy recipients.
 /// - distribution (array): Array of distribution list entries.
-/// - indorsements (array): Array of @@Indorsement objects.
+/// - indorsements (array): Array of Indorsement objects.
 /// - letterhead-font (str): Font for letterhead text.
 /// - body-font (str): Font for body text.
 /// - paragraph-block-indent (bool): Enable paragraph block indentation.
