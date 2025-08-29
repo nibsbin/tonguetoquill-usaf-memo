@@ -183,10 +183,11 @@
     let paragraph-number = generate-paragraph-number(level, increment: true)
     counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
     let indent-width = calculate-paragraph-indent(level)
+    set text(costs: (widow: 0%))
 
     block[
       // Use a breakable block as vertical spacer; handles page breaks better
-      #block(breakable: true,below: spacing.paragraph)[]
+      #block(below: spacing.paragraph)[]
       #if paragraph-config.block-indent-state.get() {
         pad(left: indent-width)[#paragraph-number#h(spacing.two-spaces)#content]
       } else {

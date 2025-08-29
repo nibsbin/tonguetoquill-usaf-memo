@@ -215,7 +215,7 @@
     show par: it => {
       par-counter.step()
     }
-    box(width: 0pt, height: 0pt)[hide(content)]
+    box(width: 0pt, height: 0pt)[#content]
   }
   
   context {
@@ -227,11 +227,10 @@
         par-counter.step()
         let cur_count = par-counter.get().at(0)
         //Check if this is the last paragraph
-        if cur_count >= par_count and false{
+        if cur_count == par_count {
           let paragraph = create-numbered-paragraph(it.body, level: 0)
-          set text(costs: (widow: 0%))
-          //Just bump the whole paragraph for now. Could be smarter.
-          block(breakable:false,sticky:true,paragraph)
+          set text(costs: (orphan: 0%))
+          block(breakable:true,sticky:true)[#paragraph]
         }else {
           create-numbered-paragraph(it.body, level: 0)
         }
@@ -379,9 +378,9 @@
   distribution: (),
   leading-backmatter-pagebreak: false
 ) = {
-  let has-any-backmatter = attachments.len() > 0 or cc.len() > 0 or distribution.len() > 0
+  let has-backmatter = attachments.len() > 0 or cc.len() > 0 or distribution.len() > 0
   
-  if leading-backmatter-pagebreak and has-any-backmatter {
+  if leading-backmatter-pagebreak and has-backmatter {
     pagebreak(weak: true)
   }
   
