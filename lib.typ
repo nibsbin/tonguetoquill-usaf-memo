@@ -213,9 +213,9 @@
     let par-counter = counter("par-id-counter")
     par-counter.update(0)
     show par: it => {
-        par-counter.step()
-      }
-    content
+      par-counter.step()
+    }
+    box(width: 0pt, height: 0pt)[hide(content)]
   }
   
   context {
@@ -227,9 +227,11 @@
         par-counter.step()
         let cur_count = par-counter.get().at(0)
         //Check if this is the last paragraph
-        if cur_count >= par_count{
-          //Make last par stick to signature
-          block(breakable:false,sticky:true)[#create-numbered-paragraph(it.body, level: 0)]
+        if cur_count >= par_count and false{
+          let paragraph = create-numbered-paragraph(it.body, level: 0)
+          set text(costs: (widow: 0%))
+          //Just bump the whole paragraph for now. Could be smarter.
+          block(breakable:false,sticky:true,paragraph)
         }else {
           create-numbered-paragraph(it.body, level: 0)
         }
@@ -369,17 +371,17 @@
 /// - attachments (array): Array of attachment descriptions.
 /// - cc (array): Array of courtesy copy recipients.
 /// - distribution (array): Array of distribution list entries.
-/// - force-pagebreak (bool): Whether to force page break before backmatter.
+/// - leading-backmatter-pagebreak (bool): Whether to force page break before backmatter.
 /// -> content
 #let render-backmatter-sections(
   attachments: (),
   cc: (),
   distribution: (),
-  force-pagebreak: false
+  leading-backmatter-pagebreak: false
 ) = {
   let has-any-backmatter = attachments.len() > 0 or cc.len() > 0 or distribution.len() > 0
   
-  if force-pagebreak and has-any-backmatter {
+  if leading-backmatter-pagebreak and has-any-backmatter {
     pagebreak(weak: true)
   }
   
@@ -425,7 +427,7 @@
 /// - letterhead-font (str): Font for letterhead text.
 /// - body-font (str): Font for body text.
 /// - paragraph-block-indent (bool): Enable paragraph block indentation.
-/// - force-backmatter-pagebreak (bool): Force page break before backmatter sections.
+/// - leading-backmatter-pagebreak (bool): Force page break before backmatter sections.
 /// - body (content): Main memorandum content.
 /// -> content
 #let official-memorandum(
@@ -453,7 +455,7 @@
   letterhead-font: "Arial",
   body-font: "Times New Roman",
   paragraph-block-indent: false,
-  force-backmatter-pagebreak: false,
+  leading-backmatter-pagebreak: false,
   body
 ) = {
   // Validate AFH 33-337 compliance before proceeding
@@ -511,7 +513,7 @@
     attachments: attachments,
     cc: cc,
     distribution: distribution,
-    force-pagebreak: force-backmatter-pagebreak
+    leading-backmatter-pagebreak: leading-backmatter-pagebreak
   )
 
   // Indorsements

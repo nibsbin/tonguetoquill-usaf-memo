@@ -185,7 +185,8 @@
     let indent-width = calculate-paragraph-indent(level)
 
     block[
-      #v(spacing.paragraph)      
+      // Use a breakable block as vertical spacer; handles page breaks better
+      #block(breakable: true,below: spacing.paragraph)[]
       #if paragraph-config.block-indent-state.get() {
         pad(left: indent-width)[#paragraph-number#h(spacing.two-spaces)#content]
       } else {
