@@ -27,7 +27,7 @@ A comprehensive Typst template for creating official United States Air Force mem
 typst init @preview/usaf-memo:0.0.1
 ```
 
-Alternatively, you can clone this repository directly. See [build.sh](build.sh) for an example build script.
+Alternatively, you can clone this repository directly. See [build.sh](build.sh) for example commands to build the template files.
 
 ### Basic Usage
 
