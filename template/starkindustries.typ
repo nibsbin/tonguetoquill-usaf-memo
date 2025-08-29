@@ -1,5 +1,4 @@
 #import "../lib.typ": *
-
 #official-memorandum(
    letterhead-title: "STARK INDUSTRIES",
   letterhead-caption: "EXECUTIVE OFFICE",
@@ -58,45 +57,65 @@
 )[
 Mr. Stark, following your public declaration of identity as "Iron Man" and subsequent unauthorized flight activities, I have received numerous calls from federal agencies expressing serious concerns regarding regulatory compliance, airspace violations, and workplace safety standards.~ This memorandum serves as official consolidation of all the complaints I've fielded from various government officials who seem to think you should follow the same rules as everyone else.~ Imagine that.
 
-#sub-par[*Airspace and Flight Operations Violations*.~ Your recent flight activities have resulted in numerous breaches of federal aviation regulations and military airspace restrictions:]
+#SET_LEVEL(1)
 
-#sub-sub-par[Unauthorized supersonic flight over populated areas, specifically the repeated breaking of the sound barrier above Malibu residential neighborhoods during what witnesses describe as "showing off for reporters."]
+*Airspace and Flight Operations Violations*.~ Your recent flight activities have resulted in numerous breaches of federal aviation regulations and military airspace restrictions:
 
-#sub-sub-par[Failure to file required flight plans with the Federal Aviation Administration prior to conducting test flights of experimental aircraft, designated by you as "Mark II" and "Mark III" armor systems.~ Your assertion that "it's not really an aircraft, it's a suit" does not exempt you from FAA regulations.]
+#SET_LEVEL(2)
 
-#sub-sub-par[Unauthorized entry into restricted military airspace, including but not limited to:]
+Unauthorized supersonic flight over populated areas, specifically the repeated breaking of the sound barrier above Malibu residential neighborhoods during what witnesses describe as "showing off for reporters."
 
-#sub-sub-sub-par[Edwards Air Force Base Test Range during active F-22 Raptor training exercises, resulting in two pilots requiring psychological evaluation after reporting "a flying red and gold robot person" during combat maneuvers.]
+Failure to file required flight plans with the Federal Aviation Administration prior to conducting test flights of experimental aircraft, designated by you as "Mark II" and "Mark III" armor systems.~ Your assertion that "it's not really an aircraft, it's a suit" does not exempt you from FAA regulations.
 
-#sub-sub-sub-par[Naval Air Weapons Station China Lake restricted zone while "testing new repulsors" against decommissioned target drones, causing \$2.3 million in collateral damage to Range Control facilities.]
+Unauthorized entry into restricted military airspace, including but not limited to:
 
-#sub-sub-sub-par[Restricted airspace over Area 51, where your presence triggered DEFCON 2 alert status and deployment of experimental interceptor aircraft that you subsequently described on Twitter as "adorably primitive."]
+#SET_LEVEL(3)
 
-#sub-par[*Workplace Safety and Environmental Violations*.~ OSHA inspection teams have identified critical safety deficiencies in your personal workshop and testing facilities:]
+Edwards Air Force Base Test Range during active F-22 Raptor training exercises, resulting in two pilots requiring psychological evaluation after reporting "a flying red and gold robot person" during combat maneuvers.
 
-#sub-sub-par[Operation of arc reactor technology without proper radiation safety protocols, environmental impact assessments, or Nuclear Regulatory Commission oversight.~ Your statement that "it's perfectly safe, I have one in my chest" does not constitute adequate safety documentation.]
+Naval Air Weapons Station China Lake restricted zone while "testing new repulsors" against decommissioned target drones, causing \$2.3 million in collateral damage to Range Control facilities.
 
-#sub-sub-par[Conducting live-fire weapons testing in residential garage facilities without proper backstops, ventilation systems, or emergency response protocols.~ Neighbors have filed 47 noise complaints regarding "explosions and weird blue light" emanating from your property at all hours.]
+Restricted airspace over Area 51, where your presence triggered DEFCON 2 alert status and deployment of experimental interceptor aircraft that you subsequently described on Twitter as "adorably primitive."
 
-#sub-sub-par[Failure to provide required safety equipment to workshop assistant "DUM-E," whose repeated exposure to welding sparks, electrical discharge, and your colorful vocabulary may constitute unsafe working conditions for artificial intelligence entities.]
+#SET_LEVEL(1)
 
-#sub-par[*Security and Intelligence Concerns*.~ Your activities have attracted unwanted attention from various governmental and non-governmental entities:]
+*Workplace Safety and Environmental Violations*.~ OSHA inspection teams have identified critical safety deficiencies in your personal workshop and testing facilities:
 
-#sub-sub-par[Multiple foreign intelligence services have expressed interest in your technology, including three attempted break-ins by individuals wearing what appeared to be "discount knockoff Iron Man suits" manufactured with suspiciously Russian components.]
+#SET_LEVEL(2)
 
-#sub-sub-par[SHIELD Director Nick Fury has requested immediate coordination meeting to discuss "Avengers Initiative" recruitment, despite your stated preference to "work alone because committees are where good ideas go to die."]
+Operation of arc reactor technology without proper radiation safety protocols, environmental impact assessments, or Nuclear Regulatory Commission oversight.~ Your statement that "it's perfectly safe, I have one in my chest" does not constitute adequate safety documentation.
 
-#sub-sub-par[The press continues to speculate about armor capabilities after your demonstration of "unibeam" technology during the Stark Expo incident, leading to congressional inquiries about weapons export controls.]
+Conducting live-fire weapons testing in residential garage facilities without proper backstops, ventilation systems, or emergency response protocols.~ Neighbors have filed 47 noise complaints regarding "explosions and weird blue light" emanating from your property at all hours.
 
-#sub-par[*Required Corrective Actions*.~ To maintain Stark Industries' status as a trusted defense contractor, you must immediately implement the following measures:]
+Failure to provide required safety equipment to workshop assistant "DUM-E," whose repeated exposure to welding sparks, electrical discharge, and your colorful vocabulary may constitute unsafe working conditions for artificial intelligence entities.
 
-#sub-sub-par[Obtain proper FAA certification for all powered armor systems intended for flight operations, including type certification, airworthiness certificates, and pilot licensing appropriate for "experimental personal aircraft."]
+#SET_LEVEL(1)
 
-#sub-sub-par[Establish formal coordination protocols with military air traffic control for all test flights, including advance notification, approved flight corridors, and emergency procedures.]
+*Security and Intelligence Concerns*.~ Your activities have attracted unwanted attention from various governmental and non-governmental entities:
 
-#sub-sub-par[Submit to comprehensive safety inspection by joint OSHA-NRC-EPA team to establish proper protocols for arc reactor operation and weapons testing activities.]
+#SET_LEVEL(2)
 
-#sub-sub-par[Provide detailed technical specifications to authorized government personnel for security classification review and technology transfer control assessment.]
+Multiple foreign intelligence services have expressed interest in your technology, including three attempted break-ins by individuals wearing what appeared to be "discount knockoff Iron Man suits" manufactured with suspiciously Russian components.
+
+SHIELD Director Nick Fury has requested immediate coordination meeting to discuss "Avengers Initiative" recruitment, despite your stated preference to "work alone because committees are where good ideas go to die."
+
+The press continues to speculate about armor capabilities after your demonstration of "unibeam" technology during the Stark Expo incident, leading to congressional inquiries about weapons export controls.
+
+#SET_LEVEL(1)
+
+*Required Corrective Actions*.~ To maintain Stark Industries' status as a trusted defense contractor, you must immediately implement the following measures:
+
+#SET_LEVEL(2)
+
+Obtain proper FAA certification for all powered armor systems intended for flight operations, including type certification, airworthiness certificates, and pilot licensing appropriate for "experimental personal aircraft."
+
+Establish formal coordination protocols with military air traffic control for all test flights, including advance notification, approved flight corridors, and emergency procedures.
+
+Submit to comprehensive safety inspection by joint OSHA-NRC-EPA team to establish proper protocols for arc reactor operation and weapons testing activities.
+
+Provide detailed technical specifications to authorized government personnel for security classification review and technology transfer control assessment.
+
+#SET_LEVEL(0)
 
 Failure to achieve compliance within 30 days will result in suspension of all classified contracts, revocation of security clearances for key personnel, and potential criminal referral for violations of federal aviation, environmental, and weapons export regulations.~ 
 

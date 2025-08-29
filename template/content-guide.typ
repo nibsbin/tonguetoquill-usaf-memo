@@ -1,4 +1,4 @@
-#import "../lib.typ": *
+#import "@preview/usaf-memo:0.0.1": *
 
 #set page(margin: 0.75in)
 #set text(size: 10pt)
@@ -102,39 +102,59 @@ This document demonstrates every parameter and feature of the USAF memorandum te
 
 This memorandum serves as both a comprehensive guide and working example of the USAF memo template system. The template automatically handles all AFH 33-337 formatting requirements while providing flexibility for various memo types and organizational needs.
 
-#sub-par[*Required Parameters.* Only two parameters are required: `memo-for` (recipients) and `subject` (subject line in title case). Recipients can be formatted as a string, array, or 2D array for grid layout.]
+#SET_LEVEL(1)
 
-#sub-par[*Optional Components.* All other parameters are optional and can be omitted if not needed. This includes references, attachments, courtesy copies, distribution lists, and indorsements.]
+*Required Parameters.* Only two parameters are required: `memo-for` (recipients) and `subject` (subject line in title case). Recipients can be formatted as a string, array, or 2D array for grid layout.
+
+*Optional Components.* All other parameters are optional and can be omitted if not needed. This includes references, attachments, courtesy copies, distribution lists, and indorsements.
+
+#SET_LEVEL(0)
 
 The template provides intelligent paragraph structuring that automatically numbers and formats content according to Air Force standards. Each paragraph and subparagraph is properly spaced and indented without manual intervention.
 
-#sub-par[*Paragraph Structure.* Use the provided paragraph functions to create properly formatted content:]
+#SET_LEVEL(1)
 
-#sub-sub-par[Base paragraphs (like this one) are created by simply writing content directly in the memo body. They are automatically numbered (1., 2., 3., etc.) and formatted per AFH 33-337.]
+*Paragraph Structure.* Use the level setting system to create properly formatted content:
 
-#sub-sub-par[First-level subparagraphs use `#sub-par[]` for breaking down main points into specific details or requirements. These are lettered (a., b., c., etc.) and automatically increment.]
+#SET_LEVEL(2)
 
-#sub-sub-par[Second-level subparagraphs use `#sub-sub-par[]` for further detail breakdown. These use parenthetical numbers (1), (2), (3), etc.]
+Base paragraphs use `#SET_LEVEL(0)` followed by content. They are automatically numbered (1., 2., 3., etc.) and formatted per AFH 33-337.
 
-#sub-sub-par[Up to five levels of subparagraphs are supported using `#sub-sub-sub-par[]` and `#sub-sub-sub-sub-par[]` for complex organizational structures.]
+First-level subparagraphs use `#SET_LEVEL(1)` for breaking down main points into specific details or requirements. These are lettered (a., b., c., etc.) and automatically increment.
+
+Second-level subparagraphs use `#SET_LEVEL(2)` for further detail breakdown. These use parenthetical numbers (1), (2), (3), etc.
+
+Up to five levels of subparagraphs are supported using `#SET_LEVEL(3)`, `#SET_LEVEL(4)`, etc. for complex organizational structures.
+
+#SET_LEVEL(0)
 
 Writing content in Typst follows a markup-based approach that combines simplicity with powerful formatting capabilities. Understanding Typst content mode is essential for effective memo creation.
 
-#sub-par[*Typst Content Basics.* In Typst, you write content in "content mode" where text flows naturally. Functions are called with `#function-name[]` syntax, and the square brackets contain the content or parameters.]
+#SET_LEVEL(1)
 
-#sub-par[*Text Formatting.* Use standard markup for emphasis: `*bold text*` for *bold text*, `_italic text_` for _italic text_, and `` `code text` `` for `code text`. These can be combined as needed.]
+*Typst Content Basics.* In Typst, you write content in "content mode" where text flows naturally. Functions are called with `#function-name[]` syntax, and the square brackets contain the content or parameters.
 
-#sub-par[*Special Characters.* Typst handles most special characters automatically. For literal hash symbols or other Typst syntax characters, escape them with a backslash: `\#` produces \#.]
+*Text Formatting.* Use standard markup for emphasis: `*bold text*` for *bold text*, `_italic text_` for _italic text_, and `` `code text` `` for `code text`. These can be combined as needed.
 
-#sub-par[*Line Breaks and Spacing.* Single line breaks are ignored (like LaTeX). Use double line breaks to create new paragraphs. The template handles all official spacing requirements automatically.]
+*Special Characters.* Typst handles most special characters automatically. For literal hash symbols or other Typst syntax characters, escape them with a backslash: `\#` produces \#.
+
+*Line Breaks and Spacing.* Single line breaks are ignored (like LaTeX). Use double line breaks to create new paragraphs. The template handles all official spacing requirements automatically.
+
+#SET_LEVEL(0)
 
 Template features include automatic AFH 33-337 compliant formatting, smart paragraph and subparagraph numbering, intelligent page break handling, grid layout support for multiple recipients, complete indorsement system for routing, and enforcement of all Air Force publishing standards.
 
-#sub-par[*Service Variations.* The template supports both Air Force and Space Force formats:]
+#SET_LEVEL(1)
 
-#sub-sub-par[For Air Force memos, use `letterhead-title: "DEPARTMENT OF THE AIR FORCE"` and rank format `"Colonel, USAF"`.]
+*Service Variations.* The template supports both Air Force and Space Force formats:
 
-#sub-sub-par[For Space Force memos, use `letterhead-title: "DEPARTMENT OF THE SPACE FORCE"` and rank format `"Colonel, USSF"`.]
+#SET_LEVEL(2)
+
+For Air Force memos, use `letterhead-title: "DEPARTMENT OF THE AIR FORCE"` and rank format `"Colonel, USAF"`.
+
+For Space Force memos, use `letterhead-title: "DEPARTMENT OF THE SPACE FORCE"` and rank format `"Colonel, USSF"`.
+
+#SET_LEVEL(0)
 
 All formatting, spacing, fonts, and positioning are handled automatically per AFH 33-337 standards. This ensures compliance while allowing you to focus on content rather than formatting details.
 

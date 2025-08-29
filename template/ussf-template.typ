@@ -26,9 +26,13 @@ This memorandum demonstrates the proper format for Space Force official correspo
 
 All formatting, spacing, fonts, and organizational elements remain consistent with AFH 33-337 requirements while reflecting proper Space Force organizational structure and rank designations.
 
-#sub-par[Space Force personnel should use appropriate service-specific elements including proper rank abbreviations (USSF), organizational symbols, and duty titles specific to Space Force operations.]
+#SET_LEVEL(1)
 
-#sub-par[The letterhead should reflect the appropriate Space Force organization title, typically "DEPARTMENT OF THE SPACE FORCE" followed by the specific unit or command designation.]
+Space Force personnel should use appropriate service-specific elements including proper rank abbreviations (USSF), organizational symbols, and duty titles specific to Space Force operations.
+
+The letterhead should reflect the appropriate Space Force organization title, typically "DEPARTMENT OF THE SPACE FORCE" followed by the specific unit or command designation.
+
+#SET_LEVEL(0)
 
 This template ensures full compliance with official correspondence standards while maintaining Space Force identity and organizational structure.
 

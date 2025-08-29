@@ -52,39 +52,6 @@
 }
 
 // =============================================================================
-// USER-FACING PARAGRAPH FUNCTIONS
-// =============================================================================
-
-/// Paragraph functions with automatic numbering and proper indentation
-/// These provide a convenient interface for hierarchical document structure
-
-/// First-level subparagraph (numbered a., b., c., etc.).
-/// - content (content): Paragraph content.
-/// -> content
-#let sub-par(content) = create-numbered-paragraph(content, level: 1)
-
-/// Second-level subparagraph (numbered (1), (2), (3), etc.).
-/// - content (content): Paragraph content.
-/// -> content
-#let sub-sub-par(content) = create-numbered-paragraph(content, level: 2)
-
-/// Third-level subparagraph (numbered (a), (b), (c), etc.).
-/// - content (content): Paragraph content.
-/// -> content
-#let sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 3)
-
-/// Fourth-level subparagraph (numbered with underlined numbers).
-/// - content (content): Paragraph content.
-/// -> content
-#let sub-sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 4)
-
-/// Fifth-level subparagraph (numbered with underlined letters).
-/// - content (content): Paragraph content.
-/// -> content
-#let sub-sub-sub-sub-sub-par(content) = create-numbered-paragraph(content, level: 5)
-
-
-// =============================================================================
 // INTERNAL RENDERING FUNCTIONS
 // =============================================================================
 
@@ -231,11 +198,11 @@
         let cur_count = par-counter.get().at(0)
         //Check if this is the last paragraph
         if cur_count == par_count {
-          let paragraph = create-numbered-paragraph(it.body, level: 0)
+          let paragraph = memo-par(it.body)
           set text(costs: (orphan: 0%))
           block(breakable:true,sticky:true)[#paragraph]
         }else {
-          create-numbered-paragraph(it.body, level: 0)
+          memo-par(it.body)
         }
       }
     }
@@ -533,19 +500,27 @@ Welcome to the Typst USAF Memo template! This template provides automatic format
 
 The template has been meticulously designed to ensure full compliance with Air Force publishing standards while providing a streamlined user experience. Key features and capabilities include:
 
-#sub-par[*Automatic paragraph numbering and formatting*. Paragraphs are automatically numbered using the proper Air Force hierarchy (1., a., (1), (a)) and spaced with precise line spacing. Writers can focus entirely on content while the template handles all formatting requirements including proper indentation, alignment, and spacing between elements.]
+#SET_LEVEL(1)
 
-#sub-par[*Hierarchical document structure*. The template supports multi-level paragraph organization essential for complex policy documents and detailed instructions. Each subparagraph level is automatically numbered and properly indented to maintain visual clarity and regulatory compliance.]
+[*Automatic paragraph numbering and formatting*. Paragraphs are automatically numbered using the proper Air Force hierarchy (1., a., (1), (a)) and spaced with precise line spacing. Writers can focus entirely on content while the template handles all formatting requirements including proper indentation, alignment, and spacing between elements.]
 
-#sub-sub-par[Implementation is straightforward: simply wrap content in the appropriate paragraph function such as `@@sub-par` for first-level subparagraphs, `@@sub-sub-par` for second-level, and so forth.]
+[*Hierarchical document structure*. The template supports multi-level paragraph organization essential for complex policy documents and detailed instructions. Each subparagraph level is automatically numbered and properly indented to maintain visual clarity and regulatory compliance.]
 
-#sub-par[*Smart page break handling*. The template automatically manages page breaks for backmatter sections (attachments, cc, and distribution lists) according to AFH 33-337 requirements. If a section doesn't fit on the current page, it uses proper continuation formatting with "(listed on next page)" notation, ensuring no orphaned headers or improper splits.]
+#SET_LEVEL(2)
 
-#sub-par[*Complete document formatting automation*. All letterhead elements, margins, fonts, date formatting, signature block positioning, and backmatter elements are automatically configured according to AFH 33-337 specifications. This includes proper placement of the Department of Defense seal scaled to fit a 1in × 2in box while preserving aspect ratio.]
+Implementation is straightforward: simply wrap content in the appropriate paragraph function such as `@@PAR_LEV` for first-level subparagraphs, `@@sub-PAR_LEV` for second-level, and so forth.
 
-#sub-par[*Flexible content management*. The template accommodates various memorandum types including single addressee, multiple addressee, and distribution lists. Reference citations, attachments, courtesy copies, and distribution lists are all properly formatted and positioned with intelligent page break handling.]
+#SET_LEVEL(1)
 
-#sub-par[*Professional presentation standards*. Typography follows Air Force requirements with 12-point Times New Roman font, proper line spacing, justified text alignment, and consistent spacing between document elements. Page numbering, when required, is automatically positioned 0.5 inches from the top of the page and flush with the right margin.]
+*Smart page break handling*. The template automatically manages page breaks for backmatter sections (attachments, cc, and distribution lists) according to AFH 33-337 requirements. If a section doesn't fit on the current page, it uses proper continuation formatting with "(listed on next page)" notation, ensuring no orphaned headers or improper splits.
+
+*Complete document formatting automation*. All letterhead elements, margins, fonts, date formatting, signature block positioning, and backmatter elements are automatically configured according to AFH 33-337 specifications. This includes proper placement of the Department of Defense seal scaled to fit a 1in × 2in box while preserving aspect ratio.
+
+*Flexible content management*. The template accommodates various memorandum types including single addressee, multiple addressee, and distribution lists. Reference citations, attachments, courtesy copies, and distribution lists are all properly formatted and positioned with intelligent page break handling.
+
+*Professional presentation standards*. Typography follows Air Force requirements with 12-point Times New Roman font, proper line spacing, justified text alignment, and consistent spacing between document elements. Page numbering, when required, is automatically positioned 0.5 inches from the top of the page and flush with the right margin.
+
+#SET_LEVEL(0)
 
 Created by #link("https://github.com/snpm")[Nibs].
 

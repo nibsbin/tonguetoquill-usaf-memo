@@ -189,12 +189,20 @@
   return measure(indent-buffer).width
 }
 
+#let PAR_LEVEL_STATE = state("PAR_LEVEL", 0)
+#let SET_LEVEL(level) = {
+  context {
+    PAR_LEVEL_STATE.update(level)
+  }
+}
+
 /// Creates a formatted paragraph with automatic numbering and indentation.
 /// - content (content): Paragraph content.
 /// - level (int): Nesting level (0 for main paragraphs, 1+ for sub-paragraphs).
 /// -> content
-#let create-numbered-paragraph(content, level: 0) = {
+#let memo-par(content, level: 0) = {
   context {
+    let level = PAR_LEVEL_STATE.get()
     let paragraph-number = generate-paragraph-number(level, increment: true)
     counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
     let indent-width = calculate-paragraph-indent(level)
