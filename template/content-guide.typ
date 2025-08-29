@@ -136,20 +136,6 @@ Template features include automatic AFH 33-337 compliant formatting, smart parag
 
 #sub-sub-par[For Space Force memos, use `letterhead-title: "DEPARTMENT OF THE SPACE FORCE"` and rank format `"Colonel, USSF"`.]
 
-Usage instructions for this template are straightforward and designed for efficiency. Replace all bracketed placeholders with your actual content, remove unused optional parameters, and adjust the memo-for format based on your specific distribution needs.
-
-#sub-par[*Quick Start Steps.* Follow these steps for rapid memo creation:]
-
-#sub-sub-par[Copy the template file and rename it appropriately for your memo.]
-
-#sub-sub-par[Replace bracketed placeholders with your actual content, starting with required fields (memo-for and subject).]
-
-#sub-sub-par[Add optional components (references, attachments, etc.) only as needed for your specific memo.]
-
-#sub-sub-par[Write your memo content using the paragraph structure guidelines above.]
-
-#sub-sub-par[Compile with `typst compile memo.typ --root .` to generate the final PDF.]
-
 All formatting, spacing, fonts, and positioning are handled automatically per AFH 33-337 standards. This ensures compliance while allowing you to focus on content rather than formatting details.
 
 ]
