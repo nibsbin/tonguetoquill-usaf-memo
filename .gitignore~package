@@ -1,5 +1,5 @@
 dev_assets/
-assets/fonts/
+**fonts/
 .github/
 pdfs/
 tests/
