@@ -27,7 +27,7 @@ A comprehensive Typst template for creating official United States Air Force mem
 typst init @preview/usaf-memo:0.0.1
 ```
 
-Alternatively, you can clone this repository directly. See [build.sh](build.sh) for example commands to build the template files.
+Alternatively, you can clone this repository directly. See [build.sh](build.sh) for example commands to build the template files. For local development, [install the package locally](https://github.com/typst/packages/tree/main?tab=readme-ov-file#local-packages).
 
 ### Breaking Changes
 
@@ -50,7 +50,13 @@ If you are using the Typst web app, you can upload the font to your project and 
 
 ### Basic Usage
 
-Import the template and use the `official-memorandum()` function with required parameters. See [`template/usaf-template.typ`](template/usaf-template.typ) for a complete example.
+Import the core functions for creating memorandums:
+
+```typst
+#import "@preview/usaf-memo:0.0.1": official-memorandum, indorsement, SET_LEVEL
+```
+
+See [`template/usaf-template.typ`](template/content-guide.typ) for a complete example of creating a memorandum with `official-memorandum()`.
 
 ## official-memorandum Parameters
 
