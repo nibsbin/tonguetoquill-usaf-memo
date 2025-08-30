@@ -24,7 +24,7 @@ A comprehensive Typst template for creating official United States Air Force mem
 
 2. Initialize template from Typst Universe
 ```bash
-typst init @preview/usaf-memo:0.0.1
+typst init @preview/tonguetoquill-usaf-memo:0.0.1
 ```
 
 ### Local Development
@@ -46,7 +46,7 @@ If you are using the Typst web app or local Typst Universe package, you can down
 Import the core functions for creating memorandums:
 
 ```typst
-#import "@preview/usaf-memo:0.0.1": official-memorandum, indorsement, SET_LEVEL
+#import "@preview/tonguetoquill-usaf-memo:0.0.1": official-memorandum, indorsement, SET_LEVEL
 ```
 
 See [`template/usaf-template.typ`](template/content-guide.typ) for a complete example of creating a memorandum with `official-memorandum()`.
@@ -57,7 +57,7 @@ See [`template/usaf-template.typ`](template/content-guide.typ) for a complete ex
 
 - **letterhead-title** (string): Primary organization title (default: `"DEPARTMENT OF THE AIR FORCE"`)
 - **letterhead-caption** (string): Sub-organization name (default: `"AIR FORCE EDUCATION COMMAND"`)
-- **letterhead-seal** (string): Path to seal image (default: `"assets/dod_seal.png"`)
+- **letterhead-seal** (string): Image for letterhead seal (default: `"image(assets/dod_seal.png)"`)
 - **memo-for** (string | array): Recipient designation(s) (default: `("ORG/SYMBOL",)`). Can be:
   - Single recipient: `"ORG/SYMBOL"`
   - Multiple recipients: `("ORG1/SYMBOL", "ORG2/SYMBOL")`
