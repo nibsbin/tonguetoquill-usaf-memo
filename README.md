@@ -29,15 +29,6 @@ typst init @preview/usaf-memo:0.0.1
 
 Alternatively, you can clone this repository directly. See [build.sh](build.sh) for example commands to build the template files. For local development, [install the package locally](https://github.com/typst/packages/tree/main?tab=readme-ov-file#local-packages).
 
-### Breaking Changes
-
-**Version 0.0.2+**: The paragraph system has been updated from wrapper functions to a level-based system:
-
-- **Old system** (deprecated): `#sub-par[content]`, `#sub-sub-par[content]`
-- **New system**: `#SET_LEVEL(1)` followed by content, `#SET_LEVEL(2)` followed by content
-
-This change provides better performance and more intuitive paragraph level management. See the [Paragraph Numbering](#paragraph-numbering) section for complete usage details.
-
 ### Fonts
 
 usaf-template.typ and ussf-template.typ use Copperplate CC for the letterhead which is an open-source clone of Copperhead Gothic Bold. The `.otf` font file is included in the `assets/fonts/`. Typst can recursively discover the font like so:
