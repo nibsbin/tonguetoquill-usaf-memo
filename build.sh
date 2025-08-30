@@ -4,7 +4,6 @@
 
 echo "Compiling templates and tests to PDFs..."
 
-typst compile --root . lib.typ pdfs/lib.pdf
 typst compile --root . template/content-guide.typ pdfs/content-guide.pdf
 # These template use a third party font included in the repository
 typst compile --root . --font-path . template/usaf-template.typ pdfs/usaf-template.pdf
