@@ -75,8 +75,8 @@
           center + top,
           align(center)[
             // Use Arial as the backup font
-            #text(12pt, font: (font,"Arial"))[#title]\
-            #text(10.5pt, font: (font,"Arial"), fill: luma(24%))[#caption]
+            #text(12pt, font: (font,"Arial"), fill:rgb("#000099"))[#title]\
+            #text(10.5pt, font: (font,"Arial"), fill:rgb("#000099"))[#caption]
           ]
         )
       ]
@@ -419,30 +419,15 @@
     "[City ST 12345-6789]"
   ),
   subject: "[Your Subject in Title Case - Required Field]",
-  references: (
-    "[Reference 1: Regulation/Directive, Date, Title]",
-    "[Reference 2: AFI/AFH Number, Date, Title]",
-    "[Reference 3: Local instruction or guidance]"
-  ),
+  references: none,
   signature-block: (
     "[FIRST M. LAST, Rank, USAF]",
     "[Your Official Duty Title]",
     "[Organization (optional)]"
   ),
-  attachments: (
-    "[Description for first attachment, Date]",
-    "[Description for second attachment, Date]"
-  ),
-  cc: (
-    "[First CC Recipient, ORG/SYMBOL]",
-    "[Second CC Recipient, ORG/SYMBOL]",
-    "[Third CC Recipient]"
-  ),
-  distribution: (
-    "[ORGANIZATION/SYMBOL]",
-    "[Another Organization Name]",
-    "[Third Distribution Point]"
-  ),
+  attachments: none,
+  cc: none,
+  distribution: none,
   indorsements: none,
   letterhead-font: "Arial",
   body-font: "Times New Roman",
