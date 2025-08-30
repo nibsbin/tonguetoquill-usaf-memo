@@ -58,10 +58,10 @@
 /// Renders the document letterhead section.
 /// - title (str): Primary organization title.
 /// - caption (str): Sub-organization or command.
-/// - seal-path (str): Path to organization seal image.
+/// - seal-path (str): Seal image to place in the letterhead.
 /// - font (str): Font for letterhead text.
 /// -> content
-#let render-letterhead(title, caption, seal-path, font) = {
+#let render-letterhead(title, caption, letterhead-seal, font) = {
   place(
     dy: 0.625in - spacing.margin, // 5/8in from top of page
     box(
@@ -84,8 +84,11 @@
   place(
     left + top,
     dx: -0.5in,
-    dy: -1in,
-    image(seal-path, width: 1in, height: 2in, fit: "contain")
+    dy: -.5in,
+    block[
+      #set image(fit: "contain", width: auto, height: 1in)
+      #align(left)[#letterhead-seal]
+    ]
   )
 }
 
@@ -402,7 +405,7 @@
 #let official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "AIR FORCE EDUCATION COMMAND",
-  letterhead-seal: "assets/dod_seal.png",
+  letterhead-seal: image("template/dod_seal.png"),
   memo-for: ("ORG/SYMBOL",),
   from-block: (
     "ORG/SYMBOL",

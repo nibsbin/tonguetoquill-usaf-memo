@@ -1,4 +1,4 @@
-#import "@preview/usaf-memo:0.0.1": official-memorandum, indorsement, SET_LEVEL
+#import "@preview/tonguetoquill-usaf-memo:0.0.1": official-memorandum, indorsement, SET_LEVEL
 
 #set page(margin: 0.75in)
 #set text(size: 10pt)
@@ -7,7 +7,7 @@
   // LETTERHEAD CONFIGURATION
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "[YOUR SQUADRON/UNIT NAME]",
-  letterhead-seal: "assets/dod_seal.png",
+  letterhead-seal: image("dod_seal.png"),
   
   // RECIPIENTS - Multiple format options shown
   memo-for: (
