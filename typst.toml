@@ -1,5 +1,5 @@
 [package]
-name = "usaf-memo"
+name = "tonguetoquill-usaf-memo"
 version = "0.0.1"
 compiler = "0.13.0"
 entrypoint = "lib.typ"
