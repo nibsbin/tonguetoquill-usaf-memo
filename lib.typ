@@ -1,4 +1,5 @@
-// lib.typ: A Typst template for AFH 33-337 compliant official memorandums.
+// lib.typ: A Typst template backend for AFH 33-337 compliant official memorandums.
+
 #import "utils.typ": *
 
 // =============================================================================
@@ -81,15 +82,16 @@
       ]
     )
   )
-  place(
-    left + top,
-    dx: -0.5in,
-    dy: -.5in,
-    block[
-      #set image(fit: "contain", width: auto, height: 1in)
-      #align(left)[#letterhead-seal]
-    ]
-  )
+  if letterhead-seal != none {
+    place(
+      left + top,
+      dx: -0.5in,
+      dy: -.5in,
+      block[
+        #fit-box(width:2in,height:1in)[#letterhead-seal]
+      ]
+    )
+  }
 }
 
 /// Renders the date section (right-aligned).
@@ -386,7 +388,7 @@
 /// Creates an official memorandum following AFH 33-337 standards.
 /// - letterhead-title (str): Primary organization title.
 /// - letterhead-caption (str): Sub-organization or command.
-/// - letterhead-seal (str): Path to organization seal image.
+/// - letterhead-seal (str): Image content for organization seal.
 /// - memo-for (str | array): Recipient(s) - string, array, or nested array for grid layout.
 /// - from-block (array): Sender information as array of strings.
 /// - subject (str): Memorandum subject line.
@@ -404,25 +406,43 @@
 /// -> content
 #let official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead-caption: "AIR FORCE EDUCATION COMMAND",
-  letterhead-seal: image("template/dod_seal.png"),
-  memo-for: ("ORG/SYMBOL",),
+  letterhead-caption: "[YOUR SQUADRON/UNIT NAME]",
+  letterhead-seal: none,
+  memo-for: (
+    ("[FIRST/OFFICE]", "[SECOND/OFFICE]", "[THIRD/OFFICE]"),
+    ("[FOURTH/OFFICE]", "[FIFTH/OFFICE]", "[SIXTH/OFFICE]"),
+  ),
   from-block: (
-    "ORG/SYMBOL",
-    "Organization",
-    "Street Address",
-    "City ST 80841-2024"
+    "[YOUR/SYMBOL]",
+    "[Your Organization Name]",
+    "[Street Address]",
+    "[City ST 12345-6789]"
   ),
-  subject: "Format for the Official Memorandum",
-  references: none,
+  subject: "[Your Subject in Title Case - Required Field]",
+  references: (
+    "[Reference 1: Regulation/Directive, Date, Title]",
+    "[Reference 2: AFI/AFH Number, Date, Title]",
+    "[Reference 3: Local instruction or guidance]"
+  ),
   signature-block: (
-    "FIRST M. LAST, Rank, USAF",
-    "AFIT Masters Student, Carnegie Mellon University",
-    "Organization (if not on letterhead)"
+    "[FIRST M. LAST, Rank, USAF]",
+    "[Your Official Duty Title]",
+    "[Organization (optional)]"
   ),
-  attachments: none,
-  cc: none,
-  distribution: none,
+  attachments: (
+    "[Description for first attachment, Date]",
+    "[Description for second attachment, Date]"
+  ),
+  cc: (
+    "[First CC Recipient, ORG/SYMBOL]",
+    "[Second CC Recipient, ORG/SYMBOL]",
+    "[Third CC Recipient]"
+  ),
+  distribution: (
+    "[ORGANIZATION/SYMBOL]",
+    "[Another Organization Name]",
+    "[Third Distribution Point]"
+  ),
   indorsements: none,
   letterhead-font: "Arial",
   body-font: "Times New Roman",
@@ -492,39 +512,3 @@
   // Indorsements
   process-indorsements(indorsements, body-font: body-font)
 }
-
-//==============================================================================
-// EXAMPLE
-// ==============================================================================
-
-#official-memorandum()[
-
-Welcome to the Typst USAF Memo template! This template provides automatic formatting for official Air Force memorandums according to AFH 33-337 "The Tongue and Quill" standards. This comprehensive template eliminates the tedious formatting work that typically consumes valuable time when preparing official correspondence.
-
-The template has been meticulously designed to ensure full compliance with Air Force publishing standards while providing a streamlined user experience. Key features and capabilities include:
-
-#SET_LEVEL(1)
-
-[*Automatic paragraph numbering and formatting*. Paragraphs are automatically numbered using the proper Air Force hierarchy (1., a., (1), (a)) and spaced with precise line spacing. Writers can focus entirely on content while the template handles all formatting requirements including proper indentation, alignment, and spacing between elements.]
-
-[*Hierarchical document structure*. The template supports multi-level paragraph organization essential for complex policy documents and detailed instructions. Each subparagraph level is automatically numbered and properly indented to maintain visual clarity and regulatory compliance.]
-
-#SET_LEVEL(2)
-
-Implementation is straightforward: simply wrap content in the appropriate paragraph function such as `@@PAR_LEV` for first-level subparagraphs, `@@sub-PAR_LEV` for second-level, and so forth.
-
-#SET_LEVEL(1)
-
-*Smart page break handling*. The template automatically manages page breaks for backmatter sections (attachments, cc, and distribution lists) according to AFH 33-337 requirements. If a section doesn't fit on the current page, it uses proper continuation formatting with "(listed on next page)" notation, ensuring no orphaned headers or improper splits.
-
-*Complete document formatting automation*. All letterhead elements, margins, fonts, date formatting, signature block positioning, and backmatter elements are automatically configured according to AFH 33-337 specifications. This includes proper placement of the Department of Defense seal scaled to fit a 1in × 2in box while preserving aspect ratio.
-
-*Flexible content management*. The template accommodates various memorandum types including single addressee, multiple addressee, and distribution lists. Reference citations, attachments, courtesy copies, and distribution lists are all properly formatted and positioned with intelligent page break handling.
-
-*Professional presentation standards*. Typography follows Air Force requirements with 12-point Times New Roman font, proper line spacing, justified text alignment, and consistent spacing between document elements. Page numbering, when required, is automatically positioned 0.5 inches from the top of the page and flush with the right margin.
-
-#SET_LEVEL(0)
-
-Created by #link("https://github.com/snpm")[Nibs].
-
-]

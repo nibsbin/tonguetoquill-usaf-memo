@@ -3,7 +3,7 @@
 #official-memorandum(
    letterhead-title: "STARK INDUSTRIES",
   letterhead-caption: "EXECUTIVE OFFICE",
-  letterhead-seal: "assets/starkindustries_seal.png",
+  letterhead-seal: image("assets/starkindustries_seal.png"),
   memo-for: (
     "MR. ANTHONY E. STARK, CEO",
     "STARK INDUSTRIES"

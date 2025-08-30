@@ -38,6 +38,21 @@
   value == none or value == false or (type(value) == array and value.len() == 0) or (type(value) == str and value == "")
 }
 
+#let fit-box(width: 2in, height: 1in, alignment:left+horizon, body) = context {
+  // 1) measure the unscaled content
+  let s = measure(body)
+
+  // 2) compute the uniform scale that fits inside the box
+  let f = calc.min(width / s.width, height / s.height) * 100%  // ratio
+
+  // 3) fixed-size box, center the scaled content, and reflow so layout respects it
+  box(width: width, height: height, clip: true)[
+    #align(alignment)[
+      #scale(f, reflow: true)[#body]
+    ]
+  ]
+}
+
 // =============================================================================
 // GRID LAYOUT UTILITIES
 // =============================================================================

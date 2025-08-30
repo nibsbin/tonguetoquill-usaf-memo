@@ -7,7 +7,7 @@
   // LETTERHEAD CONFIGURATION
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "[YOUR SQUADRON/UNIT NAME]",
-  letterhead-seal: image("dod_seal.png"),
+  letterhead-seal: image("assets/dod_seal.png"),
   
   // RECIPIENTS - Multiple format options shown
   memo-for: (
