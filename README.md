@@ -29,6 +29,15 @@ typst init @preview/usaf-memo:0.0.1
 
 Alternatively, you can clone this repository directly. See [build.sh](build.sh) for example commands to build the template files.
 
+### Breaking Changes
+
+**Version 0.0.2+**: The paragraph system has been updated from wrapper functions to a level-based system:
+
+- **Old system** (deprecated): `#sub-par[content]`, `#sub-sub-par[content]`
+- **New system**: `#SET_LEVEL(1)` followed by content, `#SET_LEVEL(2)` followed by content
+
+This change provides better performance and more intuitive paragraph level management. See the [Paragraph Numbering](#paragraph-numbering) section for complete usage details.
+
 ### Fonts
 
 usaf-template.typ and ussf-template.typ use Copperplate CC for the letterhead which is an open-source clone of Copperhead Gothic Bold. The `.otf` font file is included in the `assets/fonts/`. Typst can recursively discover the font like so:
@@ -100,25 +109,52 @@ When `separate-page` is `true`, these parameters control the separate-page indor
 ### Complete Examples
 
 For comprehensive examples with all parameters, see:
-- **Guide**: `template/guide.typ` - Comprehensive guide showing all parameters and features
+- **Guide**: `template/content-guide.typ` - Comprehensive guide showing all parameters and features with new paragraph level system
 - **Standard Air Force memo**: `template/usaf-template.typ` - Shows proper formatting with references, attachments, cc, distribution, and indorsements
 - **Space Force memo**: `template/ussf-template.typ` - Space Force memorandum variant with proper formatting
 - **Custom organization memo**: `template/starkindustries.typ` - Demonstrates custom letterhead and extensive use of all optional parameters
 
 ## Paragraph Numbering
 
-The template provides automatic hierarchical paragraph numbering following AFH 33-337 standards:
-- Regular paragraphs: 1., 2., 3., etc.
-- First-level subparagraphs: a., b., c., etc.
-- Second-level subparagraphs: (1), (2), (3), etc.
-- Third-level subparagraphs: (a), (b), (c), etc.
+The template provides automatic hierarchical paragraph numbering following AFH 33-337 standards using a level-based system:
 
-### Enhanced Paragraph Functions
+### Level-Based Paragraph System
 
-The template now includes enhanced paragraph functions with improved AFH 33-337 compliance:
-- Automatic paragraph numbering with proper hierarchical indentation
-- Smart spacing management between paragraphs and sections
-- Improved handling of nested paragraph structures
+Use `#SET_LEVEL(level)` to set the current paragraph level, then write content directly:
+
+```typst
+Your base paragraph content here.
+
+Another base paragraph.
+
+#SET_LEVEL(1)  // First-level subparagraphs: a., b., c., etc.
+
+Your first subparagraph content.
+
+Another first-level subparagraph.
+
+#SET_LEVEL(2)  // Second-level subparagraphs: (1), (2), (3), etc.
+
+Your second-level subparagraph content.
+
+#SET_LEVEL(0)  // Return to base level
+```
+
+### Paragraph Hierarchy
+
+- **Level 0** (Base paragraphs): 1., 2., 3., etc.
+- **Level 1** (First-level subparagraphs): a., b., c., etc.
+- **Level 2** (Second-level subparagraphs): (1), (2), (3), etc.
+- **Level 3** (Third-level subparagraphs): (a), (b), (c), etc.
+- **Level 4+** (Additional levels): Underlined numbering for complex structures
+
+### Key Features
+
+- **Automatic numbering** with proper hierarchical indentation
+- **Smart spacing management** between paragraphs and sections
+- **Level persistence** - once set, the level remains active until changed
+- **Flexible structure** - supports up to five levels of nested paragraphs
+- **AFH 33-337 compliance** - follows official formatting standards
 
 ## Sentence Spacing
 
@@ -164,7 +200,7 @@ The `template/` directory contains sample memorandums demonstrating various use 
 - **usaf-template.typ**: Standard Air Force memorandum template
 - **ussf-template.typ**: Space Force memorandum variant  
 - **starkindustries.typ**: Pepper notifies Tony about regulatory issues for Iron Man suits.
-- **guide.typ**: Comprehensive guide for using the official-memorandum template
+- **content-guide.typ**: Comprehensive guide for using the official-memorandum template with new paragraph level system
 
 ## Compilation
 
