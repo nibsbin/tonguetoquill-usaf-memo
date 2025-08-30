@@ -33,13 +33,13 @@ For working with the library files, you can clone this repository directly. See 
 
 #### Fonts
 
-`usaf-template.typ` and `ussf-template.typ` use Copperplate CC for the letterhead which is an open-source clone of Copperhead Gothic Bold. If you cloned the repository, Typst can recursively discover `assets/fonts/CopperplateCC-Bold.otf` like so:
+`usaf-template.typ` and `ussf-template.typ` use Copperplate CC for the letterhead which is an open-source clone of Copperhead Gothic Bold. If you cloned the repository, Typst can recursively discover `template/assets/fonts/CopperplateCC-Bold.otf` like so:
 
 ```bash
 typst compile --root . --font-path . template/usaf-template.typ pdfs/usaf-template.pdf
 ```
 
-If you are using the Typst web app or local Typst Universe package, you can download [the `.otf` file](https://github.com/SnpM/typst-usaf-memo/blob/main/assets/fonts/CopperplateCC-Bold.otf) and upload it to the root folder in your project.
+If you are using the Typst web app or local Typst Universe package, you can download [the `.otf` file](https://github.com/SnpM/typst-usaf-memo/blob/main/template/assets/fonts/CopperplateCC-Bold.otf) and upload it to the root folder in your project.
 
 ### Basic Usage
 
@@ -57,7 +57,7 @@ See [`template/usaf-template.typ`](template/content-guide.typ) for a complete ex
 
 - **letterhead-title** (string): Primary organization title (default: `"DEPARTMENT OF THE AIR FORCE"`)
 - **letterhead-caption** (string): Sub-organization name (default: `"AIR FORCE EDUCATION COMMAND"`)
-- **letterhead-seal** (string): Image for letterhead seal (default: `"image(assets/dod_seal.png)"`)
+- **letterhead-seal** (string): Image for letterhead seal (default: `"image(template/assets/dod_seal.png)"`)
 - **memo-for** (string | array): Recipient designation(s) (default: `("ORG/SYMBOL",)`). Can be:
   - Single recipient: `"ORG/SYMBOL"`
   - Multiple recipients: `("ORG1/SYMBOL", "ORG2/SYMBOL")`
@@ -208,7 +208,7 @@ When compiling templates that reference files from the root directory (such as t
 ## Requirements
 
 - **Typst**: Version 0.13.0 or higher (enforced by template)
-- **Assets**: The `assets/dod_seal.png` file must be accessible for the DoD seal
+- **Assets**: The `template/assets/dod_seal.png` file must be accessible for the DoD seal
 - **Fonts**: Times New Roman font (required for AFH 33-337 compliance)
 - **Compliance**: All memorandums are automatically validated against AFH 33-337 standards
 
@@ -234,9 +234,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 External assets used in this project:
 
-- `assets/dod_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Seal_of_the_United_States_Department_of_Defense_(2001%E2%80%932022).svg).
-- `assets/starkindustries_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Stark_Industries.png).
-- `assets/fonts/CopperplateCC-Bold.otf` is [SIL Open Font License](./assets/fonts/LICENSE.md)
+- `template/assets/dod_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Seal_of_the_United_States_Department_of_Defense_(2001%E2%80%932022).svg).
+- `template/assets/starkindustries_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Stark_Industries.png).
+- `template/assets/fonts/CopperplateCC-Bold.otf` is [SIL Open Font License](./template/assets/fonts/LICENSE.md)
 
 ## Author
 
