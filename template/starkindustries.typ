@@ -1,4 +1,5 @@
-#import "../lib.typ": *
+#import "@preview/usaf-memo:0.0.1": official-memorandum, indorsement, SET_LEVEL
+
 #official-memorandum(
    letterhead-title: "STARK INDUSTRIES",
   letterhead-caption: "EXECUTIVE OFFICE",
