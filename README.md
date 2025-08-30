@@ -1,7 +1,7 @@
 
 [![github-repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/SnpM/typst-usaf-memo)
 
-# USAF Memo Template for Typst
+# RapidQuill USAF Memo Template for Typst
 
 A comprehensive Typst template for creating official United States Air Force memorandums that comply with AFH 33-337 "The Tongue and Quill" formatting standards.
 
@@ -27,17 +27,19 @@ A comprehensive Typst template for creating official United States Air Force mem
 typst init @preview/usaf-memo:0.0.1
 ```
 
-Alternatively, you can clone this repository directly. See [build.sh](build.sh) for example commands to build the template files. For local development, [install the package locally](https://github.com/typst/packages/tree/main?tab=readme-ov-file#local-packages).
+### Local Development
+
+For working with the library files, you can clone this repository directly. See [build.sh](build.sh) for example commands to build the template files. For local development, [install the package locally](https://github.com/typst/packages/tree/main?tab=readme-ov-file#local-packages).
 
 #### Fonts
 
-`usaf-template.typ` and `ussf-template.typ` use Copperplate CC for the letterhead which is an open-source clone of Copperhead Gothic Bold. The `.otf` font file is included in the `assets/fonts/`. Typst can recursively discover the font like so:
+`usaf-template.typ` and `ussf-template.typ` use Copperplate CC for the letterhead which is an open-source clone of Copperhead Gothic Bold. If you cloned the repository, Typst can recursively discover `assets/fonts/CopperplateCC-Bold.otf` like so:
 
 ```bash
 typst compile --root . --font-path . template/usaf-template.typ pdfs/usaf-template.pdf
 ```
 
-If you are using the Typst web app, you can upload the font to your project and the app will automatically detect it.
+If you are using the Typst web app or local Typst Universe package, you can download [the `.otf` file](https://github.com/SnpM/typst-usaf-memo/blob/main/assets/fonts/CopperplateCC-Bold.otf) and upload it to the root folder in your project.
 
 ### Basic Usage
 
@@ -233,8 +235,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 External assets used in this project:
 
 - `assets/dod_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Seal_of_the_United_States_Department_of_Defense_(2001%E2%80%932022).svg).
-
 - `assets/starkindustries_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Stark_Industries.png).
+- `assets/fonts/CopperplateCC-Bold.otf` is [SIL Open Font License](./assets/fonts/LICENSE.md)
 
 ## Author
 
