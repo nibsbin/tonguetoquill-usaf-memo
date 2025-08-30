@@ -123,10 +123,15 @@
 /// -> content
 #let render-from-section(from-info) = {
   v(spacing.paragraph)
+  //if from-info is an array, join with newlines
+  if type(from-info) == array {
+    from-info = from-info.join("\n")
+  }
+
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
     "FROM:", "",
-    align(left)[#from-info.join("\n")]
+    align(left)[#from-info]
   )
 }
 
