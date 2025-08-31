@@ -4,15 +4,35 @@
 // CONFIGURATION CONSTANTS
 // =============================================================================
 
+//base .7em
+// full line: 1.1em
+
 /// Spacing constants following AFH 33-337 standards.
 /// -> dictionary
 #let spacing = (
   two-spaces: 0.5em,      // Standard two-space separator
-  line: 0.5em,            // Line spacing within paragraphs
-  paragraph: 1em,         // Blank line between paragraphs
+  line: .4em,            // Line spacing within paragraphs
+  paragraph: .4em,         // Blank line between paragraphs
   tab: 0.5in,             // Tab stop for alignment
   margin:1in            // Standard page margin
 )
+
+#let configure(body-font,ctx) = {
+  context{
+    set par(leading: spacing.line, spacing:spacing.line, justify: true)
+    set block(above:spacing.line, below:0em,spacing: 0em)
+    set text(font: body-font, size: 12pt)
+    ctx
+  }
+}
+
+#let blank-lines(count) = {
+  for i in range(0,count){
+    //block(above: spacing.line, below: spacing.line,"")
+    v(1.1em)
+  }
+}
+#let blank-line() = blank-lines(1)
 
 /// Paragraph numbering configuration dictionary.
 /// -> dictionary
@@ -144,8 +164,9 @@
 /// -> content
 #let calculate-backmatter-spacing(is-first-section) = {
   context {
-    let space = if is-first-section { 3 * spacing.paragraph } else { 2 * spacing.paragraph }
-    v(space, weak: true)
+    let line_count = if is-first-section { 2 } else { 1 }
+    blank-lines(line_count)
+    
   }
 }
 
@@ -223,9 +244,10 @@
     let indent-width = calculate-paragraph-indent(level)
     set text(costs: (widow: 0%))
 
-    block[
+    blank-line()
+     block()[
       // Use a breakable block as vertical spacer; handles page breaks better
-      #block(below: spacing.paragraph)[]
+      //#block(below: spacing.paragraph,spacing: 0em )[]
       #if paragraph-config.block-indent-state.get() {
         pad(left: indent-width)[#paragraph-number#h(spacing.two-spaces)#content]
       } else {

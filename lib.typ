@@ -9,6 +9,7 @@
 // Enforce minimum Typst compiler version for proper functionality
 #let min-version = (0, 13, 0)
 #let current-version = sys.version
+
 #assert(
   current-version.at(0) > min-version.at(0) or 
   (current-version.at(0) == min-version.at(0) and current-version.at(1) >= min-version.at(1)),
@@ -104,7 +105,7 @@
 /// - recipients (str | array): Recipient organization(s).
 /// -> content
 #let render-memo-for-section(recipients) = {
-  v(spacing.paragraph)
+  blank-line()
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
     "MEMORANDUM FOR", "",
@@ -122,7 +123,7 @@
 /// - from-info (array): Sender information array.
 /// -> content
 #let render-from-section(from-info) = {
-  v(spacing.paragraph)
+  blank-line()
   //if from-info is an array, join with newlines
   if type(from-info) == array {
     from-info = from-info.join("\n")
@@ -139,7 +140,7 @@
 /// - subject-text (str): Memorandum subject line.
 /// -> content
 #let render-subject-section(subject-text) = {
-  v(spacing.paragraph)
+  blank-line()
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
     "SUBJECT:", "", [#subject-text]
@@ -151,7 +152,7 @@
 /// -> content
 #let render-references-section(references) = {
   if not falsey(references) {
-    v(spacing.paragraph)
+    blank-line()
     grid(
       columns: (auto, spacing.two-spaces, 1fr),
       "References:", "", enum(..references, numbering: "(a)")
@@ -165,7 +166,7 @@
 /// -> content
 #let render-signature-block(signature-lines) = {
   let signature-content = {
-    v(5 * spacing.paragraph)
+    blank-lines(5)
     align(left)[
       #pad(left: 4.5in - spacing.margin)[
         #text(hyphenate: false)[
@@ -184,7 +185,6 @@
 /// - content (content): Document body content.
 /// -> content
 #let render-body(content) = {
-  set par(justify: true)
   counter("par-counter-0").update(1)
   let s = state("par-count", 0)
 
@@ -270,13 +270,11 @@
   /// Renders the indorsement with proper formatting.
   /// - body-font (str): Font to use for body text.
   /// -> content
-  ind.render = (body-font: "Times New Roman") => {
+  ind.render = (body-font: "Times New Roman") => configure(body-font,{
     let current-date = datetime.today().display("[day] [month repr:short] [year]")
     counters.indorsement.step()
     
-    context {
-      set text(font: body-font, size: 12pt)
-      set par(leading: spacing.line, spacing: .5em, justify: true)
+    context{
       
       let indorsement-number = counters.indorsement.get().first()
       let indorsement-label = format-indorsement-number(indorsement-number)
@@ -289,14 +287,14 @@
         // Separate-page indorsement format per AFH 33-337
         [#indorsement-label to #ind.original-office, #current-date, #ind.original-subject]
         
-        v(spacing.paragraph)
+        blank-line()
         grid(
           columns: (auto, 1fr),
           ind.office-symbol,
           align(right)[#current-date]
         )
         
-        v(spacing.paragraph)
+        blank-line()
         grid(
           columns: (auto, spacing.two-spaces, 1fr),
           "MEMORANDUM FOR", "", ind.memo-for
@@ -305,11 +303,11 @@
         // Standard indorsement format
         // Add spacing only if we didn't just do a pagebreak
         if not ind.leading-pagebreak {
-          v(spacing.paragraph)
+          blank-line()
         }
         [#indorsement-label, #ind.office-symbol]
         
-        v(spacing.paragraph)
+        blank-line()
         grid(
           columns: (auto, spacing.two-spaces, 1fr),
           "MEMORANDUM FOR", "", ind.memo-for
@@ -341,7 +339,7 @@
         ind.cc.join("\n")
       }
     }
-  }
+  })
   
   return ind
 }
@@ -439,7 +437,7 @@
   paragraph-block-indent: false,
   leading-backmatter-pagebreak: false,
   body
-) = {
+) = configure(body-font,{
   // Validate AFH 33-337 compliance before proceeding
   let params = (
     letterhead-title: letterhead-title,
@@ -458,7 +456,7 @@
     margin: (left: spacing.margin, right: spacing.margin, top: spacing.margin, bottom: spacing.margin),
   )
   set text(font: body-font, size: 12pt)
-  set par(leading: spacing.line, spacing: spacing.line)
+  set text()
   paragraph-config.block-indent-state.update(paragraph-block-indent)
 
   // Page numbering starting from page 2
@@ -501,4 +499,4 @@
 
   // Indorsements
   process-indorsements(indorsements, body-font: body-font)
-}
+})
