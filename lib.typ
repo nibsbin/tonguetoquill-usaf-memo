@@ -183,6 +183,7 @@
 /// - content (content): Document body content.
 /// -> content
 #let render-body(content) = {
+  SET_LEVEL(0)
   counter("par-counter-0").update(1)
   let s = state("par-count", 0)
 
