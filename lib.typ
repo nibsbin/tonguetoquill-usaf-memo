@@ -165,9 +165,9 @@
 /// - signature-lines (array): Array of signature lines.
 /// -> content
 #let render-signature-block(signature-lines) = {
-  let signature-content = {
-    blank-lines(5)
-    align(left)[
+  blank-lines(5, weak:false)
+  block(breakable:false)[
+    #align(left)[
       #pad(left: 4.5in - spacing.margin)[
         #text(hyphenate: false)[
           #for line in signature-lines {
@@ -176,9 +176,7 @@
         ]
       ]
     ]
-  }
-
-  block(breakable:false,signature-content)
+  ]
 }
 
 /// Processes document body content with automatic paragraph numbering.
@@ -195,24 +193,26 @@
     show par: it => {
       par-counter.step()
     }
-    box(width: 0pt, height: 0pt)[#content]
+    content
   }
   
   context {
-    let par-counter = counter("par-id-counter")
-    let par_count = par-counter.get().at(0) // Retrieved from previous pass
+    let par-counter_= counter("par-id-counter")
+    let par_count = par-counter_.get().at(0) // Retrieved from previous pass
+    let par-counter = counter("par-id-counter-2")
     par-counter.update(1)
     show par: it => {
       context {
+        blank-line()
         par-counter.step()
         let cur_count = par-counter.get().at(0)
+        let paragraph = memo-par(it.body)
         //Check if this is the last paragraph
-        if cur_count == par_count {
-          let paragraph = memo-par(it.body)
+        if cur_count == par_count { 
           set text(costs: (orphan: 0%))
           block(breakable:true,sticky:true)[#paragraph]
         }else {
-          memo-par(it.body)
+          block(breakable:true)[#paragraph]
         }
       }
     }

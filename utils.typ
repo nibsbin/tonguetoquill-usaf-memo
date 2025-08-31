@@ -11,8 +11,8 @@
 /// -> dictionary
 #let spacing = (
   two-spaces: 0.5em,      // Standard two-space separator
-  line: .4em,            // Line spacing within paragraphs
-  paragraph: .4em,         // Blank line between paragraphs
+  line:.5em,            // Line spacing within paragraphs
+  line-height:.7em,      //base height for lines
   tab: 0.5in,             // Tab stop for alignment
   margin:1in            // Standard page margin
 )
@@ -26,13 +26,12 @@
   }
 }
 
-#let blank-lines(count) = {
-  for i in range(0,count){
-    //block(above: spacing.line, below: spacing.line,"")
-    v(1.1em)
-  }
+#let blank-lines(count,weak:true) = {
+  let lead = spacing.line
+  let height = spacing.line-height
+  v(lead + (height + lead) * count,weak:weak)
 }
-#let blank-line() = blank-lines(1)
+#let blank-line(weak:true) = blank-lines(1,weak:weak)
 
 /// Paragraph numbering configuration dictionary.
 /// -> dictionary
@@ -194,6 +193,7 @@
   let paragraph-counter = counter(paragraph-config.counter-prefix + str(level))
   
   if counter-value != none {
+    assert(counter-value >= 0,message: "Counter value of `" + str(counter-value) + "` cannot be less than 0")
     let temp-counter = counter("temp-counter")
     temp-counter.update(counter-value)
     let numbering-format = get-paragraph-numbering-format(level)
@@ -215,10 +215,13 @@
   if level == 0 { 
     return 0pt 
   }
+
   
   let parent-level = level - 1
+  assert(parent-level >= 0)
   let parent-indent = calculate-paragraph-indent(parent-level)
-  let parent-counter-value = counter(paragraph-config.counter-prefix + str(parent-level)).get().at(0) - 1
+  let parent-counter = counter(paragraph-config.counter-prefix + str(parent-level)).get().at(0) 
+  let parent-counter-value = counter(paragraph-config.counter-prefix + str(parent-level)).get().at(0)
   let parent-number = generate-paragraph-number(parent-level, counter-value: parent-counter-value)
 
   let indent-buffer = [#h(parent-indent)#parent-number#h(spacing.two-spaces)]
@@ -242,18 +245,12 @@
     let paragraph-number = generate-paragraph-number(level, increment: true)
     counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
     let indent-width = calculate-paragraph-indent(level)
-    set text(costs: (widow: 0%))
-
-    blank-line()
-     block()[
-      // Use a breakable block as vertical spacer; handles page breaks better
-      //#block(below: spacing.paragraph,spacing: 0em )[]
-      #if paragraph-config.block-indent-state.get() {
-        pad(left: indent-width)[#paragraph-number#h(spacing.two-spaces)#content]
-      } else {
-        pad(left: 0em)[#h(indent-width)#paragraph-number#h(spacing.two-spaces)#content]
-      }
-    ]
+    set text(costs: (widow: 0%)) 
+    if paragraph-config.block-indent-state.get() {
+      [#pad(left: indent-width)[#paragraph-number#h(spacing.two-spaces)#content]]
+    } else {
+      [#pad(left: 0em)[#h(indent-width)#paragraph-number#h(spacing.two-spaces)#content]]
+    }
   }
 }
 
