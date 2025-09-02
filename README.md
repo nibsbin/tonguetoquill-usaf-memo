@@ -27,6 +27,11 @@ A comprehensive Typst template for creating official United States Air Force mem
 typst init @preview/tonguetoquill-usaf-memo:0.0.1
 ```
 
+3. Compile a `.typ` template file of your choice:
+```bash
+typst compile --root . template/starkindustries.typ pdfs/starkindustries.pdf
+```
+
 ### Local Development
 
 For working with the library files, you can clone this repository directly. See [build.sh](build.sh) for example commands to build the template files. For local development, [install the package locally](https://github.com/typst/packages/tree/main?tab=readme-ov-file#local-packages).
@@ -46,7 +51,7 @@ If you are using the Typst web app or local Typst Universe package, you can down
 Import the core functions for creating memorandums:
 
 ```typst
-#import "@preview/tonguetoquill-usaf-memo:0.0.1": official-memorandum, indorsement, SET_LEVEL
+#import "@preview/tonguetoquill-usaf-memo:0.0.1": official-memorandum, indorsement
 ```
 
 See [`template/usaf-template.typ`](template/content-guide.typ) for a complete example of creating a memorandum with `official-memorandum()`.
@@ -108,52 +113,38 @@ When `separate-page` is `true`, these parameters control the separate-page indor
 ### Complete Examples
 
 For comprehensive examples with all parameters, see:
-- **Guide**: `template/content-guide.typ` - Comprehensive guide showing all parameters and features with new paragraph level system
+- **Guide**: `template/content-guide.typ` - Comprehensive guide showing all parameters and features with enum-based paragraph system
 - **Standard Air Force memo**: `template/usaf-template.typ` - Shows proper formatting with references, attachments, cc, distribution, and indorsements
 - **Space Force memo**: `template/ussf-template.typ` - Space Force memorandum variant with proper formatting
 - **Custom organization memo**: `template/starkindustries.typ` - Demonstrates custom letterhead and extensive use of all optional parameters
 
 ## Paragraph Numbering
 
-The template provides automatic hierarchical paragraph numbering following AFH 33-337 standards using a level-based system:
-
-### Level-Based Paragraph System
-
-Use `#SET_LEVEL(level)` to set the current paragraph level, then write content directly:
+The template provides automatic hierarchical paragraph numbering following AFH 33-337 standards using Typst's native enum syntax:
 
 ```typst
-Your base paragraph content here.
+This is a base paragraph.
 
-Another base paragraph.
++ Level 1 subparagraph lettered as a.
 
-#SET_LEVEL(1)  // First-level subparagraphs: a., b., c., etc.
++ Another level 1 subsparagraph lettered as b.
 
-Your first subparagraph content.
+  + Level 2 subparagraph numbered as (1).
+    
+    + Level 3 subparagraph lettered as (a).
 
-Another first-level subparagraph.
-
-#SET_LEVEL(2)  // Second-level subparagraphs: (1), (2), (3), etc.
-
-Your second-level subparagraph content.
-
-#SET_LEVEL(0)  // Return to base level
+This returns to base paragraph numbering as 2.
 ```
-
-### Paragraph Hierarchy
-
-- **Level 0** (Base paragraphs): 1., 2., 3., etc.
-- **Level 1** (First-level subparagraphs): a., b., c., etc.
-- **Level 2** (Second-level subparagraphs): (1), (2), (3), etc.
-- **Level 3** (Third-level subparagraphs): (a), (b), (c), etc.
-- **Level 4+** (Additional levels): Underlined numbering for complex structures
 
 ### Key Features
 
+- **Natural Typst syntax** - Uses standard enum formatting familiar to Typst users
 - **Automatic numbering** with proper hierarchical indentation
 - **Smart spacing management** between paragraphs and sections
-- **Level persistence** - once set, the level remains active until changed
-- **Flexible structure** - supports up to five levels of nested paragraphs
-- **AFH 33-337 compliance** - follows official formatting standards
+- **Tab-aligned indentation** - Subparagraphs align with proper tab spacing
+- **Progressive indentation** - Use increasing spaces before `+` for deeper levels
+- **Flexible structure** - supports multiple levels of nested paragraphs
+- **AFH 33-337 compliance** - follows official formatting standards automatically
 
 ## Sentence Spacing
 
@@ -172,26 +163,6 @@ The template automatically manages page breaks for closing sections according to
 - **Distribution**: "Do not divide distribution lists between two pages"
 - **CC sections**: Consistent handling with other sections
 
-### How It Works
-
-1. **Content measurement**: Calculates if section fits on current page
-2. **Automatic continuation**: Shows "(listed on next page)" when needed
-3. **Clean breaks**: Moves entire sections to avoid orphaned headers
-4. **Compliant formatting**: Follows exact AFH 33-337 continuation requirements
-
-## Document Structure
-
-The template automatically handles:
-
-1. **Page setup**: US Letter size with 1-inch margins
-2. **Typography**: 12pt Times New Roman font with proper line spacing
-3. **Header elements**: DoD seal (scaled to 1in × 2in), letterhead, and date positioning
-4. **Body formatting**: Justified text with proper paragraph spacing and numbering
-5. **Signature block**: Positioned 4.5 inches from left edge
-6. **Backmatter elements**: Attachments, cc, and distribution lists with smart page breaks
-7. **Page numbering**: Starts on page 2, positioned 0.5" from top, flush right
-8. **Continuation handling**: Proper "(listed on next page)" formatting for long sections
-
 ## Examples
 
 The `template/` directory contains sample memorandums demonstrating various use cases:
@@ -199,11 +170,7 @@ The `template/` directory contains sample memorandums demonstrating various use 
 - **usaf-template.typ**: Standard Air Force memorandum template
 - **ussf-template.typ**: Space Force memorandum variant  
 - **starkindustries.typ**: Pepper notifies Tony about regulatory issues for Iron Man suits.
-- **content-guide.typ**: Comprehensive guide for using the official-memorandum template with new paragraph level system
-
-## Compilation
-
-When compiling templates that reference files from the root directory (such as the main library file `lib.typ`), you must use the `--root .` flag to tell Typst to treat the current directory as the root for resolving file imports.
+- **content-guide.typ**: Comprehensive guide for using the official-memorandum template with enum-based paragraph system
 
 ## Requirements
 
@@ -211,18 +178,6 @@ When compiling templates that reference files from the root directory (such as t
 - **Assets**: The `template/assets/dod_seal.png` file must be accessible for the DoD seal
 - **Fonts**: Times New Roman font (required for AFH 33-337 compliance)
 - **Compliance**: All memorandums are automatically validated against AFH 33-337 standards
-
-## Compliance Features
-
-The template enforces strict AFH 33-337 compliance through:
-
-- **Automatic validation** of required parameters and formatting with comprehensive error messages
-- **Font enforcement** - only Times New Roman allowed for body text per regulations
-- **Version checking** - requires Typst 0.13.0+ for proper functionality and modern features
-- **Parameter validation** - ensures all mandatory elements are present before compilation
-- **Signature block validation** - enforces proper format requirements per AFH 33-337
-- **Enhanced spacing constants** - implements precise spacing requirements for professional formatting
-- **Improved backmatter handling** - renamed from "closing" for better terminology alignment
 
 ## Contributing
 
