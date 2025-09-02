@@ -194,6 +194,7 @@
   let s = state("par-count", 0)
 
   context {
+    // Embed enum processing to calculate paragraph levels
     let processed_content = context {
       //erase enums
       show enum.item: _enum_item => {}
@@ -213,6 +214,7 @@
           //Empty vertical space to force paragraph segmentation
           v(0em, weak: true)
           _enum_item.body
+          SET_LEVEL(0)
           enum-level.update(l => l - 1)
         }
       }
