@@ -209,13 +209,12 @@
 /// - level (int): Paragraph nesting level.
 /// -> length
 #let calculate-paragraph-indent(level) = {
+  assert(level >= 0)
   if level == 0 { 
     return 0pt 
   }
-
   
   let parent-level = level - 1
-  assert(parent-level >= 0)
   let parent-indent = calculate-paragraph-indent(parent-level)
   let parent-counter = counter(paragraph-config.counter-prefix + str(parent-level)).get().at(0) 
   let parent-counter-value = counter(paragraph-config.counter-prefix + str(parent-level)).get().at(0)
@@ -236,18 +235,22 @@
 /// - content (content): Paragraph content.
 /// - level (int): Nesting level (0 for main paragraphs, 1+ for sub-paragraphs).
 /// -> content
-#let memo-par(content, level: 0) = {
+#let memo-par(content) = {
   context {
     let level = PAR_LEVEL_STATE.get()
     let paragraph-number = generate-paragraph-number(level, increment: true)
     counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
     let indent-width = calculate-paragraph-indent(level)
     set text(costs: (widow: 0%)) 
-    if paragraph-config.block-indent-state.get() {
-      [#pad(left: indent-width)[#paragraph-number#h(spacing.two-spaces)#content]]
-    } else {
-      [#pad(left: 0em)[#h(indent-width)#paragraph-number#h(spacing.two-spaces)#content]]
+
+    let output = {
+      if paragraph-config.block-indent-state.get() {
+        pad(left: indent-width)[#paragraph-number#h(spacing.two-spaces)#contentfdsa]
+      } else {
+        pad(left: 0em)[#h(indent-width)#paragraph-number#h(spacing.two-spaces)#content]
+      }
     }
+    output
   }
 }
 

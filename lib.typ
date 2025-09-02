@@ -11,11 +11,15 @@
 #let current-version = sys.version
 
 #assert(
-  current-version.at(0) > min-version.at(0) or 
-  (current-version.at(0) == min-version.at(0) and current-version.at(1) >= min-version.at(1)),
-  message: "This template requires Typst compiler version 0.13.0 or higher. " +
-           "Current version: " + str(current-version.at(0)) + "." + str(current-version.at(1)) + ". " +
-           "Please update your Typst installation."
+  current-version.at(0) > min-version.at(0)
+    or (current-version.at(0) == min-version.at(0) and current-version.at(1) >= min-version.at(1)),
+  message: "This template requires Typst compiler version 0.13.0 or higher. "
+    + "Current version: "
+    + str(current-version.at(0))
+    + "."
+    + str(current-version.at(1))
+    + ". "
+    + "Please update your Typst installation.",
 )
 
 // =============================================================================
@@ -31,25 +35,28 @@
   for param in required-params {
     assert(
       param in params and params.at(param) != none,
-      message: "Required parameter '" + param + "' is missing or empty. " +
-               "AFH 33-337 compliance requires all mandatory elements."
+      message: "Required parameter '"
+        + param
+        + "' is missing or empty. "
+        + "AFH 33-337 compliance requires all mandatory elements.",
     )
   }
-  
+
   // Validate font compliance
   if "body-font" in params {
     assert(
       params.at("body-font") == "Times New Roman",
-      message: "AFH 33-337 requires Times New Roman font for body text. " +
-               "Current font: " + str(params.at("body-font"))
+      message: "AFH 33-337 requires Times New Roman font for body text. "
+        + "Current font: "
+        + str(params.at("body-font")),
     )
   }
-  
+
   // Validate signature block format
   let sig-block = params.at("signature-block")
   assert(
     type(sig-block) == array and sig-block.len() >= 2,
-    message: "Signature block must contain at least name and title lines per AFH 33-337"
+    message: "Signature block must contain at least name and title lines per AFH 33-337",
   )
 }
 
@@ -76,12 +83,12 @@
           center + top,
           align(center)[
             // Use Arial as the backup font
-            #text(12pt, font: (font,"Arial"), fill:rgb("#000099"))[#title]\
-            #text(10.5pt, font: (font,"Arial"), fill:rgb("#000099"))[#caption]
-          ]
+            #text(12pt, font: (font, "Arial"), fill: rgb("#000099"))[#title]\
+            #text(10.5pt, font: (font, "Arial"), fill: rgb("#000099"))[#caption]
+          ],
         )
-      ]
-    )
+      ],
+    ),
   )
   if letterhead-seal != none {
     place(
@@ -89,8 +96,8 @@
       dx: -0.5in,
       dy: -.5in,
       block[
-        #fit-box(width:2in,height:1in)[#letterhead-seal]
-      ]
+        #fit-box(width: 2in, height: 1in)[#letterhead-seal]
+      ],
     )
   }
 }
@@ -108,14 +115,15 @@
   blank-line()
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
-    "MEMORANDUM FOR", "",
+    "MEMORANDUM FOR",
+    "",
     align(left)[
       #if type(recipients) == array {
         create-auto-grid(recipients, column-gutter: spacing.tab)
       } else {
         recipients
       }
-    ]
+    ],
   )
 }
 
@@ -131,8 +139,7 @@
 
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
-    "FROM:", "",
-    align(left)[#from-info]
+    "FROM:", "", align(left)[#from-info],
   )
 }
 
@@ -143,7 +150,7 @@
   blank-line()
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
-    "SUBJECT:", "", [#subject-text]
+    "SUBJECT:", "", [#subject-text],
   )
 }
 
@@ -155,7 +162,7 @@
     blank-line()
     grid(
       columns: (auto, spacing.two-spaces, 1fr),
-      "References:", "", enum(..references, numbering: "(a)")
+      "References:", "", enum(..references, numbering: "(a)"),
     )
   }
 }
@@ -165,8 +172,8 @@
 /// - signature-lines (array): Array of signature lines.
 /// -> content
 #let render-signature-block(signature-lines) = {
-  blank-lines(5, weak:false)
-  block(breakable:false)[
+  blank-lines(5, weak: false)
+  block(breakable: false)[
     #align(left)[
       #pad(left: 4.5in - spacing.margin)[
         #text(hyphenate: false)[
@@ -186,38 +193,72 @@
   counter("par-counter-0").update(1)
   let s = state("par-count", 0)
 
-  // Compute the number of paragraphs in body with a counter
   context {
-    let par-counter = counter("par-id-counter")
-    par-counter.update(0)
-    show par: it => {
-      par-counter.step()
-    }
-    content
-  }
-  
-  context {
-    SET_LEVEL(0)
-    let par-counter_= counter("par-id-counter")
-    let par_count = par-counter_.get().at(0) // Retrieved from previous pass
-    let par-counter = counter("par-id-counter-2")
-    par-counter.update(1)
-    show par: it => {
-      context {
-        blank-line()
-        par-counter.step()
-        let cur_count = par-counter.get().at(0)
-        let paragraph = memo-par(it.body)
-        //Check if this is the last paragraph
-        if cur_count == par_count { 
-          set text(costs: (orphan: 0%))
-          block(breakable:true,sticky:true)[#paragraph]
-        }else {
-          block(breakable:true)[#paragraph]
+    let processed_content = context {
+      //erase enums
+      show enum.item: _enum_item => {}
+
+      // Hacky way to track enum level
+      let enum-level = state("enum-level", 1)
+
+
+      // Convert enums to SET_LEVEL paragraphs
+      show enum.item: _enum_item => {
+        context {
+          enum-level.update(l => l + 1)
+          SET_LEVEL(enum-level.get())
+          let paragraph = _enum_item.body
+          _enum_item
+
+          //Empty vertical space to force paragraph segmentation
+          v(0em, weak: true)
+          _enum_item.body
+          enum-level.update(l => l - 1)
         }
       }
+      content
     }
-    content
+
+    //Count total paragraphs in body
+    let total-par-counter = counter("total-par-counter")
+    total-par-counter.update(0)
+
+    let total-par-count-content = {
+      SET_LEVEL(0)
+      show par: it => {
+        context {
+          total-par-counter.step()
+        }
+      }
+      processed_content
+    }
+
+    // Wrap all paragraphs with memo-par
+    // Use separate counter to detect last paragraph
+    let par-counter = counter("par-counter")
+    par-counter.update(1)
+    context {
+      show par: it => {
+        context {
+          blank-line()
+          par-counter.step()
+          let cur_count = par-counter.get().at(0)
+          let par_count = total-par-counter.get().at(0)
+          let paragraph = memo-par([#it.body #cur_count #par_count])
+          //Check if this is the last paragraph
+          if cur_count == par_count {
+            set text(costs: (orphan: 0%))
+            block(breakable: true, sticky: true)[#paragraph]
+          } else {
+            block(breakable: true)[#paragraph]
+          }
+        }
+      }
+      total-par-count-content
+      SET_LEVEL(0)
+      processed_content
+    }
+    
   }
 }
 // =============================================================================
@@ -239,11 +280,11 @@
 /// -> dictionary
 #let indorsement(
   office-symbol: "ORG/SYMBOL",
-  memo-for: "ORG/SYMBOL", 
+  memo-for: "ORG/SYMBOL",
   signature-block: (
     "FIRST M. LAST, Rank, USAF",
     "Duty Title",
-    "Organization (if not on letterhead)"
+    "Organization (if not on letterhead)",
   ),
   attachments: none,
   cc: none,
@@ -252,7 +293,7 @@
   original-office: none,
   original-date: none,
   original-subject: none,
-  body
+  body,
 ) = {
   let ind = (
     office-symbol: office-symbol,
@@ -267,38 +308,36 @@
     original-subject: original-subject,
     body: body,
   )
-  
+
   /// Renders the indorsement with proper formatting.
   /// - body-font (str): Font to use for body text.
   /// -> content
-  ind.render = (body-font: "Times New Roman") => configure(body-font,{
+  ind.render = (body-font: "Times New Roman") => configure(body-font, {
     let current-date = datetime.today().display("[day] [month repr:short] [year]")
     counters.indorsement.step()
-    
-    context{
-      
+
+    context {
       let indorsement-number = counters.indorsement.get().first()
       let indorsement-label = format-indorsement-number(indorsement-number)
-      
+
       if ind.leading-pagebreak or separate-page {
         pagebreak()
       }
-      
+
       if ind.separate-page and ind.original-office != none {
         // Separate-page indorsement format per AFH 33-337
         [#indorsement-label to #ind.original-office, #current-date, #ind.original-subject]
-        
+
         blank-line()
         grid(
           columns: (auto, 1fr),
-          ind.office-symbol,
-          align(right)[#current-date]
+          ind.office-symbol, align(right)[#current-date],
         )
-        
+
         blank-line()
         grid(
           columns: (auto, spacing.two-spaces, 1fr),
-          "MEMORANDUM FOR", "", ind.memo-for
+          "MEMORANDUM FOR", "", ind.memo-for,
         )
       } else {
         // Standard indorsement format
@@ -307,31 +346,31 @@
           blank-line()
         }
         [#indorsement-label, #ind.office-symbol]
-        
+
         blank-line()
         grid(
           columns: (auto, spacing.two-spaces, 1fr),
-          "MEMORANDUM FOR", "", ind.memo-for
+          "MEMORANDUM FOR", "", ind.memo-for,
         )
       }
       // Render body content
       render-body(ind.body)
-      
+
       // Signature block positioning per AFH 33-337
       render-signature-block(ind.signature-block)
 
-      
+
       // Attachments section
       if not falsey(ind.attachments) {
         calculate-backmatter-spacing(true)
         let attachment-count = ind.attachments.len()
         let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
-        
+
         [#section-label]
         parbreak()
         enum(..ind.attachments, numbering: "1.")
       }
-      
+
       // Courtesy copies section
       if not falsey((ind.cc)) {
         calculate-backmatter-spacing(falsey(ind.attachments))
@@ -341,7 +380,7 @@
       }
     }
   })
-  
+
   return ind
 }
 
@@ -355,20 +394,27 @@
   attachments: none,
   cc: none,
   distribution: none,
-  leading-backmatter-pagebreak: false
+  leading-backmatter-pagebreak: false,
 ) = {
-  let has-backmatter = (attachments != none and attachments.len() > 0) or (cc != none and cc.len() > 0) or (distribution != none and distribution.len() > 0)
-  
+  let has-backmatter = (
+    (attachments != none and attachments.len() > 0)
+      or (cc != none and cc.len() > 0)
+      or (distribution != none and distribution.len() > 0)
+  )
+
   if leading-backmatter-pagebreak and has-backmatter {
     pagebreak(weak: true)
   }
-  
+
   // Attachments section
   if attachments != none and attachments.len() > 0 {
     calculate-backmatter-spacing(true)
     let attachment-count = attachments.len()
     let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
-    let continuation-label = (if attachment-count == 1 { "Attachment" } else { str(attachment-count) + " Attachments" }) + " (listed on next page):"
+    let continuation-label = (
+      (if attachment-count == 1 { "Attachment" } else { str(attachment-count) + " Attachments" })
+        + " (listed on next page):"
+    )
     render-backmatter-section(attachments, section-label, numbering-style: "1.", continuation-label: continuation-label)
   }
 
@@ -420,14 +466,14 @@
     "[YOUR/SYMBOL]",
     "[Your Organization Name]",
     "[Street Address]",
-    "[City ST 12345-6789]"
+    "[City ST 12345-6789]",
   ),
   subject: "[Your Subject in Title Case - Required Field]",
   references: none,
   signature-block: (
     "[FIRST M. LAST, Rank, USAF]",
     "[Your Official Duty Title]",
-    "[Organization (optional)]"
+    "[Organization (optional)]",
   ),
   attachments: none,
   cc: none,
@@ -437,8 +483,8 @@
   body-font: "Times New Roman",
   paragraph-block-indent: false,
   leading-backmatter-pagebreak: false,
-  body
-) = configure(body-font,{
+  body,
+) = configure(body-font, {
   // Validate AFH 33-337 compliance before proceeding
   let params = (
     letterhead-title: letterhead-title,
@@ -449,7 +495,7 @@
     body-font: body-font,
   )
   validate-memo-compliance(params)
-  
+
   // Initialize document counters and settings
   counters.indorsement.update(0)
   set page(
@@ -467,7 +513,7 @@
         top + right,
         dx: 0in,
         dy: -0.5in,
-        text(12pt)[#counter(page).display()]
+        text(12pt)[#counter(page).display()],
       )
     }
   }
@@ -486,16 +532,16 @@
   // Main document body
   // Render body content
   render-body(body)
-  
+
   // Signature block positioning per AFH 33-337
   render-signature-block(signature-block)
-  
+
   // Backmatter sections with proper spacing and page breaks
   render-backmatter-sections(
     attachments: attachments,
     cc: cc,
     distribution: distribution,
-    leading-backmatter-pagebreak: leading-backmatter-pagebreak
+    leading-backmatter-pagebreak: leading-backmatter-pagebreak,
   )
 
   // Indorsements
