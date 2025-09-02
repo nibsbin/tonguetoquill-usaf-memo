@@ -1,4 +1,4 @@
-#import "@preview/tonguetoquill-usaf-memo:0.0.1": official-memorandum, indorsement, SET_LEVEL
+#import "@preview/tonguetoquill-usaf-memo:0.0.1": official-memorandum, indorsement
 
 #set page(margin: 0.75in)
 #set text(size: 10pt)

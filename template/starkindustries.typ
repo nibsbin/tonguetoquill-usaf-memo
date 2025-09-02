@@ -1,4 +1,4 @@
-#import "@preview/tonguetoquill-usaf-memo:0.0.1": official-memorandum, indorsement, SET_LEVEL
+#import "@preview/tonguetoquill-usaf-memo:0.0.1": official-memorandum, indorsement
 
 #official-memorandum(
    letterhead-title: "STARK INDUSTRIES",
