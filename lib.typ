@@ -183,7 +183,6 @@
 /// - content (content): Document body content.
 /// -> content
 #let render-body(content) = {
-  SET_LEVEL(0)
   counter("par-counter-0").update(1)
   let s = state("par-count", 0)
 
@@ -198,6 +197,7 @@
   }
   
   context {
+    SET_LEVEL(0)
     let par-counter_= counter("par-id-counter")
     let par_count = par-counter_.get().at(0) // Retrieved from previous pass
     let par-counter = counter("par-id-counter-2")
