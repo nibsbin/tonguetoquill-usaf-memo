@@ -97,8 +97,7 @@
     ]
   )
 )[
-
-tonguetoquill-usaf-memo is maintained on GitHub at https://github.com/SnpM/tonguetoquill-usaf-memo. See [the README](https://github.com/SnpM/packages/tree/main?tab=readme-ov-file#typst-packages) for documentation. Please send bug reports and contributions to this repository.
+ #link("https://github.com/SnpM/tonguetoquill-usaf-memo")[`tonguetoquill-usaf-memo`] is an open-source project maintained on GitHub. See #link("https://github.com/snpm/tonguetoquill-usaf-memo")[the README] for documentation. Please send bug reports and contributions to this repository.
 
 This memo template demonstrates every parameter and feature of the USAF memorandum template. Replace all bracketed placeholders with your actual content.
 
