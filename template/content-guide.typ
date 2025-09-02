@@ -1,4 +1,4 @@
-#import "@preview/tonguetoquill-usaf-memo:0.0.1": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:0.0.2": official-memorandum, indorsement
 
 #set page(margin: 0.75in)
 #set text(size: 10pt)
@@ -9,7 +9,7 @@
   letterhead-caption: "[YOUR SQUADRON/UNIT NAME]",
   letterhead-seal: image("assets/dod_seal.png"),
   
-  // RECIPIENTS - Multiple format options shown
+  // RECIPIENTS - Multiple format options shown@preview/tonguetoquill-usaf-memo:0.0.2
   memo-for: (
     // Grid layout example - replace with your recipients
     ("[FIRST/OFFICE]", "[SECOND/OFFICE]", "[THIRD/OFFICE]"),

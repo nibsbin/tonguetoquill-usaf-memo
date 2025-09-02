@@ -1,4 +1,4 @@
-#import "@preview/tonguetoquill-usaf-memo:0.0.1": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:0.0.2": official-memorandum, indorsement
 
 #official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
