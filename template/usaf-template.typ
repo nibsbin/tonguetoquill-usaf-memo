@@ -77,23 +77,16 @@ Place "SUBJECT:" in uppercase letters on the second line below the last line of 
 
 Body text begins on the second line below the last line in the subject element and is flush with the left margin.~ If the Reference element is used, then the body text begins on the second line below the last line on the Reference element.
 
-#SET_LEVEL(1)
++ When a paragraph is split between pages, there must be at least two lines from the paragraph on both pages.~ This template automatically handles this formatting, but in the case of widowed sentences you can use manual page breaks.~ Similarly, avoid single-sentence paragraphs by revising or reorganizing the content.
 
-When a paragraph is split between pages, there must be at least two lines from the paragraph on both pages.~ This template automatically handles this formatting, but in the case of widowed sentences you can use manual page breaks.~ Similarly, avoid single-sentence paragraphs by revising or reorganizing the content.
++ Number or letter each body text paragraph and subparagraph according to the format for subdividing paragraphs in official memorandums presented in the Tongue and Quill.~ This subdivision format is provided automatically in this template.~ When a memorandum is subdivided, the number of levels used should be relative to the length of the memorandum.~ Shorter products typically use three or fewer levels.~ Longer products may use more levels, but only the number of levels needed.
 
-Number or letter each body text paragraph and subparagraph according to the format for subdividing paragraphs in official memorandums presented in the Tongue and Quill.~ This subdivision format is provided automatically in this template.~ When a memorandum is subdivided, the number of levels used should be relative to the length of the memorandum.~ Shorter products typically use three or fewer levels.~ Longer products may use more levels, but only the number of levels needed.
-
-#SET_LEVEL(0)
 
 Follow the spacing guidance between the text, signature block, attachment element, courtesy copy element, and distribution lists carefully.~ The signature block starts on the fifth line below the body text – this spacing is handled automatically by the template.~ Never separate the text from the signature block: the signature page must include body text above the signature block.~ Also, the first element below the signature block begins on the third line below the last line of the duty title; this applies to attachments, courtesy copies, and distribution lists, whichever is used first.
 
 Elements of the Official Memorandum can be inserted as templated parts in MS Word.~ Select the "Insert" menu, "Quick Parts", and then select the desired element.~ Follow the formatting instructions provided with the element template.
 
-#SET_LEVEL(1)
-
-To add classification banner markings (including FOUO markings), click on the header or footer, and in the "Header & Footer Tools" tab, select the Header / Footer dropdown menus on the left side.~ Use the pre-generated headers and footers – note that the first page is different from the second page onward, and so the second page header and footer must be applied separately.
-
-#SET_LEVEL(0)
++ To add classification banner markings (including FOUO markings), click on the header or footer, and in the "Header & Footer Tools" tab, select the Header / Footer dropdown menus on the left side.~ Use the pre-generated headers and footers – note that the first page is different from the second page onward, and so the second page header and footer must be applied separately.
 
 When a paragraph is split between pages, there must be at least two lines from the paragraph on both pages.~ This template automatically handles this formatting, but in the case of widowed sentences you can use manual page breaks.~ Similarly, avoid single-sentence paragraphs by revising or reorganizing the content.
 
@@ -104,7 +97,6 @@ Follow the spacing guidance between the text, signature block, attachment elemen
 Elements of the Official Memorandum can be inserted as templated parts in MS Word.~ Select the “Insert” menu, “Quick Parts”, and then select the desired element.~ Follow the formatting instructions provided with the element template.
 
 To add classification banner markings (including FOUO markings), click on the header or footer, and in the “Header & Footer Tools” tab, select the Header / Footer dropdown menus on the left side.~ Use the pre-generated headers and footers – note that the first page is different from the second page onward, and so the second page header and footer must be applied separately. 
-
 
 The example of this memorandum applies to many official memorandums that Airmen may be tasked to prepare; however, there are additional elements for special uses of the official memorandum.~ Refer to the Tongue and Quill discussion on the official memorandum for more details, or consult published guidance applicable to your duties.
 ]
