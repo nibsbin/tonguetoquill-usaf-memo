@@ -4,9 +4,6 @@
 // CONFIGURATION CONSTANTS
 // =============================================================================
 
-//base .7em
-// full line: 1.1em
-
 /// Spacing constants following AFH 33-337 standards.
 /// -> dictionary
 #let spacing = (
