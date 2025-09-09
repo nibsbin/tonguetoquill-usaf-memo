@@ -1,4 +1,4 @@
-#import "@preview/tonguetoquill-usaf-memo:0.0.2": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:0.0.3": official-memorandum, indorsement
 
 #set page(margin: 0.75in)
 #set text(size: 10pt)
@@ -10,7 +10,7 @@
   letterhead-seal: image("assets/dod_seal.gif"),
   letterhead-font: "Copperplate CC",
   
-  // RECIPIENTS - Multiple format options shown@preview/tonguetoquill-usaf-memo:0.0.2
+  // RECIPIENTS - Multiple format options shown@preview/tonguetoquill-usaf-memo:0.0.3
   memo-for: (
     // Grid layout example - replace with your recipients
     ("[FIRST/OFFICE]", "[SECOND/OFFICE]", "[THIRD/OFFICE]"),
@@ -64,7 +64,6 @@
   ),
   
   // FORMATTING OPTIONS - Customize appearance
-  letterhead-font: "Arial",                    // Letterhead font (Arial recommended)
   body-font: "Times New Roman",               // Body text font (TNR for AFH 33-337)
   paragraph-block-indent: false,             // true = indent paragraphs, false = block style
   leading-backmatter-pagebreak: false,         // true = force page break before attachments/cc

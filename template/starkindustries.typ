@@ -1,7 +1,7 @@
-#import "@preview/tonguetoquill-usaf-memo:0.0.2": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:0.0.3": official-memorandum, indorsement
 
 #official-memorandum(
-   letterhead-title: "STARK INDUSTRIES",
+  letterhead-title: "STARK INDUSTRIES",
   letterhead-caption: "EXECUTIVE OFFICE",
   letterhead-seal: image("assets/starkindustries_seal.png"),
   memo-for: (

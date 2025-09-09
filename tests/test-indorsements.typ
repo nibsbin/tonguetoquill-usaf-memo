@@ -1,4 +1,4 @@
-#import "@preview/tonguetoquill-usaf-memo:0.0.2": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:0.0.3": official-memorandum, indorsement
 
 #official-memorandum(
   indorsements: (
