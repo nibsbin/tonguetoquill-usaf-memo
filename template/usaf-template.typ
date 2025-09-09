@@ -3,7 +3,7 @@
 #official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "123RD EXAMPLE SQUADRON",
-  letterhead-seal: image("assets/dod_seal.png"),
+  letterhead-seal: image("assets/dod_seal.gif"),
   letterhead-font: "Copperplate CC",
   memo-for: (
     ("123 ES/CC", "123 ES/DO", "123 ES/CSS"),

@@ -3,7 +3,7 @@
 #official-memorandum(
   letterhead-title: "DEPARTMENT OF THE SPACE FORCE",
   letterhead-caption: "1ST SPACE OPERATIONS SQUADRON",
-  letterhead-seal: image("assets/dod_seal.png"),
+  letterhead-seal: image("assets/dod_seal.gif"),
   memo-for: "SPACECOM/CC",
   from-block: (
     "1 SOPS/CC",
