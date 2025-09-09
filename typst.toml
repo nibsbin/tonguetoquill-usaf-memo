@@ -1,6 +1,6 @@
 [package]
 name = "tonguetoquill-usaf-memo"
-version = "0.0.2"
+version = "0.0.3"
 compiler = "0.13.1"
 entrypoint = "lib.typ"
 repository = "https://github.com/SnpM/tonguetoquill-usaf-memo"
