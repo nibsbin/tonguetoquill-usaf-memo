@@ -27,7 +27,7 @@ A comprehensive Typst template for creating official United States Air Force mem
 
 2. Initialize template from Typst Universe
 ```bash
-typst init @preview/tonguetoquill-usaf-memo:0.0.2
+typst init @preview/tonguetoquill-usaf-memo:0.0.3
 ```
 
 3. Compile a `.typ` template file of your choice:
@@ -54,7 +54,7 @@ If you are using the Typst web app or local Typst Universe package, you can down
 Import the core functions for creating memorandums:
 
 ```typst
-#import "@preview/tonguetoquill-usaf-memo:0.0.2": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:0.0.3": official-memorandum, indorsement
 ```
 
 See [`template/usaf-template.typ`](template/content-guide.typ) for a complete example of creating an `official-memorandum()` with `indorsement` sections.
