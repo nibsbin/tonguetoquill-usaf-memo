@@ -198,6 +198,8 @@
     let processed_content = context {
       //erase enums
       show enum.item: _enum_item => {}
+      show list.item: _enum_item => {}
+
 
       // Hacky way to track enum level
       let enum-level = state("enum-level", 1)
@@ -214,6 +216,23 @@
           //Empty vertical space to force paragraph segmentation
           v(0em, weak: true)
           _enum_item.body
+          SET_LEVEL(0)
+          enum-level.update(l => l - 1)
+        }
+      }
+
+      // Convert lists to SET_LEVEL paragraphs
+      // Treat lists the same as enums for paragraph numbering
+      show list.item: list_item => {
+        context {
+          enum-level.update(l => l + 1)
+          SET_LEVEL(enum-level.get())
+          let paragraph = list_item.body
+          list_item
+
+          //Empty vertical space to force paragraph segmentation
+          v(0em, weak: true)
+          list_item.body
           SET_LEVEL(0)
           enum-level.update(l => l - 1)
         }
