@@ -14,6 +14,8 @@
   margin:1in            // Standard page margin
 )
 
+#let ORIGINAL_DATE_STATE = state("ORIGINAL_DATE", datetime.today())
+
 #let configure(body-font,ctx) = {
   context{
     set par(leading: spacing.line, spacing:spacing.line, justify: true)
@@ -67,6 +69,10 @@
       #scale(f, reflow: true)[#body]
     ]
   ]
+}
+
+#let display-date(date) = {
+  date.display("[day padding:none] [month repr:long] [year]")
 }
 
 // =============================================================================

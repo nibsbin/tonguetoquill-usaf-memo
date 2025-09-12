@@ -103,9 +103,10 @@
 }
 
 /// Renders the date section (right-aligned).
+/// - date (datetime): The date to display.
 /// -> content
-#let render-date-section() = {
-  align(right)[#datetime.today().display("[day padding:none] [month repr:long] [year]")]
+#let render-date-section(date) = {
+  align(right)[#display-date(date)]
 }
 
 /// Renders the MEMORANDUM FOR section.
@@ -282,6 +283,54 @@
     
   }
 }
+
+/// Renders all backmatter sections with proper spacing and page breaks.
+/// - attachments (array): Array of attachment descriptions.
+/// - cc (array): Array of courtesy copy recipients.
+/// - distribution (array): Array of distribution list entries.
+/// - leading-backmatter-pagebreak (bool): Whether to force page break before backmatter.
+/// -> content
+#let render-backmatter-sections(
+  attachments: none,
+  cc: none,
+  distribution: none,
+  leading-backmatter-pagebreak: false,
+) = {
+  let has-backmatter = (
+    (attachments != none and attachments.len() > 0)
+      or (cc != none and cc.len() > 0)
+      or (distribution != none and distribution.len() > 0)
+  )
+
+  if leading-backmatter-pagebreak and has-backmatter {
+    pagebreak(weak: true)
+  }
+
+  // Attachments section
+  if attachments != none and attachments.len() > 0 {
+    calculate-backmatter-spacing(true)
+    let attachment-count = attachments.len()
+    let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
+    let continuation-label = (
+      (if attachment-count == 1 { "Attachment" } else { str(attachment-count) + " Attachments" })
+        + " (listed on next page):"
+    )
+    render-backmatter-section(attachments, section-label, numbering-style: "1.", continuation-label: continuation-label)
+  }
+
+  // Courtesy copies section
+  if cc != none and cc.len() > 0 {
+    calculate-backmatter-spacing(attachments == none or attachments.len() == 0)
+    render-backmatter-section(cc, "cc:")
+  }
+
+  // Distribution section
+  if distribution != none and distribution.len() > 0 {
+    calculate-backmatter-spacing((attachments == none or attachments.len() == 0) and (cc == none or cc.len() == 0))
+    render-backmatter-section(distribution, "DISTRIBUTION:")
+  }
+}
+
 // =============================================================================
 // INDORSEMENT DATA STRUCTURE
 // =============================================================================
@@ -312,7 +361,7 @@
   leading-pagebreak: false,
   separate-page: false,
   original-office: none,
-  original-date: none,
+  indorsement-date: datetime.today(),
   original-subject: none,
   body,
 ) = {
@@ -325,8 +374,8 @@
     leading-pagebreak: leading-pagebreak,
     separate-page: separate-page,
     original-office: original-office,
-    original-date: original-date,
     original-subject: original-subject,
+    indorsement-date: indorsement-date,
     body: body,
   )
 
@@ -334,7 +383,6 @@
   /// - body-font (str): Font to use for body text.
   /// -> content
   ind.render = (body-font: "Times New Roman") => configure(body-font, {
-    let current-date = datetime.today().display("[day] [month repr:short] [year]")
     counters.indorsement.step()
 
     context {
@@ -347,12 +395,12 @@
 
       if ind.separate-page and ind.original-office != none {
         // Separate-page indorsement format per AFH 33-337
-        [#indorsement-label to #ind.original-office, #current-date, #ind.original-subject]
+        [#indorsement-label to #ind.original-office, #display-date(ORIGINAL_DATE_STATE.get()).at(0), #ind.original-subject]
 
         blank-line()
         grid(
           columns: (auto, 1fr),
-          ind.office-symbol, align(right)[#current-date],
+          ind.office-symbol, align(right)[#display-date(indorsement-date)],
         )
 
         blank-line()
@@ -405,52 +453,6 @@
   return ind
 }
 
-/// Renders all backmatter sections with proper spacing and page breaks.
-/// - attachments (array): Array of attachment descriptions.
-/// - cc (array): Array of courtesy copy recipients.
-/// - distribution (array): Array of distribution list entries.
-/// - leading-backmatter-pagebreak (bool): Whether to force page break before backmatter.
-/// -> content
-#let render-backmatter-sections(
-  attachments: none,
-  cc: none,
-  distribution: none,
-  leading-backmatter-pagebreak: false,
-) = {
-  let has-backmatter = (
-    (attachments != none and attachments.len() > 0)
-      or (cc != none and cc.len() > 0)
-      or (distribution != none and distribution.len() > 0)
-  )
-
-  if leading-backmatter-pagebreak and has-backmatter {
-    pagebreak(weak: true)
-  }
-
-  // Attachments section
-  if attachments != none and attachments.len() > 0 {
-    calculate-backmatter-spacing(true)
-    let attachment-count = attachments.len()
-    let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
-    let continuation-label = (
-      (if attachment-count == 1 { "Attachment" } else { str(attachment-count) + " Attachments" })
-        + " (listed on next page):"
-    )
-    render-backmatter-section(attachments, section-label, numbering-style: "1.", continuation-label: continuation-label)
-  }
-
-  // Courtesy copies section
-  if cc != none and cc.len() > 0 {
-    calculate-backmatter-spacing(attachments == none or attachments.len() == 0)
-    render-backmatter-section(cc, "cc:")
-  }
-
-  // Distribution section
-  if distribution != none and distribution.len() > 0 {
-    calculate-backmatter-spacing((attachments == none or attachments.len() == 0) and (cc == none or cc.len() == 0))
-    render-backmatter-section(distribution, "DISTRIBUTION:")
-  }
-}
 
 // =============================================================================
 // MAIN MEMORANDUM TEMPLATE
@@ -479,6 +481,7 @@
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "[YOUR SQUADRON/UNIT NAME]",
   letterhead-seal: none,
+  date: none,
   memo-for: (
     ("[FIRST/OFFICE]", "[SECOND/OFFICE]", "[THIRD/OFFICE]"),
     ("[FOURTH/OFFICE]", "[FIFTH/OFFICE]", "[SIXTH/OFFICE]"),
@@ -518,6 +521,12 @@
   validate-memo-compliance(params)
 
   // Initialize document counters and settings
+  context {
+    if date != none {
+      ORIGINAL_DATE_STATE.update(date)
+    }
+  }
+
   counters.indorsement.update(0)
   set page(
     paper: "us-letter",
@@ -544,7 +553,9 @@
 
   // Document header sections
   v(1.75in - spacing.margin) // 1.75in from top of the page
-  render-date-section()
+  context {
+    render-date-section(ORIGINAL_DATE_STATE.get())
+  }
   render-memo-for-section(memo-for)
   render-from-section(from-block)
   render-subject-section(subject)
@@ -568,3 +579,4 @@
   // Indorsements
   process-indorsements(indorsements, body-font: body-font)
 })
+
