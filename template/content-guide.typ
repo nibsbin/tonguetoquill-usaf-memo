@@ -12,11 +12,8 @@
   
   // RECIPIENTS - Multiple format options shown@preview/tonguetoquill-usaf-memo:0.0.3
   memo-for: (
-    // Grid layout example - replace with your recipients
-    ("[FIRST/OFFICE]", "[SECOND/OFFICE]", "[THIRD/OFFICE]"),
-    ("[FOURTH/OFFICE]", "[FIFTH/OFFICE]", "[SIXTH/OFFICE]"),
+    "[FIRST/OFFICE]", "[SECOND/OFFICE]", "[THIRD/OFFICE]", "[FOURTH/OFFICE]", "[FIFTH/OFFICE]", "[SIXTH/OFFICE]"
     // Alternative single recipient: "[SINGLE/OFFICE]"
-    // Alternative list: ("[FIRST/OFFICE]", "[SECOND/OFFICE]")
   ),
   
   // SENDER INFORMATION BLOCK
@@ -67,6 +64,8 @@
   body-font: "Times New Roman",               // Body text font (TNR for AFH 33-337)
   paragraph-block-indent: false,             // true = indent paragraphs, false = block style
   leading-backmatter-pagebreak: false,         // true = force page break before attachments/cc
+  memo-for-cols: 3,                        // Number of columns for recipient grid (default 3)
+                                           
   
   // INDORSEMENTS - For routing through multiple offices
   indorsements: (
@@ -89,8 +88,6 @@
         "[Final Authority Title]"
       ),
       separate-page: true,                   // Use separate page format (common for final authority)
-      original-office: "[ORIGINAL/SENDER]", // Original memo office symbol
-      original-subject: "[Original Subject]", // Original memo subject
     )[
       [Final indorsement text. This indorsement uses separate page format, commonly used when returning to the original sender with final approval or disapproval.]
     ]

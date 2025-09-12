@@ -14,8 +14,6 @@
   margin:1in            // Standard page margin
 )
 
-#let ORIGINAL_DATE_STATE = state("ORIGINAL_DATE", datetime.today())
-
 #let configure(body-font,ctx) = {
   context{
     set par(leading: spacing.line, spacing:spacing.line, justify: true)
@@ -80,35 +78,40 @@
 // =============================================================================
 
 /// Creates an automatic grid layout from 1D or 2D array.
-/// - rows (array): Array of content (1D or 2D).
+/// - content (str | array): Content to arrange in grid.
 /// - column-gutter (length): Space between columns.
+/// - columns (int): Number of columns for the grid.
 /// -> grid
-#let create-auto-grid(rows, column-gutter: .5em) = {
-  // Normalize input to 2D array for consistent processing
-  let normalized-rows = {
-    let buffer = rows  
-    if rows.len() > 0 and type(rows.at(0)) != array {
-      buffer = rows.map(item => (item,))  // Convert 1D to 2D
-    }
-    //Add empty column for proper spacing
-    buffer = buffer.map(row => row + ("",))
-    buffer
-  }
+#let create-auto-grid(content, column-gutter: .5em, cols: 3) = {
+  let content_type = type(content)
   
-  // Calculate maximum column count
-  let max-columns = calc.max(..normalized-rows.map(row => row.len()))
+  assert(content_type == str or content_type == array, message: "Content must be a string or an array of strings.")
+  if content_type == array {
+    for item in content {
+      assert(type(item) == str, message: "All items in content array must be strings.")
+    }
+  }
+
+  // Normalize to 1d array
+  if content_type == str {
+    content = (content,)
+  }
+
 
   // Build cell array in row-major order
   let cells = ()
-  for row in normalized-rows {
-    for i in range(0, max-columns) {
-      let cell-content = if i < row.len() { row.at(i) } else { [] }
-      cells.push([#cell-content])
+  let i = 0
+  for item in content {
+    i += 1
+    cells.push(item)
+    if calc.rem(i, cols) == 0 {
+      // Add empty cell to pad the page
+      cells.push([])
     }
   }
 
   grid(
-    columns: max-columns,
+    columns: calc.max(1, cols) + 1,
     column-gutter: .1fr,
     row-gutter: spacing.line,
     ..cells

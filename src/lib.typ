@@ -23,42 +23,9 @@
 )
 
 // =============================================================================
-// PARAMETER VALIDATION
+// GLOBAL STATE AND COUNTERS
 // =============================================================================
-
-/// Validates memorandum parameters for AFH 33-337 compliance.
-/// - params (dictionary): Dictionary of memorandum parameters.
-/// -> none
-#let validate-memo-compliance(params) = {
-  // Validate required parameters exist
-  let required-params = ("letterhead-title", "memo-for", "from-block", "subject", "signature-block")
-  for param in required-params {
-    assert(
-      param in params and params.at(param) != none,
-      message: "Required parameter '"
-        + param
-        + "' is missing or empty. "
-        + "AFH 33-337 compliance requires all mandatory elements.",
-    )
-  }
-
-  // Validate font compliance
-  if "body-font" in params {
-    assert(
-      params.at("body-font") == "Times New Roman",
-      message: "AFH 33-337 requires Times New Roman font for body text. "
-        + "Current font: "
-        + str(params.at("body-font")),
-    )
-  }
-
-  // Validate signature block format
-  let sig-block = params.at("signature-block")
-  assert(
-    type(sig-block) == array and sig-block.len() >= 2,
-    message: "Signature block must contain at least name and title lines per AFH 33-337",
-  )
-}
+#let MAIN_MEMO = state("main-memo-state", none) // Tracks if we are in the main memo or indorsements
 
 // =============================================================================
 // INTERNAL RENDERING FUNCTIONS
@@ -111,8 +78,9 @@
 
 /// Renders the MEMORANDUM FOR section.
 /// - recipients (str | array): Recipient organization(s).
+/// - columns (int): Number of columns for recipient grid.
 /// -> content
-#let render-memo-for-section(recipients) = {
+#let render-memo-for-section(recipients, cols) = {
   blank-line()
   grid(
     columns: (auto, spacing.two-spaces, 1fr),
@@ -120,7 +88,7 @@
     "",
     align(left)[
       #if type(recipients) == array {
-        create-auto-grid(recipients, column-gutter: spacing.tab)
+        create-auto-grid(recipients, column-gutter: spacing.tab, cols: cols)
       } else {
         recipients
       }
@@ -343,9 +311,7 @@
 /// - cc (array): Array of courtesy copy recipients.
 /// - leading-pagebreak (bool): Whether to force page break before indorsement.
 /// - separate-page (bool): Whether to use separate-page indorsement format.
-/// - original-office (none | str): Original memo's office symbol (for separate-page format).
-/// - original-date (none | str): Original memo's date (for separate-page format).
-/// - original-subject (none | str): Original memo's subject (for separate-page format).
+/// - indorsement-date (datetime): Date of the indorsement.
 /// - body (content): Indorsement body content.
 /// -> dictionary
 #let indorsement(
@@ -360,9 +326,7 @@
   cc: none,
   leading-pagebreak: false,
   separate-page: false,
-  original-office: none,
   indorsement-date: datetime.today(),
-  original-subject: none,
   body,
 ) = {
   let ind = (
@@ -373,9 +337,6 @@
     cc: cc,
     leading-pagebreak: leading-pagebreak,
     separate-page: separate-page,
-    original-office: original-office,
-    original-subject: original-subject,
-    indorsement-date: indorsement-date,
     body: body,
   )
 
@@ -386,6 +347,18 @@
     counters.indorsement.step()
 
     context {
+      let main-memo = MAIN_MEMO.get()
+      assert(type(main-memo) != none,message: "Internal error: MAIN_MEMO state not initialized.")
+      let original-date = datetime.today()
+      // Get original subject from main-memo
+      let original-subject = main-memo.subject
+      // Extract original-office from memo-from; if multiple lines, use the first line
+      let original-office = if type(main-memo.from-block) == array {
+          main-memo.from-block.at(0)
+        } else {
+          main-memo.from-block
+        }
+
       let indorsement-number = counters.indorsement.get().first()
       let indorsement-label = format-indorsement-number(indorsement-number)
 
@@ -393,9 +366,9 @@
         pagebreak()
       }
 
-      if ind.separate-page and ind.original-office != none {
+      if ind.separate-page {
         // Separate-page indorsement format per AFH 33-337
-        [#indorsement-label to #ind.original-office, #display-date(ORIGINAL_DATE_STATE.get()).at(0), #ind.original-subject]
+        [#indorsement-label to #original-office, #display-date(original-date), #original-subject]
 
         blank-line()
         grid(
@@ -462,7 +435,8 @@
 /// - letterhead-title (str): Primary organization title.
 /// - letterhead-caption (str): Sub-organization or command.
 /// - letterhead-seal (str): Image content for organization seal.
-/// - memo-for (str | array): Recipient(s) - string, array, or nested array for grid layout.
+/// - date (datetime): Date of the memorandum; defaults to today if not provided.
+/// - memo-for (str | array): Recipient(s) - string, array of strings.
 /// - from-block (array): Sender information as array of strings.
 /// - subject (str): Memorandum subject line.
 /// - references (array): Optional array of reference documents.
@@ -483,8 +457,7 @@
   letterhead-seal: none,
   date: none,
   memo-for: (
-    ("[FIRST/OFFICE]", "[SECOND/OFFICE]", "[THIRD/OFFICE]"),
-    ("[FOURTH/OFFICE]", "[FIFTH/OFFICE]", "[SIXTH/OFFICE]"),
+    "[FIRST/OFFICE]", "[SECOND/OFFICE]", "[THIRD/OFFICE]", "[FOURTH/OFFICE]", "[FIFTH/OFFICE]", "[SIXTH/OFFICE]"
   ),
   from-block: (
     "[YOUR/SYMBOL]",
@@ -503,29 +476,38 @@
   cc: none,
   distribution: none,
   indorsements: none,
+  // Optional styling parameters
   letterhead-font: "Arial",
   body-font: "Times New Roman",
+  memo-for-cols: 3,
   paragraph-block-indent: false,
   leading-backmatter-pagebreak: false,
   body,
 ) = configure(body-font, {
-  // Validate AFH 33-337 compliance before proceeding
-  let params = (
+  // Initialize document counters and settings
+
+  let self = (
     letterhead-title: letterhead-title,
+    letterhead-caption: letterhead-caption,
+    letterhead-seal: letterhead-seal,
+    date: if date == none { datetime.today() } else { date },
     memo-for: memo-for,
     from-block: from-block,
     subject: subject,
+    references: references,
     signature-block: signature-block,
+    attachments: attachments,
+    cc: cc,
+    distribution: distribution,
+    indorsements: indorsements,
+    letterhead-font: letterhead-font,
     body-font: body-font,
+    memo-for-cols: memo-for-cols,
+    paragraph-block-indent: paragraph-block-indent,
+    leading-backmatter-pagebreak: leading-backmatter-pagebreak,
+    body: body,
   )
-  validate-memo-compliance(params)
-
-  // Initialize document counters and settings
-  context {
-    if date != none {
-      ORIGINAL_DATE_STATE.update(date)
-    }
-  }
+  MAIN_MEMO.update(self)
 
   counters.indorsement.update(0)
   set page(
@@ -534,7 +516,7 @@
   )
   set text(font: body-font, size: 12pt)
   set text()
-  paragraph-config.block-indent-state.update(paragraph-block-indent)
+  paragraph-config.block-indent-state.update(self.paragraph-block-indent)
 
   // Page numbering starting from page 2
   context {
@@ -549,34 +531,34 @@
   }
 
   // Document letterhead
-  render-letterhead(letterhead-title, letterhead-caption, letterhead-seal, letterhead-font)
+  render-letterhead(self.letterhead-title, self.letterhead-caption, self.letterhead-seal, self.letterhead-font)
 
   // Document header sections
   v(1.75in - spacing.margin) // 1.75in from top of the page
   context {
-    render-date-section(ORIGINAL_DATE_STATE.get())
+    render-date-section(self.date)
   }
-  render-memo-for-section(memo-for)
-  render-from-section(from-block)
-  render-subject-section(subject)
-  render-references-section(references)
+  render-memo-for-section(self.memo-for, self.memo-for-cols)
+  render-from-section(self.from-block)
+  render-subject-section(self.subject)
+  render-references-section(self.references)
 
   // Main document body
   // Render body content
-  render-body(body)
+  render-body(self.body)
 
   // Signature block positioning per AFH 33-337
-  render-signature-block(signature-block)
+  render-signature-block(self.signature-block)
 
   // Backmatter sections with proper spacing and page breaks
   render-backmatter-sections(
-    attachments: attachments,
-    cc: cc,
-    distribution: distribution,
-    leading-backmatter-pagebreak: leading-backmatter-pagebreak,
+    attachments: self.attachments,
+    cc: self.cc,
+    distribution: self.distribution,
+    leading-backmatter-pagebreak: self.leading-backmatter-pagebreak,
   )
 
   // Indorsements
-  process-indorsements(indorsements, body-font: body-font)
+  process-indorsements(self.indorsements, body-font: self.body-font)
 })
 

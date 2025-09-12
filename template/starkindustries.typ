@@ -8,6 +8,7 @@
     "MR. ANTHONY E. STARK, CEO",
     "STARK INDUSTRIES"
   ),
+  memo-for-cols: 1, // Pushes "STARK INDUSTRIES" to a new line
   from-block: (
     "STARK INDUSTRIES",
     "Executive Office",
