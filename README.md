@@ -23,11 +23,11 @@ A comprehensive Typst template for creating official United States Air Force mem
 
 ### Installation
 
-1. [Install Typst](*https://github.com/typst/typst?tab=readme-ov-file#installation).
+1. [Install Typst](https://github.com/typst/typst?tab=readme-ov-file#installation).
 
 2. Initialize template from Typst Universe
 ```bash
-typst init @preview/tonguetoquill-usaf-memo:0.0.3
+typst init @preview/tonguetoquill-usaf-memo:0.1.0
 ```
 
 3. Compile a `.typ` template file of your choice:
@@ -41,23 +41,23 @@ For working with the library files, you can clone this repository directly. See 
 
 #### Fonts
 
-`usaf-template.typ` and `ussf-template.typ` use Copperplate CC for the letterhead which is an open-source clone of Copperhead Gothic Bold. If you cloned the repository, Typst can recursively discover `template/assets/fonts/CopperplateCC-Bold.otf` like so:
+`usaf-template.typ` and `ussf-template.typ` use Copperplate CC for the letterhead which is an open-source clone of Copperplate Gothic Bold. If you cloned the repository, Typst can recursively discover `template/assets/fonts/CopperplateCC-Heavy.otf` like so:
 
 ```bash
 typst compile --root . --font-path . template/usaf-template.typ pdfs/usaf-template.pdf
 ```
 
-If you are using the Typst web app or local Typst Universe package, you can download [the `.otf` file](https://github.com/SnpM/tonguetoquill-usaf-memo/blob/main/template/assets/fonts/CopperplateCC-Bold.otf) and upload it to the root folder in your project.
+If you are using the Typst web app or local Typst Universe package, you can download [the `.otf` file](https://github.com/SnpM/tonguetoquill-usaf-memo/blob/main/template/assets/fonts/CopperplateCC-Heavy.otf) and upload it to the root folder in your project.
 
 ### Basic Usage
 
 Import the core functions for creating memorandums:
 
 ```typst
-#import "@preview/tonguetoquill-usaf-memo:0.0.3": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:0.1.0": official-memorandum, indorsement
 ```
 
-See [`template/usaf-template.typ`](template/content-guide.typ) for a complete example of creating an `official-memorandum()` with `indorsement` sections.
+See `template/content-guide.typ` for a complete example of creating an `official-memorandum()` with `indorsement` sections. For a concise, standard memo, see `template/usaf-template.typ`.
 
 ### Complete Examples
 
@@ -115,7 +115,7 @@ The template automatically manages page breaks for closing sections according to
 The `template/` directory contains sample memorandums demonstrating various use cases:
 
 - **usaf-template.typ**: Standard Air Force memorandum template
-- **ussf-template.typ**: Space Force memorandum variant  
+- **ussf-template.typ**: Space Force memorandum variant
 - **starkindustries.typ**: Pepper notifies Tony about regulatory issues for Iron Man suits.
 - **content-guide.typ**: Comprehensive guide for using the official-memorandum template with enum-based paragraph system
 
@@ -131,4 +131,4 @@ External assets used in this project:
 
 - `template/assets/dod_seal.gif` is [public domain](https://commons.wikimedia.org/wiki/File:Seal_of_the_United_States_Department_of_Defense_(2001%E2%80%932022).svg).
 - `template/assets/starkindustries_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Stark_Industries.png).
-- `template/assets/fonts/Copperplate-Heavy.otf` is [SIL Open Font License](./template/assets/fonts/LICENSE.md) pulled from [here](https://github.com/CowboyCollective/CopperplateCC)
+- `template/assets/fonts/CopperplateCC-Heavy.otf` is [SIL Open Font License](./template/assets/fonts/LICENSE.md) pulled from [here](https://github.com/CowboyCollective/CopperplateCC)
