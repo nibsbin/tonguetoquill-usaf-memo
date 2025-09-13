@@ -1,4 +1,4 @@
-#import "@preview/tonguetoquill-usaf-memo:0.0.3": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:0.1.0": official-memorandum, indorsement
 
 #set page(margin: 0.75in)
 #set text(size: 10pt)
@@ -10,7 +10,7 @@
   letterhead-seal: image("assets/dod_seal.gif"),
   letterhead-font: "Copperplate CC",
   
-  // RECIPIENTS - Multiple format options shown@preview/tonguetoquill-usaf-memo:0.0.3
+  // RECIPIENTS - Multiple format options shown
   memo-for: (
     "[FIRST/OFFICE]", "[SECOND/OFFICE]", "[THIRD/OFFICE]", "[FOURTH/OFFICE]", "[FIFTH/OFFICE]", "[SIXTH/OFFICE]"
     // Alternative single recipient: "[SINGLE/OFFICE]"

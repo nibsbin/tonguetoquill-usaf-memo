@@ -1,4 +1,4 @@
-#import "@preview/tonguetoquill-usaf-memo:0.0.3": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:0.1.0": official-memorandum, indorsement
 
 #official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
@@ -42,11 +42,11 @@
         "Duty Title"
       ),
     )[
-        Number each indorsement in sequence (1st Ind, 2d Ind, 3d Ind, …). Begin the first indorsement on the second line below the last element of the official memorandum. Begin subsequent indorsements on the second line below the last element of the previous indorsement. Follow the indorsement number with your office symbol.
+        Number each indorsement in sequence (1st Ind, 2d Ind, 3d Ind, …).~ Begin the first indorsement on the second line below the last element of the official memorandum.~ Begin subsequent indorsements on the second line below the last element of the previous indorsement.~ Follow the indorsement number with your office symbol.
         
-        When inserting a new indorsement element (either on the same page or as a separate page), the numbering will need to be reset. This is accomplished by right-clicking the number on the list, then selecting “Restart at 1”.
+        When inserting a new indorsement element (either on the same page or as a separate page), the numbering will need to be reset.~ This is accomplished by right-clicking the number on the list, then selecting “Restart at 1”.
         
-        Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page. The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
+        Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page.~ The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
         ],
     indorsement(
       office-symbol: "[Indorser ORG/SYMBOL]",
@@ -57,7 +57,7 @@
       ),
       separate-page: true,
     )[
-        Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page. The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
+        Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page.~ The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
       ],
   ),
   //leading-backmatter-pagebreak: true, // Forces a break before backmatter sections (attachments, cc, distribution)
@@ -93,7 +93,7 @@ Follow the spacing guidance between the text, signature block, attachment elemen
 
 Elements of the Official Memorandum can be inserted as templated parts in MS Word.~ Select the “Insert” menu, “Quick Parts”, and then select the desired element.~ Follow the formatting instructions provided with the element template.
 
-To add classification banner markings (including FOUO markings), click on the header or footer, and in the “Header & Footer Tools” tab, select the Header / Footer dropdown menus on the left side.~ Use the pre-generated headers and footers – note that the first page is different from the second page onward, and so the second page header and footer must be applied separately. 
+To add classification banner markings (including FOUO markings), click on the header or footer, and in the “Header & Footer Tools” tab, select the Header / Footer dropdown menus on the left side.~ Use the pre-generated headers and footers – note that the first page is different from the second page onward, and so the second page header and footer must be applied separately.~ 
 
 The example of this memorandum applies to many official memorandums that Airmen may be tasked to prepare; however, there are additional elements for special uses of the official memorandum.~ Refer to the Tongue and Quill discussion on the official memorandum for more details, or consult published guidance applicable to your duties.
 ]
