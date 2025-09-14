@@ -65,33 +65,34 @@ For comprehensive examples with all parameters, see:
 - **Space Force memo**: `template/ussf-template.typ` - Space Force memorandum variant with proper formatting
 - **Custom organization memo**: `template/starkindustries.typ` - Demonstrates custom letterhead and extensive use of all optional parameters
 
-## Paragraph Numbering
+## Additional usage details
 
-The template provides automatic hierarchical paragraph numbering following AFH 33-337 standards using Typst's native numbered list syntax:
+### Paragraph numbering
+
+AFH 33-337–compliant hierarchical numbering using Typst's native enum lists.
 
 ```typst
 Base paragraph numbered as 1., 2., etc.
 
 + Level 1 subparagraph lettered as a., b., etc.
-
   + Level 2 subparagraph numbered as (1), (2), etc.
-    
     + Level 3 subparagraph lettered as (a), (b), etc.
 
 This returns to base paragraph numbering as 2.
 ```
 
-### Key Features
+### Tips
+- Base-level paragraphs are plain text lines; do not prefix them with `+`.
+- Increase depth by adding leading spaces before `+` (two spaces per level works well).
+- Keep items contiguous—an empty line ends the list and returns to the base level.
+- Indentation and alignment are handled for you; subparagraphs align with proper tab stops.
+- Numbering and spacing are automatic and AFH 33-337 compliant.
 
-- **Natural Typst syntax** - Uses standard enum formatting familiar to Typst users
-- **Automatic numbering** with proper hierarchical indentation
-- **Smart spacing management** between paragraphs and sections
-- **Tab-aligned indentation** - Subparagraphs align with proper tab spacing
-- **Progressive indentation** - Use increasing spaces before `+` for deeper levels
-- **Flexible structure** - supports multiple levels of nested paragraphs
-- **AFH 33-337 compliance** - follows official formatting standards automatically
+### Common pitfalls
+- Using `-` or `*` instead of `+` creates a bullet list, not a numbered enum.
+- Misaligned nesting: ensure nested `+` items are indented more than their parent.
 
-## Sentence Spacing
+### Sentence spacing
 
 The project includes GitHub Copilot prompts in `.github/prompts/` to help with sentence spacing formatting:
 
@@ -100,7 +101,7 @@ The project includes GitHub Copilot prompts in `.github/prompts/` to help with s
 
 These prompts help ensure consistent spacing formatting in your memorandums according to your organization's preferred style.
 
-## Smart Page Break Handling
+### Smart page break handling
 
 The template automatically manages page breaks for closing sections according to AFH 33-337 standards:
 
@@ -112,10 +113,10 @@ The template automatically manages page breaks for closing sections according to
 
 The `template/` directory contains sample memorandums demonstrating various use cases:
 
-- **usaf-template.typ**: Standard Air Force memorandum template
-- **ussf-template.typ**: Space Force memorandum variant
-- **starkindustries.typ**: Pepper notifies Tony about regulatory issues for Iron Man suits.
-- **content-guide.typ**: Comprehensive guide for using the official-memorandum template with enum-based paragraph system
+- [**usaf-template.typ**](template/usaf-template.typ): Standard Air Force memorandum template
+- [**ussf-template.typ**](template/ussf-template.typ): Space Force memorandum variant
+- [**starkindustries.typ**](template/starkindustries.typ): Pepper notifies Tony about regulatory issues for Iron Man suits.
+- [**content-guide.typ**](template/content-guide.typ): Comprehensive guide for using the official-memorandum template with enum-based paragraph system
 
 ## Contributing
 
