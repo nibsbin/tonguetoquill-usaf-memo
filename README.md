@@ -21,7 +21,15 @@ A comprehensive Typst template for creating official United States Air Force mem
 
 ## Quick Start
 
-### Installation
+### (Recommended)
+
+1. Find `tonguetoquill-usaf-memo` on [the app](https://typst.app/?q=tonguetoquill-usaf-memo&template=tonguetoquill-usaf-memo)
+
+2. Create a new project from the template.
+
+3. Download the [CopperplateCC-Heavy.otf](https://github.com/SnpM/tonguetoquill-usaf-memo/blob/bebba4c1a51f9d67ca66e08109439b2c637e1015/template/assets/fonts/CopperplateCC-Heavy.otf) font and upload it to your project folder.
+
+### Local Installation
 
 1. [Install Typst](https://github.com/typst/typst?tab=readme-ov-file#installation).
 
@@ -32,22 +40,12 @@ typst init @preview/tonguetoquill-usaf-memo:0.1.0
 
 3. Compile a `.typ` template file of your choice:
 ```bash
-typst compile --root . template/starkindustries.typ pdfs/starkindustries.pdf
+typst compile --root . --font-path . template/starkindustries.typ pdfs/starkindustries.pdf
 ```
 
 ### Local Development
 
-For working with the library files, you can clone this repository directly. See [build.sh](build.sh) for example commands to build the template files. For local development, [install the package locally](https://github.com/typst/packages/tree/main?tab=readme-ov-file#local-packages).
-
-#### Fonts
-
-`usaf-template.typ` and `ussf-template.typ` use Copperplate CC for the letterhead which is an open-source clone of Copperplate Gothic Bold. If you cloned the repository, Typst can recursively discover `template/assets/fonts/CopperplateCC-Heavy.otf` like so:
-
-```bash
-typst compile --root . --font-path . template/usaf-template.typ pdfs/usaf-template.pdf
-```
-
-If you are using the Typst web app or local Typst Universe package, you can download [the `.otf` file](https://github.com/SnpM/tonguetoquill-usaf-memo/blob/main/template/assets/fonts/CopperplateCC-Heavy.otf) and upload it to the root folder in your project.
+Clone [the repo](https://github.com/SnpM/tonguetoquill-usaf-memo). Follow [these instructions](https://github.com/typst/packages/tree/main?tab=readme-ov-file#local-packages) to install the package locally. 
 
 ### Basic Usage
 
