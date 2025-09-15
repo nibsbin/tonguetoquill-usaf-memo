@@ -6,6 +6,9 @@
 [![github-repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/SnpM/tonguetoquill-usaf-memo)
 [![Nibs](https://img.shields.io/badge/author-Nibs-white?logo=github)](https://github.com/SnpM)
 
+[![Nibs](https://img.shields.io/badge/Typst-Universe-aqua)](
+https://github.com/snpm/tonguetoquill-usaf-memo)
+
 A comprehensive Typst template for creating official United States Air Force memorandums that comply with AFH 33-337 "The Tongue and Quill" formatting standards.
 
 ## Features
