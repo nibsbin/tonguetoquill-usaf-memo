@@ -16,7 +16,7 @@
   ),
   
   // SENDER INFORMATION BLOCK
-  from-block: (
+  memo-from: (
     "[YOUR/SYMBOL]",                    // Organization symbol
     "[Your Organization Name]",         // Full organization name  
     "[Street Address]",                 // Mailing address
