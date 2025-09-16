@@ -2,14 +2,13 @@
 
 #import "utils.typ": *
 
-// =============================================================================
-// GLOBAL STATE AND COUNTERS
-// =============================================================================
+//===Global State and defaults===
 #let MAIN_MEMO = state("main-memo-state", none) // Tracks if we are in the main memo or indorsements
 
-// =============================================================================
-// INTERNAL RENDERING FUNCTIONS
-// =============================================================================
+#let DEFAULT_LETTERHEAD_FONTS = ("Copperplate CC")
+#let DEFAULT_BODY_FONTS = ("times new roman","liberation serif")
+
+//===Rendering Functions===
 
 /// Renders the document letterhead section.
 /// - title (str): Primary organization title.
@@ -18,6 +17,10 @@
 /// - font (str): Font for letterhead text.
 /// -> content
 #let render-letterhead(title, caption, letterhead-seal, font) = {
+  //Normalize to array
+  if type(font) != array {
+    font = (font,)
+  }
   place(
     dy: 0.625in - spacing.margin, // 5/8in from top of page
     box(
@@ -29,9 +32,10 @@
         #place(
           center + top,
           align(center)[
-            // Use Arial as the backup font
-            #text(12pt, font: (font, "Arial"), fill: rgb("#000099"))[#title]\
-            #text(10.5pt, font: (font, "Arial"), fill: rgb("#000099"))[#caption]
+            // Use default fonts as backup
+            #let fonts = font + DEFAULT_LETTERHEAD_FONTS
+            #text(12pt, font: fonts, fill: rgb("#000099"), fallback: false)[#title]\
+            #text(10.5pt, font: fonts, fill: rgb("#000099"), fallback: false)[#caption]
           ],
         )
       ],
@@ -323,7 +327,7 @@
   /// Renders the indorsement with proper formatting.
   /// - body-font (str): Font to use for body text.
   /// -> content
-  ind.render = (body-font: "Times New Roman") => configure(body-font, {
+  ind.render = (body-font: DEFAULT_BODY_FONTS ) => configure(body-font, {
     counters.indorsement.step()
 
     context {
@@ -457,8 +461,8 @@
   distribution: none,
   indorsements: none,
   // Optional styling parameters
-  letterhead-font: "Arial",
-  body-font: "Times New Roman",
+  letterhead-font: DEFAULT_BODY_FONTS,
+  body-font: DEFAULT_BODY_FONTS,
   memo-for-cols: 3,
   paragraph-block-indent: false,
   leading-backmatter-pagebreak: false,
@@ -494,8 +498,6 @@
     paper: "us-letter",
     margin: (left: spacing.margin, right: spacing.margin, top: spacing.margin, bottom: spacing.margin),
   )
-  set text(font: body-font, size: 12pt)
-  set text()
   paragraph-config.block-indent-state.update(self.paragraph-block-indent)
 
   // Page numbering starting from page 2
