@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # Build all .typ files to corresponding PDFs
-# Note that including the fallback fonts for windows/mac/web app creates warnings
-# There is not current way to suppress these warnings
 
 echo "Compiling templates and tests to PDFs..."
 typst compile --font-path . template/starkindustries.typ pdfs/starkindustries.pdf
