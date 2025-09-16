@@ -6,7 +6,7 @@
 #let MAIN_MEMO = state("main-memo-state", none) // Tracks if we are in the main memo or indorsements
 
 #let DEFAULT_LETTERHEAD_FONTS = ("Copperplate CC",)
-#let DEFAULT_BODY_FONTS = ("times new roman","liberation serif")
+#let DEFAULT_BODY_FONTS = ("times new roman","tex gyre termes")
 
 //===Rendering Functions===
 
