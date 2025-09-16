@@ -1,0 +1,21 @@
+[package]
+name = "tonguetoquill-typst-writer"
+version = "0.1.0"
+edition = "2021"
+authors = ["Nibs"]
+license = "MIT"
+description = "A Rust library for converting Markdown to Typst using pulldown-cmark"
+repository = "https://github.com/SnpM/tonguetoquill-usaf-memo"
+
+[lib]
+path = "rust_src/lib.rs"
+
+[[example]]
+name = "basic"
+path = "rust_src/examples/basic.rs"
+
+[dependencies]
+pulldown-cmark = "0.12"
+
+[dev-dependencies]
+indoc = "2.0"
