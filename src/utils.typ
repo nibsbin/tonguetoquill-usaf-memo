@@ -16,7 +16,7 @@
 
 #let configure(body-font,ctx) = {
   context{
-    set par(leading: spacing.line, spacing:spacing.line, justify: true)
+    set par(leading: spacing.line, justify: true)
     set block(above:spacing.line, below:0em,spacing: 0em)
     set text(font: body-font, size: 12pt, fallback: false)
     ctx
@@ -249,12 +249,11 @@
     let level = PAR_LEVEL_STATE.get()
     let paragraph-number = generate-paragraph-number(level, increment: true)
     counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
-    let indent-width = calculate-paragraph-indent(level)
-    set text(costs: (widow: 0%)) 
+    let indent-width = calculate-paragraph-indent(level) 
 
     let output = {
       if paragraph-config.block-indent-state.get() {
-        pad(left: indent-width)[#paragraph-number#h(spacing.two-spaces)#contentfdsa]
+        pad(left: indent-width)[#paragraph-number#h(spacing.two-spaces)#content]
       } else {
         pad(left: 0em)[#h(indent-width)#paragraph-number#h(spacing.two-spaces)#content]
       }

@@ -221,11 +221,10 @@
           par-counter.step()
           let cur_count = par-counter.get().at(0)
           let par_count = total-par-counter.get().at(0)
-          let paragraph = memo-par([#it.body])
+          let paragraph = memo-par(it)
           //Check if this is the last paragraph
           if cur_count == par_count {
-            set text(costs: (orphan: 0%))
-            block(breakable: true, sticky: true)[#paragraph]
+            block(breakable: true)[#paragraph]
           } else {
             block(breakable: true)[#paragraph]
           }
