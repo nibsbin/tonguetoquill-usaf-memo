@@ -1,1 +1,0 @@
-/home/runner/work/tonguetoquill-usaf-memo/tonguetoquill-usaf-memo/target/debug/examples/basic: /home/runner/work/tonguetoquill-usaf-memo/tonguetoquill-usaf-memo/rust_src/examples/basic.rs /home/runner/work/tonguetoquill-usaf-memo/tonguetoquill-usaf-memo/rust_src/lib.rs
