@@ -3,26 +3,6 @@
 #import "utils.typ": *
 
 // =============================================================================
-// COMPILER VERSION COMPLIANCE CHECK
-// =============================================================================
-
-// Enforce minimum Typst compiler version for proper functionality
-#let min-version = (0, 13, 0)
-#let current-version = sys.version
-
-#assert(
-  current-version.at(0) > min-version.at(0)
-    or (current-version.at(0) == min-version.at(0) and current-version.at(1) >= min-version.at(1)),
-  message: "This template requires Typst compiler version 0.13.0 or higher. "
-    + "Current version: "
-    + str(current-version.at(0))
-    + "."
-    + str(current-version.at(1))
-    + ". "
-    + "Please update your Typst installation.",
-)
-
-// =============================================================================
 // GLOBAL STATE AND COUNTERS
 // =============================================================================
 #let MAIN_MEMO = state("main-memo-state", none) // Tracks if we are in the main memo or indorsements
