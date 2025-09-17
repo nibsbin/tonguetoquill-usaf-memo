@@ -1,13 +1,9 @@
-
-
 # tonguetoquill: USAF Memo Template for Typst
 
 
 [![github-repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/SnpM/tonguetoquill-usaf-memo)
-[![Nibs](https://img.shields.io/badge/author-Nibs-white?logo=github)](https://github.com/SnpM)
-
-[![typst-universe](https://img.shields.io/badge/Typst-Universe-aqua)](
-https://github.com/snpm/tonguetoquill-usaf-memo)
+[![typst-universe](https://img.shields.io/badge/Typst-Universe-aqua)](https://github.com/snpm/tonguetoquill-usaf-memo)
+[![nibs](https://img.shields.io/badge/author-Nibs-white?logo=github)](https://github.com/SnpM)
 
 A comprehensive Typst template for creating official United States Air Force memorandums that comply with AFH 33-337 "The Tongue and Quill" formatting standards.
 
@@ -16,44 +12,12 @@ A comprehensive Typst template for creating official United States Air Force mem
 ### Core Formatting
 - **Full AFH 33-337 compliance** with "The Tongue and Quill" formatting standards
 - **Automatic letterhead generation** with configurable organization title, caption, and seal
-- **Professional typography** using Times New Roman font family with proper sizing (12pt body text)
-- **Standard military date format** (e.g., "1 January 2024") with automatic today() default
-- **Proper page margins** (1 inch on all sides) and consistent spacing throughout
-
-### Advanced Paragraph System
+- **Pixel-perfect typesetting** for all memorandum components in AFH 33-337
 - **Hierarchical paragraph numbering** (1., a., (1), (a)) with proper indentation
-- **Automatic counter management** for nested paragraph structures
-- **AFH 33-337 compliant numbering** following military correspondence standards
-- **Smart indentation** with precise tab stop alignment
-- **Enum-based interface** using Typst's native list system for intuitive authoring
-
-### Document Structure
-- **Complete header automation** (MEMORANDUM FOR, FROM, SUBJECT, References)
-- **Flexible recipient handling** with multi-column grid layout support
-- **Optional reference section** with lettered formatting (a), (b), (c)
-- **Professional signature blocks** with proper positioning and orphan prevention
 - **Comprehensive backmatter** (Attachments, CC, Distribution) with smart formatting
-
-### Smart Page Management
-- **Intelligent page breaks** preventing orphaned headers and signature blocks
-- **Continuation formatting** for multi-page backmatter sections
-- **Dynamic spacing calculations** to maintain proper document flow
 - **Page numbering** starting from page 2 per AFH 33-337 standards
-- **Orphan/widow prevention** for professional document appearance
-
-### Indorsement System
-- **Sequential indorsement numbering** (1st Ind, 2d Ind, 3d Ind) following military conventions
-- **Flexible indorsement formats** supporting both same-page and separate-page styles
-- **Automatic date and subject referencing** linking back to original memorandum
-- **Individual signature blocks** and backmatter for each indorsement
-- **Smart page break control** for proper document flow
-
-### Customization Options
-- **Configurable fonts** with automatic fallbacks (Copperplate CC for letterhead, Times New Roman/TeX Gyre Termes for body)
-- **Organization seal support** with automatic scaling and positioning
-- **Flexible styling parameters** for various organizational needs
-- **Multi-column recipient layouts** with configurable column counts
-- **Optional paragraph indentation** styles (block vs. hanging indent)
+- **Highly Configurable** with numerous parameters for customization
+- **Standard and Separate Page Indorsements** with full support for long indorsement chains
 
 ## Quick Start
 
@@ -67,7 +31,7 @@ A comprehensive Typst template for creating official United States Air Force mem
 3. Start with one of the template files:
    - `template/usaf-template.typ` for a standard Air Force memo
    - `template/ussf-template.typ` for Space Force
-   - `template/content-guide.typ` for a comprehensive example
+   - `template/stark-industries.typ` for a custom organization example
 
 ### Local Installation
 
@@ -97,7 +61,7 @@ Clone [the repo](https://github.com/SnpM/tonguetoquill-usaf-memo) and follow [th
 ```bash
 git clone https://github.com/SnpM/tonguetoquill-usaf-memo.git
 cd tonguetoquill-usaf-memo
-./build.sh  # Compile all examples (requires Typst installed)
+./build.sh  # Compile all template esamples
 ```
 
 ### Basic Usage
@@ -115,8 +79,8 @@ Import the core functions for creating memorandums:
 )[
 Your memorandum content goes here.
 
-+ Use plus signs for numbered subparagraphs.
-  + Indent with spaces for deeper nesting.
+- Use plus signs for numbered subparagraphs.
+  - Indent with spaces for deeper nesting.
 
 Continue with regular paragraphs.
 ]
@@ -141,23 +105,12 @@ AFH 33-337–compliant hierarchical numbering using Typst's native enum lists.
 ```typst
 Base paragraph numbered as 1., 2., etc.
 
-+ Level 1 subparagraph lettered as a., b., etc.
-  + Level 2 subparagraph numbered as (1), (2), etc.
-    + Level 3 subparagraph lettered as (a), (b), etc.
+- Level 1 subparagraph lettered as a., b., etc.
+  - Level 2 subparagraph numbered as (1), (2), etc.
+    - Level 3 subparagraph lettered as (a), (b), etc.
 
 This returns to base paragraph numbering as 2.
 ```
-
-### Tips
-- Base-level paragraphs are plain text lines; do not prefix them with `+`.
-- Increase depth by adding leading spaces before `+` (two spaces per level works well).
-- Keep items contiguous—an empty line ends the list and returns to the base level.
-- Indentation and alignment are handled for you; subparagraphs align with proper tab stops.
-- Numbering and spacing are automatic and AFH 33-337 compliant.
-
-### Common pitfalls
-- Using `-` or `*` instead of `+` creates a bullet list, not a numbered enum.
-- Misaligned nesting: ensure nested `+` items are indented more than their parent.
 
 ### Sentence spacing
 
@@ -235,105 +188,11 @@ indorsement(
 )[Your indorsement content]
 ```
 
-### Paragraph Numbering System
-
-Use Typst's native enum system for AFH 33-337 compliant paragraph numbering:
-
-```typst
-This is paragraph 1.
-
-+ This is subparagraph 1a.
-  + This is subparagraph 1a(1).
-    + This is subparagraph 1a(1)(a).
-
-+ This is subparagraph 1b.
-
-This is paragraph 2.
-```
-
-**Numbering Hierarchy:**
-- **Level 0**: 1., 2., 3., etc. (base paragraphs)
-- **Level 1**: a., b., c., etc. (subparagraphs)
-- **Level 2**: (1), (2), (3), etc. (sub-subparagraphs)
-- **Level 3**: (a), (b), (c), etc. (sub-sub-subparagraphs)
-- **Level 4+**: Underlined format for deeper nesting
-
-### Font Configuration
-
-The template supports configurable fonts with automatic fallbacks:
-
-**Letterhead Fonts:**
-- Primary: `"Copperplate CC"` (open-source Copperplate Gothic Bold clone)
-- Fallback: System serif fonts
-
-**Body Fonts:**
-- Primary: `"times new roman"` (if available)
-- Fallback: `"tex gyre termes"` (open-source Times New Roman clone)
-
-### Smart Features
-
-**Page Break Management:**
-- Prevents orphaned signature blocks
-- Smart backmatter section handling
-- Continuation labeling for multi-page sections
-
-**Automatic Formatting:**
-- Military date format (1 January 2024)
-- Proper spacing and indentation
-- AFH 33-337 compliant typography
-- Automatic paragraph numbering and indentation
-
-## Troubleshooting
-
-### Common Issues
-
-**Missing Fonts:**
-- Download [CopperplateCC-Heavy.otf](https://github.com/SnpM/tonguetoquill-usaf-memo/blob/bebba4c1a51f9d67ca66e08109439b2c637e1015/template/assets/fonts/CopperplateCC-Heavy.otf) for letterhead
-- The template automatically falls back to TeX Gyre Termes for body text if Times New Roman is unavailable
-
-**Paragraph Numbering Issues:**
-- Use `+` for enum items, not `-` or `*`
-- Maintain consistent indentation (2 spaces per level recommended)
-- Keep enum items contiguous - empty lines reset to base level
-
-**Build Errors:**
-- Ensure Typst 0.13.1 or later is installed
-- Check that all image files are accessible in the correct paths
-- Verify font files are in the project directory for local compilation
-
-### Performance Tips
-
-- Use `leading-backmatter-pagebreak: true` for complex documents with extensive backmatter
-- Keep indorsement content concise to avoid pagination issues
-- Use `memo-for-cols` parameter to optimize recipient list layout
-
 ## Development
 
 ### Contributing
 
-Contributions are welcome! Please follow these guidelines:
-
-1. **Documentation**: Update both inline documentation and this README for any new features
-2. **Testing**: Test your changes with the provided template files
-3. **Standards**: Ensure AFH 33-337 compliance for any formatting changes
-4. **Examples**: Add examples to demonstrate new functionality
-
-### Local Development Setup
-
-1. Clone the repository:
-```bash
-git clone https://github.com/SnpM/tonguetoquill-usaf-memo.git
-cd tonguetoquill-usaf-memo
-```
-
-2. Install Typst locally following [official instructions](https://github.com/typst/typst?tab=readme-ov-file#installation)
-
-3. Test compilation:
-```bash
-typst compile --font-path . template/usaf-template.typ test-output.pdf
-```
-
-4. Follow [Typst local package instructions](https://github.com/typst/packages/tree/main?tab=readme-ov-file#local-packages) for development
+Contributions are welcome! Please explore `src/` for core functions and `template/` for the user-facing examples. Feel free to open issues or submit pull requests.
 
 ### Project Structure
 
@@ -346,88 +205,6 @@ typst compile --font-path . template/usaf-template.typ test-output.pdf
 │   └── assets/         # Fonts and images
 ├── pdfs/               # Compiled example outputs
 └── README.md           # This documentation
-```
-
-## Examples
-
-The `template/` directory contains sample memorandums demonstrating various use cases:
-
-### Template Files
-
-- [**usaf-template.typ**](template/usaf-template.typ): Standard Air Force memorandum with all sections
-- [**ussf-template.typ**](template/ussf-template.typ): Space Force memorandum variant
-- [**starkindustries.typ**](template/starkindustries.typ): Corporate memo example (Pepper notifies Tony about Iron Man suit regulations)
-- [**content-guide.typ**](template/content-guide.typ): Comprehensive guide showing all features with detailed examples
-
-### Basic Memorandum Example
-
-```typst
-#import "@preview/tonguetoquill-usaf-memo:0.1.0": official-memorandum
-
-#official-memorandum(
-  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead-caption: "123RD FIGHTER SQUADRON",
-  letterhead-seal: image("assets/dod_seal.gif"),
-  
-  memo-for: ("123 FW/CC", "123 OG/CC", "123 MXG/CC"),
-  memo-from: (
-    "123 FS/CC",
-    "123rd Fighter Squadron",
-    "Joint Base Example",
-    "Example AFB ST 12345-6789"
-  ),
-  subject: "Example Official Memorandum Format",
-  
-  signature-block: (
-    "JOHN A. SMITH, Lt Col, USAF",
-    "Commander"
-  ),
-)[
-This is the first paragraph of the memorandum body.
-
-+ This is subparagraph 1a.
-  + This is subparagraph 1a(1).
-  + This is subparagraph 1a(2).
-
-+ This is subparagraph 1b.
-
-This is the second paragraph.
-]
-```
-
-### Memorandum with Indorsements
-
-```typst
-#import "@preview/tonguetoquill-usaf-memo:0.1.0": official-memorandum, indorsement
-
-#official-memorandum(
-  // ... basic parameters ...
-  indorsements: (
-    indorsement(
-      office-symbol: "123 OG/CC",
-      memo-for: "123 FW/CC",
-      signature-block: (
-        "JANE B. DOE, Col, USAF",
-        "Commander, 123rd Operations Group"
-      ),
-    )[
-    I concur with the squadron commander's recommendation.
-    ],
-    
-    indorsement(
-      office-symbol: "123 FW/CC", 
-      memo-for: "HAF/A3O",
-      signature-block: (
-        "ROBERT C. JONES, Brig Gen, USAF",
-        "Commander"
-      ),
-    )[
-    Forwarded with endorsement.
-    ]
-  ),
-)[
-Original memorandum content requesting approval for new training program.
-]
 ```
 
 ## License
