@@ -21,6 +21,8 @@ A comprehensive Typst template for creating official United States Air Force mem
 - **Flexible content management** for various memo types
 - **Proper signature block positioning** and closing elements
 - **Intelligent space management** prevents orphaned headers and improper splits
+- **Comprehensive API documentation** with detailed function parameters
+- **Robust error handling** with improved syntax validation
 
 ## Quick Start
 
@@ -66,6 +68,54 @@ For comprehensive examples with all parameters, see:
 - **Standard Air Force memo**: `template/usaf-template.typ` - Shows proper formatting with references, attachments, cc, distribution, and indorsements
 - **Space Force memo**: `template/ussf-template.typ` - Space Force memorandum variant with proper formatting
 - **Custom organization memo**: `template/starkindustries.typ` - Demonstrates custom letterhead and extensive use of all optional parameters
+
+## API Reference
+
+### Core Functions
+
+The package exports two primary functions for creating memorandums:
+
+#### `official-memorandum(...)`
+
+Creates a complete AFH 33-337 compliant memorandum with automatic formatting, paragraph numbering, and proper spacing.
+
+**Required Parameters:**
+- `memo-for` (str | array): Recipient organization(s) 
+- `subject` (str): Memorandum subject line in title case
+
+**Optional Parameters:**
+- `letterhead-title` (str): Organization title (default: "DEPARTMENT OF THE AIR FORCE")
+- `letterhead-caption` (str): Sub-organization name
+- `letterhead-seal` (content): Organization seal image
+- `date` (datetime): Memorandum date (defaults to today)
+- `memo-from` (array): Sender information array
+- `signature-block` (array): Signature lines
+- `references` (array): Reference documents
+- `attachments` (array): Attachment descriptions
+- `cc` (array): Courtesy copy recipients
+- `distribution` (array): Distribution list
+- `indorsements` (array): Array of indorsement objects
+- `body-font` (str | array): Body text font (default: Times New Roman/TeX Gyre Termes)
+- `letterhead-font` (str | array): Letterhead font (default: Copperplate CC)
+- `paragraph-block-indent` (bool): Enable paragraph indentation
+- `leading-backmatter-pagebreak` (bool): Force page break before attachments/cc
+
+#### `indorsement(...)`
+
+Creates routing indorsements for multi-office coordination, following AFH 33-337 standards.
+
+**Required Parameters:**
+- `body` (content): Indorsement content
+
+**Optional Parameters:**
+- `office-symbol` (str): Sending office symbol
+- `memo-for` (str): Receiving office symbol
+- `signature-block` (array): Signature lines
+- `attachments` (array): Attachment descriptions
+- `cc` (array): Courtesy copy recipients
+- `leading-pagebreak` (bool): Force page break before indorsement
+- `separate-page` (bool): Use separate-page format
+- `indorsement-date` (datetime): Date of indorsement
 
 ## Additional usage details
 

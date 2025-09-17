@@ -14,6 +14,11 @@
   margin:1in            // Standard page margin
 )
 
+/// Configures document typography and layout settings according to AFH 33-337 standards.
+/// Applies consistent font, paragraph, and block styling throughout the document.
+/// - body-font (str | array): Font family(ies) to use for body text.
+/// - ctx (content): Content to apply configuration to.
+/// -> content
 #let configure(body-font,ctx) = {
   context{
     set par(leading: spacing.line, justify: true)
@@ -23,11 +28,20 @@
   }
 }
 
+/// Creates vertical spacing with multiple blank lines.
+/// Uses AFH 33-337 compliant line spacing calculations.
+/// - count (int): Number of blank lines to insert.
+/// - weak (bool): Whether spacing can be compressed at page boundaries.
+/// -> content
 #let blank-lines(count,weak:true) = {
   let lead = spacing.line
   let height = spacing.line-height
   v(lead + (height + lead) * count,weak:weak)
 }
+
+/// Creates a single blank line with proper AFH 33-337 spacing.
+/// - weak (bool): Whether spacing can be compressed at page boundaries.
+/// -> content
 #let blank-line(weak:true) = blank-lines(1,weak:weak)
 
 /// Paragraph numbering configuration dictionary.
@@ -49,11 +63,20 @@
 // =============================================================================
 
 /// Checks if a value is "falsey" (none, false, empty array, or empty string).
-/// - value (any): The value to check.
+/// Useful for testing optional parameters and content before rendering.
+/// - value (any): The value to check for "falsey" status.
+/// -> bool
 #let falsey(value) = {
   value == none or value == false or (type(value) == array and value.len() == 0) or (type(value) == str and value == "")
 }
 
+/// Scales and fits content within a fixed-size box with specified alignment.
+/// Maintains aspect ratio while ensuring content fits within box dimensions.
+/// - width (length): Maximum width of the container box.
+/// - height (length): Maximum height of the container box. 
+/// - alignment (alignment): How to align content within the box (default: left+horizon).
+/// - body (content): Content to scale and fit within the box.
+/// -> content
 #let fit-box(width: 2in, height: 1in, alignment:left+horizon, body) = context {
   // 1) measure the unscaled content
   let s = measure(body)
@@ -69,6 +92,10 @@
   ]
 }
 
+/// Formats a datetime object into AFH 33-337 compliant date display format.
+/// Returns date in "DD Month YYYY" format (e.g., "1 January 2024").
+/// - date (datetime): The date to format and display.
+/// -> str
 #let display-date(date) = {
   date.display("[day padding:none] [month repr:long] [year]")
 }
@@ -233,7 +260,15 @@
   return measure(indent-buffer).width
 }
 
+/// Global state tracking current paragraph nesting level for automatic numbering.
+/// Used internally by the paragraph numbering system.
+/// -> state
 #let PAR_LEVEL_STATE = state("PAR_LEVEL", 0)
+
+/// Sets the current paragraph nesting level for automatic numbering.
+/// Used internally by enum processing to track hierarchy depth.
+/// - level (int): The nesting level to set (0 for base level, 1+ for sub-levels).
+/// -> content
 #let SET_LEVEL(level) = {
   context {
     PAR_LEVEL_STATE.update(level)

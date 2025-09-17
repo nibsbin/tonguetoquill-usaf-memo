@@ -3,9 +3,20 @@
 #import "utils.typ": *
 
 //===Global State and defaults===
+
+/// Global state container for the main memorandum data structure.
+/// Tracks the primary memo information for use by indorsements and other components.
+/// -> state
 #let MAIN_MEMO = state("main-memo-state", none) // Tracks if we are in the main memo or indorsements
 
+/// Default font families for letterhead text, prioritizing military standard fonts.
+/// Falls back through list if fonts are unavailable on the system.
+/// -> array
 #let DEFAULT_LETTERHEAD_FONTS = ("Copperplate CC",)
+
+/// Default font families for body text, complying with AFH 33-337 requirements.
+/// Prioritizes Times New Roman with TeX Gyre Termes as open-source fallback.
+/// -> array
 #let DEFAULT_BODY_FONTS = ("times new roman","tex gyre termes")
 
 //===Rendering Functions===
@@ -221,12 +232,26 @@
           par-counter.step()
           let cur_count = par-counter.get().at(0)
           let par_count = total-par-counter.get().at(0)
-          let paragraph = memo-par(it)
+          
+          // Get paragraph content without creating new paragraphs
+          let level = PAR_LEVEL_STATE.get()
+          let paragraph-number = generate-paragraph-number(level, increment: true)
+          counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
+          let indent-width = calculate-paragraph-indent(level)
+          
+          let formatted-paragraph = {
+            if paragraph-config.block-indent-state.get() {
+              pad(left: indent-width)[#paragraph-number#h(spacing.two-spaces)#it]
+            } else {
+              pad(left: 0em)[#h(indent-width)#paragraph-number#h(spacing.two-spaces)#it]
+            }
+          }
+          
           //Check if this is the last paragraph
           if cur_count == par_count {
-            block(breakable: true)[#paragraph]
+            block(breakable: true)[#formatted-paragraph]
           } else {
-            block(breakable: true)[#paragraph]
+            block(breakable: true)[#formatted-paragraph]
           }
         }
       }
@@ -289,16 +314,22 @@
 // INDORSEMENT DATA STRUCTURE
 // =============================================================================
 
-/// Creates an indorsement object with proper AFH 33-337 formatting.
-/// - office-symbol (str): Sending organization symbol.
-/// - memo-for (str): Recipient organization symbol.
-/// - signature-block (array): Array of signature lines.
-/// - attachments (array): Array of attachment descriptions.
-/// - cc (array): Array of courtesy copy recipients.
-/// - leading-pagebreak (bool): Whether to force page break before indorsement.
-/// - separate-page (bool): Whether to use separate-page indorsement format.
-/// - indorsement-date (datetime): Date of the indorsement.
-/// - body (content): Indorsement body content.
+/// Creates an indorsement object for routing memorandums through multiple offices.
+/// Indorsements provide coordination and approval routing per AFH 33-337 standards.
+/// Each indorsement represents one office's review and forwarding of the original memo.
+/// 
+/// Use this function to create indorsement objects, then include them in the 
+/// indorsements array of the main official-memorandum() function.
+/// 
+/// - office-symbol (str): Sending organization symbol (default: "ORG/SYMBOL").
+/// - memo-for (str): Recipient organization symbol (default: "ORG/SYMBOL").
+/// - signature-block (array): Array of signature lines (name/rank, title, organization).
+/// - attachments (array): Array of attachment descriptions specific to this indorsement.
+/// - cc (array): Array of courtesy copy recipients for this indorsement.
+/// - leading-pagebreak (bool): Whether to force page break before indorsement (default: false).
+/// - separate-page (bool): Whether to use separate-page indorsement format (default: false).
+/// - indorsement-date (datetime): Date of the indorsement (default: today).
+/// - body (content): **REQUIRED** - Indorsement body content (routing comments, instructions).
 /// -> dictionary
 #let indorsement(
   office-symbol: "ORG/SYMBOL",
@@ -417,25 +448,32 @@
 // MAIN MEMORANDUM TEMPLATE
 // =============================================================================
 
-/// Creates an official memorandum following AFH 33-337 standards.
-/// - letterhead-title (str): Primary organization title.
-/// - letterhead-caption (str): Sub-organization or command.
-/// - letterhead-seal (str): Image content for organization seal.
+/// Creates an official memorandum following AFH 33-337 "The Tongue and Quill" standards.
+/// Generates a fully formatted military memorandum with automatic paragraph numbering,
+/// proper spacing, letterhead formatting, and intelligent page break handling.
+/// 
+/// Only memo-for and subject are required; all other parameters have sensible defaults.
+/// Supports multiple recipients, attachments, distribution lists, and routing indorsements.
+/// 
+/// - letterhead-title (str): Primary organization title (default: "DEPARTMENT OF THE AIR FORCE").
+/// - letterhead-caption (str): Sub-organization or unit name (default: placeholder text).
+/// - letterhead-seal (content): Organization seal image for letterhead (default: none).
 /// - date (datetime): Date of the memorandum; defaults to today if not provided.
-/// - memo-for (str | array): Recipient(s) - string, array of strings.
-/// - memo-from (array): Sender information as array of strings.
-/// - subject (str): Memorandum subject line.
-/// - references (array): Optional array of reference documents.
-/// - signature-block (array): Array of signature lines.
+/// - memo-for (str | array): **REQUIRED** - Recipient organization(s). Can be string or array.
+/// - memo-from (array): Sender information as array of strings (organization, address lines).
+/// - subject (str): **REQUIRED** - Memorandum subject line in title case.
+/// - references (array): Optional array of reference documents for citations.
+/// - signature-block (array): Array of signature lines (name, title, organization).
 /// - attachments (array): Array of attachment descriptions.
 /// - cc (array): Array of courtesy copy recipients.
 /// - distribution (array): Array of distribution list entries.
-/// - indorsements (array): Array of Indorsement objects.
-/// - letterhead-font (str): Font for letterhead text.
-/// - body-font (str): Font for body text.
-/// - paragraph-block-indent (bool): Enable paragraph block indentation.
-/// - leading-backmatter-pagebreak (bool): Force page break before backmatter sections.
-/// - body (content): Main memorandum content.
+/// - indorsements (array): Array of indorsement objects created with indorsement().
+/// - letterhead-font (str | array): Font(s) for letterhead text (default: Copperplate CC).
+/// - body-font (str | array): Font(s) for body text (default: Times New Roman/TeX Gyre Termes).
+/// - memo-for-cols (int): Number of columns for recipient grid layout (default: 3).
+/// - paragraph-block-indent (bool): Enable paragraph block indentation (default: false).
+/// - leading-backmatter-pagebreak (bool): Force page break before backmatter sections (default: false).
+/// - body (content): Main memorandum content with automatic paragraph numbering.
 /// -> content
 #let official-memorandum(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",

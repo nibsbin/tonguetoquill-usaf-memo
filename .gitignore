@@ -1,0 +1,14 @@
+# Build artifacts
+*.pdf
+
+# Test files
+test-*.typ
+
+# Downloaded binaries
+typst
+typst-*
+*.tar.xz
+
+# Temporary files
+*.tmp
+*~
