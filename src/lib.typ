@@ -7,6 +7,7 @@
 
 #let DEFAULT_LETTERHEAD_FONTS = ("Copperplate CC",)
 #let DEFAULT_BODY_FONTS = ("times new roman","tex gyre termes")
+#let LETTERHEAD_COLOR = rgb("#000099")
 
 //===Rendering Functions===
 
@@ -37,8 +38,8 @@
         #place(
           center + top,
           align(center)[
-            #text(12pt, font: font, fill: rgb("#000099"))[#title]\
-            #text(10.5pt, font: font, fill: rgb("#000099"))[#caption]
+            #text(12pt, font: font, fill: LETTERHEAD_COLOR)[#title]\
+            #text(10.5pt, font: font, fill: LETTERHEAD_COLOR)[#caption]
           ],
         )
       ],
