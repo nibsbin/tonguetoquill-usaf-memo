@@ -51,12 +51,12 @@
 /// - Uses standard DoD blue color (#000099) for text
 /// 
 /// - title (str): Primary organization title (e.g., "DEPARTMENT OF THE AIR FORCE")
-/// - caption (str): Sub-organization or command (e.g., "123RD EXAMPLE SQUADRON")
+/// - caption (str|array): Sub-organization or command (e.g., "123RD EXAMPLE SQUADRON")
 /// - letterhead-seal (content): Organization seal image content to display
 /// - font (str | array): Font(s) for letterhead text, normalized to array internally
 /// -> content
 #let render-letterhead(title, caption, letterhead-seal, font) = {
-  //Normalize to array
+  //Normalize font to array
   if type(font) != array {
     if type(font) != str {
       font = ()
@@ -65,6 +65,11 @@
       font = (font,)
     }
   }
+  // If caption is an array, join with newlines
+  if type(caption) == array {
+    caption = caption.join("\n")
+  } 
+
   place(
     dy: 0.625in - spacing.margin, // 5/8in from top of page
     box(
