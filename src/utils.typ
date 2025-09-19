@@ -151,7 +151,7 @@
 /// -> str
 #let display-date(date) = {
   if type(date) == str {
-    date = date
+    date
   }
   else {
     date.display("[day padding:none] [month repr:long] [year]")
