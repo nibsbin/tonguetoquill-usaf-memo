@@ -19,7 +19,6 @@
 /// Spacing constants following AFH 33-337 standards.
 /// 
 /// Defines standard measurements used throughout the memorandum template:
-/// - two-spaces: Standard separator between labels and content
 /// - line: Line spacing within paragraphs for proper readability
 /// - line-height: Base height for line calculations
 /// - tab: Tab stop distance for paragraph indentation alignment
@@ -27,7 +26,6 @@
 /// 
 /// -> dictionary
 #let spacing = (
-  two-spaces: 0.5em,      // Standard two-space separator
   line:.5em,            // Line spacing within paragraphs
   line-height:.7em,      //base height for lines
   tab: 0.5in,             // Tab stop for alignment
@@ -361,7 +359,7 @@
   let parent-counter-value = counter(paragraph-config.counter-prefix + str(parent-level)).get().at(0)
   let parent-number = generate-paragraph-number(parent-level, counter-value: parent-counter-value)
 
-  let indent-buffer = [#h(parent-indent)#parent-number#h(spacing.two-spaces)]
+  let indent-buffer = [#h(parent-indent)#parent-number#"  "]
   return measure(indent-buffer).width
 }
 
@@ -406,13 +404,8 @@
     let indent-width = calculate-paragraph-indent(level)
     set text(costs: (widow: 0%)) 
 
-    let output = {
-      if paragraph-config.block-indent-state.get() {
-        pad(left: indent-width)[#paragraph-number#h(spacing.two-spaces)#content]
-      } else {
-        pad(left: 0em)[#h(indent-width)#paragraph-number#h(spacing.two-spaces)#content]
-      }
-    }
+    // Potential bug with spacing; use h(.25em) as an extra spacer
+    let output = pad(left: indent-width, paragraph-number + h(.25em) + " " + content)
     output
   }
 }
