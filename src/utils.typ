@@ -206,6 +206,15 @@
     }
   }
 
+  // Add padding cells to complete the last row if needed
+  let remainder = calc.rem(cells.len(), cols + 1)
+  if remainder != 0 {
+    let padding_needed = (cols + 1) - remainder
+    for _ in range(padding_needed) {
+      cells.push([])
+    }
+  }
+
   grid(
     columns: calc.max(1, cols) + 1,
     column-gutter: .1fr,
