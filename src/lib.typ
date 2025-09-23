@@ -33,7 +33,7 @@
 /// Default fonts for body text.
 /// Prioritizes Times New Roman, falls back to TeX Gyre Termes (open-source clone).
 /// -> array
-#let DEFAULT_BODY_FONTS = ("times new roman","tex gyre termes")
+#let DEFAULT_BODY_FONTS = ("times new roman","NimbusRomNo9L")
 
 /// Standard color for letterhead text per AFH 33-337 guidelines.
 /// -> color
@@ -123,9 +123,9 @@
 #let render-for-section(recipients, cols) = {
   blank-line()
   grid(
-    columns: (auto, spacing.two-spaces, 1fr),
+    columns: (auto, auto, 1fr),
     "MEMORANDUM FOR",
-    "",
+    "  ",
     align(left)[
       #if type(recipients) == array {
         create-auto-grid(recipients, column-gutter: spacing.tab, cols: cols)
@@ -152,8 +152,8 @@
   }
 
   grid(
-    columns: (auto, spacing.two-spaces, 1fr),
-    "FROM:", "", align(left)[#from-info],
+    columns: (auto, auto, 1fr),
+    "FROM:", "  ", align(left)[#from-info],
   )
 }
 
@@ -167,8 +167,8 @@
 #let render-subject-section(subject-text) = {
   blank-line()
   grid(
-    columns: (auto, spacing.two-spaces, 1fr),
-    "SUBJECT:", "", [#subject-text],
+    columns: (auto, auto, 1fr),
+    "SUBJECT:", "  ", [#subject-text],
   )
 }
 
@@ -184,8 +184,8 @@
   if not falsey(references) {
     blank-line()
     grid(
-      columns: (auto, spacing.two-spaces, 1fr),
-      "References:", "", enum(..references, numbering: "(a)"),
+      columns: (auto, auto, 1fr),
+      "References:", "  ", enum(..references, numbering: "(a)"),
     )
   }
 }
@@ -471,8 +471,8 @@
 
         blank-line()
         grid(
-          columns: (auto, spacing.two-spaces, 1fr),
-          "MEMORANDUM FOR", "", ind.memo-for,
+          columns: (auto, auto, 1fr),
+          "MEMORANDUM FOR", "  ", ind.memo-for,
         )
       } else {
         // Standard indorsement format
@@ -484,8 +484,8 @@
 
         blank-line()
         grid(
-          columns: (auto, spacing.two-spaces, 1fr),
-          "MEMORANDUM FOR", "", ind.memo-for,
+          columns: (auto, auto, 1fr),
+          "MEMORANDUM FOR", "  ", ind.memo-for,
         )
       }
       // Render body content
