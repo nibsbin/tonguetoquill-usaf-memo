@@ -1,6 +1,6 @@
 #import "@preview/tonguetoquill-usaf-memo:0.1.1": official-memorandum, indorsement
 
-#official-memorandum(
+#show: official-memorandum.with(
   letterhead-title: "STARK INDUSTRIES",
   letterhead-caption: "EXECUTIVE OFFICE",
   letterhead-seal: image("assets/starkindustries_seal.png"),
@@ -56,7 +56,7 @@
     "Congressional Armed Services Committee",
     "Happy Hogan, Head of Security, Stark Industries"
   )
-)[
+)
 Mr. Stark, following your public declaration of identity as "Iron Man" and subsequent unauthorized flight activities, I have received numerous calls from federal agencies expressing serious concerns regarding regulatory compliance, airspace violations, and workplace safety standards.~ This memorandum serves as official consolidation of all the complaints I've fielded from various government officials who seem to think you should follow the same rules as everyone else.~ Imagine that.
 
 + *Airspace and Flight Operations Violations*.~ Your recent flight activities have resulted in numerous breaches of federal aviation regulations and military airspace restrictions:
@@ -104,5 +104,3 @@ Failure to achieve compliance within 30 days will result in suspension of all cl
 I understand that your newfound capabilities are exciting, Mr. Stark, but I'm running out of ways to explain to government officials why our CEO thinks traffic laws don't apply to him when he's wearing metal pajamas.~ Please schedule a meeting with the appropriate agencies to discuss compliance.~ 
 
 Also, please remind DUM-E that government inspectors are not appropriate targets for fire extinguisher practice, regardless of how "suspicious" they appear.~ 
-
-  ]

@@ -1,6 +1,6 @@
 #import "@preview/tonguetoquill-usaf-memo:0.1.1": official-memorandum, indorsement
 
-#official-memorandum(
+#show: official-memorandum.with(
   letterhead-title: "DEPARTMENT OF THE SPACE FORCE",
   letterhead-caption: "1ST SPACE OPERATIONS SQUADRON",
   letterhead-seal: image("assets/dod_seal.gif"),
@@ -21,7 +21,7 @@
     "Space Force Instruction 33-301, 1 Aug 2020",
     "DoD Directive 8000.01, 15 Feb 2013"
   )
-)[
+)
 
 This memorandum demonstrates the proper format for Space Force official correspondence following AFH 33-337 standards. The Space Force adopted Air Force correspondence formats with appropriate service-specific modifications.
 
@@ -32,5 +32,3 @@ All formatting, spacing, fonts, and organizational elements remain consistent wi
 + The letterhead should reflect the appropriate Space Force organization title, typically "DEPARTMENT OF THE SPACE FORCE" followed by the specific unit or command designation.
 
 This template ensures full compliance with official correspondence standards while maintaining Space Force identity and organizational structure.
-
-]
