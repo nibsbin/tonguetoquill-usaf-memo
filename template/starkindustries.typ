@@ -55,7 +55,8 @@
     "National Transportation Safety Board",
     "Congressional Armed Services Committee",
     "Happy Hogan, Head of Security, Stark Industries"
-  )
+  ),
+  footer-tag-line: "Peace Through Power"
 )
 Mr. Stark, following your public declaration of identity as "Iron Man" and subsequent unauthorized flight activities, I have received numerous calls from federal agencies expressing serious concerns regarding regulatory compliance, airspace violations, and workplace safety standards.~ This memorandum serves as official consolidation of all the complaints I've fielded from various government officials who seem to think you should follow the same rules as everyone else.~ Imagine that.
 
