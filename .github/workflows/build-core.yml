@@ -34,6 +34,14 @@ jobs:
             cp .gitignore~core .gitignore
             git add .gitignore
             git commit -m "Update .gitignore from .gitignore~core" || echo "No changes to commit"
+            
+            # Remove files that match the new .gitignore patterns
+            git ls-files -i --exclude-from=.gitignore | while read file; do
+              git rm --cached "$file"
+            done
+            
+            # Commit the removals if any files were removed
+            git commit -m "Remove files excluded by .gitignore~core" || echo "No files to remove"
           fi
           
           # Push to release/core branch
