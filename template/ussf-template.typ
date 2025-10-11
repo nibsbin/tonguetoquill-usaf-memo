@@ -21,7 +21,7 @@
     "Space Force Instruction 33-301, 1 Aug 2020",
     "DoD Directive 8000.01, 15 Feb 2013"
   ),
-  footer-tag-line: "Semper Supra"
+  footer-tag-line: "semper supra"
 )
 
 This memorandum demonstrates the proper format for Space Force official correspondence following AFH 33-337 standards. The Space Force adopted Air Force correspondence formats with appropriate service-specific modifications.

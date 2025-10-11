@@ -647,7 +647,7 @@
     },
     footer: if not falsey(self.footer-tag-line) {
       align(center)[
-        #text(fill: LETTERHEAD_COLOR, weight: "bold", font: "tangerine", size: 18pt)[#self.footer-tag-line]
+        #text(fill: LETTERHEAD_COLOR, font: "cinzel", size: 15pt)[#self.footer-tag-line]
       ]
     }
   )
