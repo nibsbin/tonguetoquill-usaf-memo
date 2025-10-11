@@ -8,6 +8,8 @@ on:
 jobs:
   sync-release-core:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       - name: Checkout repository
@@ -36,7 +38,7 @@ jobs:
             git commit -m "Update .gitignore from .gitignore~core" || echo "No changes to commit"
             
             # Remove files that match the new .gitignore patterns
-            git ls-files -i --exclude-from=.gitignore | while read file; do
+            git ls-files -c -i --exclude-from=.gitignore | while read file; do
               git rm --cached "$file"
             done
             
