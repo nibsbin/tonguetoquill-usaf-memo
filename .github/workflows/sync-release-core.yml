@@ -24,12 +24,12 @@ jobs:
       
       - name: Sync release/core branch
         run: |
-          # Create or switch to release/core branch
+          # Fetch the release/core branch
           git fetch origin release/core:release/core || git branch release/core
           git checkout release/core
           
-          # Merge main into release/core
-          git merge origin/main --no-edit
+          # Force reset release/core to match main exactly
+          git reset --hard origin/main
           
           # Rename .gitignore~core to .gitignore
           if [ -f .gitignore~core ]; then
@@ -46,5 +46,5 @@ jobs:
             git commit -m "Remove files excluded by .gitignore~core" || echo "No files to remove"
           fi
           
-          # Push to release/core branch
-          git push origin release/core
+          # Force push to release/core branch
+          git push --force origin release/core
