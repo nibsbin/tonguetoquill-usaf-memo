@@ -1,0 +1,50 @@
+name: Sync Release package Branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-release-package:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Sync release/package branch
+        run: |
+          # Fetch the release/package branch
+          git fetch origin release/package:release/package || git branch release/package
+          git checkout release/package
+          
+          # Force reset release/package to match main exactly
+          git reset --hard origin/main
+          
+          # Rename .gitignore~package to .gitignore
+          if [ -f .gitignore~package ]; then
+            cp .gitignore~package .gitignore
+            git add .gitignore
+            git commit -m "Update .gitignore from .gitignore~package" || echo "No changes to commit"
+
+            # Remove files that match the new .gitignore patterns
+            git ls-files -c -i --exclude-from=.gitignore | while read file; do
+              git rm --cached "$file"
+            done
+            
+            # Commit the removals if any files were removed
+            git commit -m "Remove files excluded by .gitignore~package" || echo "No files to remove"
+          fi
+          
+          # Force push to release/package branch
+          git push --force origin release/package
