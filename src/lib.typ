@@ -48,7 +48,7 @@
 /// Positions elements according to AFH 33-337 standards:
 /// - Title and caption are centered at 5/8" from top of page
 /// - Optional seal is placed in the upper left corner with automatic scaling
-/// - Uses standard DoD blue color (#000099) for text
+/// - Uses standard DoD blue color for text
 /// 
 /// - title (str): Primary organization title (e.g., "DEPARTMENT OF THE AIR FORCE")
 /// - caption (str|array): Sub-organization or command (e.g., "123RD EXAMPLE SQUADRON")
@@ -590,6 +590,7 @@
   cc: none,
   distribution: none,
   indorsements: none,
+  footer-tag-line: none,
   classification_level: none,
   // Optional styling parameters
   letterhead-font: DEFAULT_LETTERHEAD_FONTS,
@@ -615,6 +616,7 @@
     cc: cc,
     distribution: distribution,
     indorsements: indorsements,
+    footer-tag-line: footer-tag-line,
     classification_level: classification_level,
     letterhead-font: letterhead-font,
     body-font: body-font,
@@ -642,6 +644,7 @@
             )
           )
         )
+
       }
       // Top classification banner
       // Position 0.375 inches from the top, centered, above the letterhead
@@ -652,6 +655,12 @@
           text(12pt, font: DEFAULT_BODY_FONTS, fill: black)[#strong(classification_level)]
         )
       }
+    },
+    footer: if not falsey(self.footer-tag-line) {
+      align(center)[
+        #text(fill: LETTERHEAD_COLOR, font: "cinzel", size: 15pt)[#self.footer-tag-line]
+      ]
+    }
     },
     footer: context {
       // Bottom classification banner
@@ -665,6 +674,7 @@
       }
     },
   )
+
   paragraph-config.block-indent-state.update(self.paragraph-block-indent)
 
   // Document letterhead
@@ -694,7 +704,6 @@
     distribution: self.distribution,
     leading-backmatter-pagebreak: self.leading-backmatter-pagebreak,
   )
-
   // Indorsements
   process-indorsements(self.indorsements, body-font: self.body-font)
 })

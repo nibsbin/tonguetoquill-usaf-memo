@@ -1,0 +1,50 @@
+name: Sync Release Core Branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-release-core:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Sync release/core branch
+        run: |
+          # Fetch the release/core branch
+          git fetch origin release/core:release/core || git branch release/core
+          git checkout release/core
+          
+          # Force reset release/core to match main exactly
+          git reset --hard origin/main
+          
+          # Rename .gitignore~core to .gitignore
+          if [ -f .gitignore~core ]; then
+            cp .gitignore~core .gitignore
+            git add .gitignore
+            git commit -m "Update .gitignore from .gitignore~core" || echo "No changes to commit"
+            
+            # Remove files that match the new .gitignore patterns
+            git ls-files -c -i --exclude-from=.gitignore | while read file; do
+              git rm --cached "$file"
+            done
+            
+            # Commit the removals if any files were removed
+            git commit -m "Remove files excluded by .gitignore~core" || echo "No files to remove"
+          fi
+          
+          # Force push to release/core branch
+          git push --force origin release/core

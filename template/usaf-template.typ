@@ -1,9 +1,9 @@
 #import "@preview/tonguetoquill-usaf-memo:0.1.1": official-memorandum, indorsement
 
-#official-memorandum(
+#show: official-memorandum.with(
   letterhead-title: "DEPARTMENT OF THE AIR FORCE",
   letterhead-caption: "123RD EXAMPLE SQUADRON",
-  letterhead-seal: image("assets/dod_seal.gif"),
+  letterhead-seal: image("assets/dow_seal.png"),
   memo-for: (
     "123 ES/CC", "123 ES/DO", "123 ES/CSS", "456 ES/CC", "456 ES/DO", "456 ES/CSS"
   ),
@@ -60,7 +60,7 @@
       ],
   ),
   //leading-backmatter-pagebreak: true, // Forces a break before backmatter sections (attachments, cc, distribution)
-)[
+)
 
 Use only approved organizational letterhead for all correspondence.~ This applies to all letterhead, both pre-printed and computer generated.~ Reference (a) details the format and style of official letterhead such as centering the first line of the header 5/8ths of an inch from the top of the page in 12 point Copperplate Gothic Bold font.~ The second header line is centered 3 points below the first line in 10.5 point Copperplate Gothic Bold font.
 
@@ -99,4 +99,3 @@ Elements of the Official Memorandum can be inserted as templated parts in MS Wor
 To add classification banner markings (including FOUO markings), click on the header or footer, and in the “Header & Footer Tools” tab, select the Header / Footer dropdown menus on the left side.~ Use the pre-generated headers and footers – note that the first page is different from the second page onward, and so the second page header and footer must be applied separately.~ 
 
 The example of this memorandum applies to many official memorandums that Airmen may be tasked to prepare; however, there are additional elements for special uses of the official memorandum.~ Refer to the Tongue and Quill discussion on the official memorandum for more details, or consult published guidance applicable to your duties.
-]
