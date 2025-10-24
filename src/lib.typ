@@ -590,6 +590,7 @@
   cc: none,
   distribution: none,
   indorsements: none,
+  classification_level: none,
   // Optional styling parameters
   letterhead-font: DEFAULT_LETTERHEAD_FONTS,
   body-font: DEFAULT_BODY_FONTS,
@@ -614,6 +615,7 @@
     cc: cc,
     distribution: distribution,
     indorsements: indorsements,
+    classification_level: classification_level,
     letterhead-font: letterhead-font,
     body-font: body-font,
     memo-for-cols: memo-for-cols,
@@ -640,9 +642,28 @@
             )
           )
         )
-        
       }
-    }
+      // Top classification banner
+      // Position 0.375 inches from the top, centered, above the letterhead
+      if classification_level != none {
+        place(
+          top+center,
+          dy: 0.375in,
+          text(12pt, font: DEFAULT_BODY_FONTS, fill: black)[#strong(classification_level)]
+        )
+      }
+    },
+    footer: context {
+      // Bottom classification banner
+      // Position 0.375 inches from the bottom, centered
+      if classification_level != none {
+        place(
+          bottom+center,
+          dy: -0.375in,
+          text(12pt, font: DEFAULT_BODY_FONTS, fill: black)[#strong(classification_level)]
+        )
+      }
+    },
   )
   paragraph-config.block-indent-state.update(self.paragraph-block-indent)
 
