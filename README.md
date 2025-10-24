@@ -39,7 +39,7 @@ A comprehensive Typst template for creating official United States Air Force mem
 
 2. Initialize template from Typst Universe:
 ```bash
-typst init @preview/tonguetoquill-usaf-memo:0.1.1 my-memo
+typst init @preview/tonguetoquill-usaf-memo:0.1.2 my-memo
 cd my-memo
 ```
 
@@ -69,7 +69,7 @@ cd tonguetoquill-usaf-memo
 Import the core functions for creating memorandums:
 
 ```typst
-#import "@preview/tonguetoquill-usaf-memo:0.1.1": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:0.1.2": official-memorandum, indorsement
 ```
 
 **Minimal Example:**
