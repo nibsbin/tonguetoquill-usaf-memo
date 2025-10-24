@@ -1,4 +1,4 @@
-#import "@preview/tonguetoquill-usaf-memo:0.1.2": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:0.2.0": official-memorandum, indorsement
 
 #show: official-memorandum.with(
   letterhead-title: "DEPARTMENT OF THE SPACE FORCE",
