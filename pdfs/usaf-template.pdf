@@ -1959,11 +1959,11 @@ endobj
   /A <<
     /Type /Action
     /S /URI
-    /URI (https://github.com/SnpM/tonguetoquill-usaf-memo/blob/bebba4c1a51f9d67ca66e08109439b2c637e1015/template/assets/fonts/CopperplateCC-Heavy.otf)
+    /URI (https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/CopperplateCC/CopperplateCC-Heavy.otf)
   >>
   /F 4
   /StructParent 0
-  /Contents (https://github.com/SnpM/tonguetoquill-usaf-memo/blob/bebba4c1a51f9d67ca66e08109439b2c637e1015/template/assets/fonts/CopperplateCC-Heavy.otf)
+  /Contents (https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/CopperplateCC/CopperplateCC-Heavy.otf)
 >>
 endobj
 
@@ -6645,8 +6645,8 @@ endobj
 160 0 obj
 <<
   /Creator (Typst 0.14.0)
-  /ModDate (D:20251024115818-04'00)
-  /CreationDate (D:20251024115818-04'00)
+  /ModDate (D:20251024123136-04'00)
+  /CreationDate (D:20251024123136-04'00)
 >>
 endobj
 
@@ -6657,7 +6657,7 @@ endobj
   /Subtype /XML
 >>
 stream
-<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?><x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="xmp-writer"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/"  xmlns:xmp="http://ns.adobe.com/xap/1.0/"  xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"  xmlns:xmpTPg="http://ns.adobe.com/xap/1.0/t/pg/"  xmlns:pdf="http://ns.adobe.com/pdf/1.3/" ><xmp:CreatorTool>Typst 0.14.0</xmp:CreatorTool><dc:language><rdf:Bag><rdf:li>en</rdf:li></rdf:Bag></dc:language><xmp:ModifyDate>2025-10-24T11:58:18-04:00</xmp:ModifyDate><xmp:CreateDate>2025-10-24T11:58:18-04:00</xmp:CreateDate><xmpTPg:NPages>5</xmpTPg:NPages><dc:format>application/pdf</dc:format><xmpMM:InstanceID>JRqKr7uD6gTxaL51bmzi9w==</xmpMM:InstanceID><xmpMM:DocumentID>JRqKr7uD6gTxaL51bmzi9w==</xmpMM:DocumentID><xmpMM:RenditionClass>proof</xmpMM:RenditionClass><pdf:PDFVersion>1.7</pdf:PDFVersion></rdf:Description></rdf:RDF></x:xmpmeta><?xpacket end="r"?>
+<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?><x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="xmp-writer"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/"  xmlns:xmp="http://ns.adobe.com/xap/1.0/"  xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"  xmlns:xmpTPg="http://ns.adobe.com/xap/1.0/t/pg/"  xmlns:pdf="http://ns.adobe.com/pdf/1.3/" ><xmp:CreatorTool>Typst 0.14.0</xmp:CreatorTool><dc:language><rdf:Bag><rdf:li>en</rdf:li></rdf:Bag></dc:language><xmp:ModifyDate>2025-10-24T12:31:36-04:00</xmp:ModifyDate><xmp:CreateDate>2025-10-24T12:31:36-04:00</xmp:CreateDate><xmpTPg:NPages>5</xmpTPg:NPages><dc:format>application/pdf</dc:format><xmpMM:InstanceID>0IwvtKwJU7KXfaQ4AyxbVw==</xmpMM:InstanceID><xmpMM:DocumentID>0IwvtKwJU7KXfaQ4AyxbVw==</xmpMM:DocumentID><xmpMM:RenditionClass>proof</xmpMM:RenditionClass><pdf:PDFVersion>1.7</pdf:PDFVersion></rdf:Description></rdf:RDF></x:xmpmeta><?xpacket end="r"?>
 endstream
 endobj
 
@@ -6828,28 +6828,28 @@ xref
 0000074053 00000 n
 0000074476 00000 n
 0000074835 00000 n
-0000075328 00000 n
-0000075718 00000 n
-0000079436 00000 n
-0000079700 00000 n
-0000084054 00000 n
-0000084318 00000 n
-0000087166 00000 n
-0000087430 00000 n
-0000089126 00000 n
-0000089390 00000 n
-0000090630 00000 n
-0000117013 00000 n
-0001204694 00000 n
-0001204821 00000 n
-0001205907 00000 n
+0000075256 00000 n
+0000075646 00000 n
+0000079364 00000 n
+0000079628 00000 n
+0000083982 00000 n
+0000084246 00000 n
+0000087094 00000 n
+0000087358 00000 n
+0000089054 00000 n
+0000089318 00000 n
+0000090558 00000 n
+0000116941 00000 n
+0001204622 00000 n
+0001204749 00000 n
+0001205835 00000 n
 trailer
 <<
   /Size 163
   /Root 162 0 R
   /Info 160 0 R
-  /ID [(JRqKr7uD6gTxaL51bmzi9w==) (JRqKr7uD6gTxaL51bmzi9w==)]
+  /ID [(0IwvtKwJU7KXfaQ4AyxbVw==) (0IwvtKwJU7KXfaQ4AyxbVw==)]
 >>
 startxref
-1206126
+1206054
 %%EOF
