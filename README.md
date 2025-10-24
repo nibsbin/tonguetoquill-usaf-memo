@@ -1,9 +1,9 @@
 # tonguetoquill: USAF Memo Template for Typst
 
 
-[![github-repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/SnpM/tonguetoquill-usaf-memo)
-[![typst-universe](https://img.shields.io/badge/Typst-Universe-aqua)](https://github.com/snpm/tonguetoquill-usaf-memo)
-[![nibs](https://img.shields.io/badge/author-Nibs-white?logo=github)](https://github.com/SnpM)
+[![github-repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/nibsbin/tonguetoquill-usaf-memo)
+[![typst-universe](https://img.shields.io/badge/Typst-Universe-aqua)](https://github.com/nibsbin/tonguetoquill-usaf-memo)
+[![nibs](https://img.shields.io/badge/author-Nibs-white?logo=github)](https://github.com/nibsbin)
 
 A comprehensive Typst template for creating official United States Air Force memorandums that comply with AFH 33-337 "The Tongue and Quill" formatting standards.
 
@@ -25,8 +25,8 @@ A comprehensive Typst template for creating official United States Air Force mem
 
 1. Go to [the package page](https://typst.app/universe/package/tonguetoquill-usaf-memo) and click "Create project in app".
 
-2. Download the [*CopperplateCC-Heavy*](https://github.com/SnpM/tonguetoquill-usaf-memo/blob/bebba4c1a51f9d67ca66e08109439b2c637e1015/template/assets/fonts/CopperplateCC-Heavy.otf) font and upload it to your project folder. This is an open-source clone of *Copperplate Gothic Bold*.
-    - **Note:** *Times New Roman* is a proprietary Microsoft font that I can't distribute legally. The package will automatically use the built-in *TeX Gyre Termes* font, an open-source clone of *Times New Roman*.
+2. Download the [*CopperplateCC-Heavy*](https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/CopperplateCC/CopperplateCC-Heavy.otf) font and upload it to your project folder. This is an open-source clone of *Copperplate Gothic Bold*.
+    - **Note:** *Times New Roman* is a proprietary Microsoft font that I can't distribute legally. The package will automatically use the built-in *NimbusRomNo9L* font, an open-source clone of *Times New Roman*.
 
 3. Start with one of the template files:
    - `template/usaf-template.typ` for a standard Air Force memo
@@ -46,7 +46,7 @@ cd my-memo
 3. Download the required font:
 ```bash
 # Download CopperplateCC-Heavy font
-curl -L -o CopperplateCC-Heavy.otf https://github.com/SnpM/tonguetoquill-usaf-memo/raw/bebba4c1a51f9d67ca66e08109439b2c637e1015/template/assets/fonts/CopperplateCC-Heavy.otf
+curl -L -o CopperplateCC-Heavy.otf https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/CopperplateCC/CopperplateCC-Heavy.otf
 ```
 
 4. Compile a template file:
@@ -56,12 +56,12 @@ typst compile --font-path . template/usaf-template.typ my-memo.pdf
 
 ### Local Development
 
-Clone [the repo](https://github.com/SnpM/tonguetoquill-usaf-memo) and follow [these instructions](https://github.com/typst/packages/tree/main?tab=readme-ov-file#local-packages) to install the package locally for development.
+Clone [the repo](https://github.com/nibsbin/tonguetoquill-usaf-memo) and follow [these instructions](https://github.com/typst/packages/tree/main?tab=readme-ov-file#local-packages) to install the package locally for development.
 
 ```bash
-git clone https://github.com/SnpM/tonguetoquill-usaf-memo.git
+git clone https://github.com/nibsbin/tonguetoquill-usaf-memo.git
 cd tonguetoquill-usaf-memo
-./build.sh  # Compile all template esamples
+./build.sh  # Compile all template examples
 ```
 
 ### Basic Usage
@@ -91,7 +91,6 @@ See the [API Reference](#api-reference) section below for complete parameter doc
 ### Complete Examples
 
 For comprehensive examples with all parameters, see:
-- **Guide**: `template/content-guide.typ` - Comprehensive guide showing all parameters and features with enum-based paragraph system
 - **Standard Air Force memo**: `template/usaf-template.typ` - Shows proper formatting with references, attachments, cc, distribution, and indorsements
 - **Space Force memo**: `template/ussf-template.typ` - Space Force memorandum variant with proper formatting
 - **Custom organization memo**: `template/starkindustries.typ` - Demonstrates custom letterhead and extensive use of all optional parameters
@@ -160,7 +159,7 @@ official-memorandum(
   
   // Styling options
   letterhead-font: ("Copperplate CC",),                     // Letterhead fonts
-  body-font: ("times new roman", "tex gyre termes"),        // Body fonts
+  body-font: ("times new roman", "NimbusRomNo9L"),        // Body fonts
   memo-for-cols: 3,                                         // Recipient columns
   paragraph-block-indent: false,                            // Paragraph indentation
   leading-backmatter-pagebreak: false,                      // Force page break
@@ -213,7 +212,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 External assets used in this project:
 
-- `dod_seal.gif` is [public domain](https://www.e-publishing.af.mil/Portals/1/Documents/Official%20Memorandum%20Template_10Nov2020.dotx?ver=M7cny_cp1_QDajkyg0xWBw%3D%3D)
+- `dow_seal.png` is [public domain](https://www.e-publishing.af.mil/Portals/1/Documents/Official%20Memorandum%20Template_10Nov2020.dotx?ver=M7cny_cp1_QDajkyg0xWBw%3D%3D)
 - `starkindustries_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Stark_Industries.png).
-- `Copperlate CC` is under [SIL Open Font License](./template/assets/fonts/LICENSE.md) pulled from [here](https://github.com/CowboyCollective/CopperplateCC)
-- `TeX Gyre Termes` is under [GUST Font License](https://www.gust.org.pl/projects/e-foundry/tex-gyre/term) pulled from [here](https://www.fontsquirrel.com/fonts/tex-gyre-termes)
+- `Copperplate CC` is under [SIL Open Font License](./fonts/CopperplateCC/LICENSE.md) pulled from [here](https://github.com/CowboyCollective/CopperplateCC)
+- `NimbusRomNo9L` is under [GPL](./fonts/NimbusRomanNo9L/GNU%20General%20Public%20License.txt) pulled from URW++ foundry
