@@ -473,7 +473,11 @@
           "MEMORANDUM FOR", "  ", ind.ind-for,
         )
       } else {
-        [#indorsement-label, #ind.ind-from]
+        blank-line()
+        grid(
+          columns: (auto, 1fr),
+          [#indorsement-label, #ind.ind-from], align(right)[#display-date(ind.date)],
+        )
 
         blank-line()
         grid(
