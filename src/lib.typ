@@ -397,8 +397,8 @@
 /// - Individual signature blocks and backmatter sections
 /// - Page break control for document flow management
 /// 
-/// - office-symbol (str): Sending organization symbol for the indorsement
-/// - memo-for (str): Recipient organization symbol
+/// - ind-from (str): Sending organization symbol for the indorsement
+/// - ind-for (str): Recipient organization symbol
 /// - signature-block (array): Array of signature lines for the indorsing official
 /// - attachments (array): Array of attachment descriptions (optional)
 /// - cc (array): Array of courtesy copy recipients (optional)
@@ -408,8 +408,8 @@
 /// - body (content): Indorsement body content
 /// -> dictionary
 #let indorsement(
-  office-symbol: "ORG/SYMBOL",
-  memo-for: "ORG/SYMBOL",
+  ind-from: "ORG/SYMBOL",
+  ind-for: "ORG/SYMBOL",
   signature-block: (
     "FIRST M. LAST, Rank, USAF",
     "Duty Title",
@@ -423,8 +423,8 @@
   body,
 ) = {
   let ind = (
-    office-symbol: office-symbol,
-    memo-for: memo-for,
+    ind-from: ind-from,
+    ind-for: ind-for,
     signature-block: signature-block,
     attachments: attachments,
     cc: cc,
@@ -467,13 +467,13 @@
         blank-line()
         grid(
           columns: (auto, 1fr),
-          ind.office-symbol, align(right)[#display-date(ind.date)],
+          ind.ind-from, align(right)[#display-date(ind.date)],
         )
 
         blank-line()
         grid(
           columns: (auto, auto, 1fr),
-          "MEMORANDUM FOR", "  ", ind.memo-for,
+          "MEMORANDUM FOR", "  ", ind.ind-for,
         )
       } else {
         // Standard indorsement format
@@ -481,12 +481,12 @@
         if not ind.leading-pagebreak {
           blank-line()
         }
-        [#indorsement-label, #ind.office-symbol]
+        [#indorsement-label, #ind.ind-from]
 
         blank-line()
         grid(
           columns: (auto, auto, 1fr),
-          "MEMORANDUM FOR", "  ", ind.memo-for,
+          "MEMORANDUM FOR", "  ", ind.ind-for,
         )
       }
       // Render body content

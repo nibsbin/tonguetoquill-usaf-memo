@@ -174,8 +174,8 @@ Creates an indorsement for forwarding or commenting on a memorandum.
 
 ```typst
 indorsement(
-  office-symbol: "ORG/SYMBOL",                              // Sending organization
-  memo-for: "RECIPIENT/SYMBOL",                             // Recipient organization
+  ind-from: "ORG/SYMBOL",                                   // Sending organization
+  ind-for: "RECIPIENT/SYMBOL",                              // Recipient organization
   signature-block: ("[NAME, Rank, USAF]", "[Title]"),      // Signature lines
   attachments: none,                                         // Optional attachments
   cc: none,                                                 // Courtesy copies
