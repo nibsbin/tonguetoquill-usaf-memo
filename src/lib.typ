@@ -405,7 +405,6 @@
 /// - cc (array): Array of courtesy copy recipients (optional)
 /// - new-page (bool): Whether to use new-page indorsement format
 /// - date (str|datetime): Date of the indorsement (defaults to today)
-/// - signature-blank-lines (int): Number of blank lines above signature (default: 4)
 /// - body (content): Indorsement body content
 /// -> dictionary
 #let indorsement(
@@ -420,7 +419,6 @@
   cc: none,
   new-page: false,
   date: datetime.today(),
-  signature-blank-lines: 4,
   body,
 ) = {
   let ind = (
@@ -431,7 +429,6 @@
     cc: cc,
     new-page: new-page,
     date: date,
-    signature-blank-lines: signature-blank-lines,
     body: body,
   )
 
@@ -457,6 +454,9 @@
 
       let indorsement-number = counters.indorsement.get().first()
       let indorsement-label = format-indorsement-number(indorsement-number)
+
+      // Calculate signature blank lines from compress-indorsements flag
+      let signature-blank-lines = if main-memo.compress-indorsements { 3 } else { 4 }
 
       if new-page {
         pagebreak()
@@ -494,7 +494,7 @@
       render-body(ind.body)
 
       // Signature block positioning per AFH 33-337
-      render-signature-block(ind.signature-block, signature-blank-lines: ind.signature-blank-lines)
+      render-signature-block(ind.signature-block, signature-blank-lines: signature-blank-lines)
 
 
       // Attachments section
@@ -563,6 +563,7 @@
 /// - letterhead-font (str | array): Font(s) for letterhead text (defaults to Copperplate CC)
 /// - body-font (str | array): Font(s) for body text (defaults to Times New Roman/TeX Gyre Termes)
 /// - font-size (length): Font size for body text (default: 12pt per AFH 33-337)
+/// - compress-indorsements (bool): Use 3 blank lines instead of 4 for indorsement signatures (default: false)
 /// - memo-for-cols (int): Number of columns for recipient grid layout (default: 3)
 /// - paragraph-block-indent (bool): Enable paragraph block indentation (default: false)
 /// - leading-backmatter-pagebreak (bool): Force page break before backmatter sections (default: false)
@@ -599,6 +600,7 @@
   letterhead-font: DEFAULT_LETTERHEAD_FONTS,
   body-font: DEFAULT_BODY_FONTS,
   font-size: 12pt,
+  compress-indorsements: false,
   memo-for-cols: 3,
   paragraph-block-indent: false,
   leading-backmatter-pagebreak: false,
@@ -625,6 +627,7 @@
     letterhead-font: letterhead-font,
     body-font: body-font,
     font-size: font-size,
+    compress-indorsements: compress-indorsements,
     memo-for-cols: memo-for-cols,
     paragraph-block-indent: paragraph-block-indent,
     leading-backmatter-pagebreak: leading-backmatter-pagebreak,
