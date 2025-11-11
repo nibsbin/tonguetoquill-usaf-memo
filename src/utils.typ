@@ -33,21 +33,22 @@
 )
 
 /// Configures document-wide typography and spacing settings.
-/// 
+///
 /// Applies consistent formatting across the entire memorandum:
 /// - Sets paragraph leading and spacing for proper line height
 /// - Configures block spacing to eliminate unwanted gaps
-/// - Sets font and size to 12pt (AFH 33-337 standard)
+/// - Sets font and configurable size (AFH 33-337 standard is 12pt)
 /// - Enables text justification for professional appearance
-/// 
+///
 /// - body-font (str | array): Font(s) to use for body text
+/// - font-size (length): Font size for body text (default: 12pt)
 /// - ctx (content): Content to apply configuration to
 /// -> content
-#let configure(body-font,ctx) = {
+#let configure(body-font, font-size: 12pt, ctx) = {
   context{
     set par(leading: spacing.line, spacing:spacing.line, justify: true)
     set block(above:spacing.line, below:0em,spacing: 0em)
-    set text(font: body-font, size: 12pt, fallback: false)
+    set text(font: body-font, size: font-size, fallback: false)
     ctx
   }
 }
@@ -533,18 +534,19 @@
 }
 
 /// Processes and renders an array of indorsements.
-/// 
+///
 /// Iterates through an array of indorsement objects and renders each one
 /// with proper formatting and font settings. Used by the main memorandum
 /// template to process the indorsements parameter.
-/// 
+///
 /// - indorsements (array): Array of indorsement objects created with indorsement()
 /// - body-font (str | array): Font(s) to use for indorsement text
+/// - font-size (length): Font size for indorsement text (default: 12pt)
 /// -> content
-#let process-indorsements(indorsements, body-font: none) = {
+#let process-indorsements(indorsements, body-font: none, font-size: 12pt) = {
   if not falsey(indorsements) {
     for indorsement in indorsements {
-      (indorsement.render)(body-font: body-font)
+      (indorsement.render)(body-font: body-font, font-size: font-size)
     }
   }
 }

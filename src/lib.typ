@@ -433,8 +433,9 @@
 
   /// Renders the indorsement with proper formatting.
   /// - body-font (str): Font to use for body text.
+  /// - font-size (length): Font size for body text (default: 12pt).
   /// -> content
-  ind.render = (body-font: DEFAULT_BODY_FONTS ) => configure(body-font, {
+  ind.render = (body-font: DEFAULT_BODY_FONTS, font-size: 12pt) => configure(body-font, font-size: font-size, {
     counters.indorsement.step()
 
     context {
@@ -557,6 +558,7 @@
 /// - indorsements (array): Array of indorsement objects for document routing (optional)
 /// - letterhead-font (str | array): Font(s) for letterhead text (defaults to Copperplate CC)
 /// - body-font (str | array): Font(s) for body text (defaults to Times New Roman/TeX Gyre Termes)
+/// - font-size (length): Font size for body text (default: 12pt per AFH 33-337)
 /// - memo-for-cols (int): Number of columns for recipient grid layout (default: 3)
 /// - paragraph-block-indent (bool): Enable paragraph block indentation (default: false)
 /// - leading-backmatter-pagebreak (bool): Force page break before backmatter sections (default: false)
@@ -592,11 +594,12 @@
   // Optional styling parameters
   letterhead-font: DEFAULT_LETTERHEAD_FONTS,
   body-font: DEFAULT_BODY_FONTS,
+  font-size: 12pt,
   memo-for-cols: 3,
   paragraph-block-indent: false,
   leading-backmatter-pagebreak: false,
   body,
-) = configure(body-font, {
+) = configure(body-font, font-size: font-size, {
   // Initialize document counters and settings
 
   let self = (
@@ -617,6 +620,7 @@
     classification-level: classification-level,
     letterhead-font: letterhead-font,
     body-font: body-font,
+    font-size: font-size,
     memo-for-cols: memo-for-cols,
     paragraph-block-indent: paragraph-block-indent,
     leading-backmatter-pagebreak: leading-backmatter-pagebreak,
@@ -708,6 +712,6 @@
     leading-backmatter-pagebreak: self.leading-backmatter-pagebreak,
   )
   // Indorsements
-  process-indorsements(self.indorsements, body-font: self.body-font)
+  process-indorsements(self.indorsements, body-font: self.body-font, font-size: self.font-size)
 })
 
