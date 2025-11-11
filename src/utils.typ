@@ -140,16 +140,50 @@
   ]
 }
 
-/// Formats a date in standard military format.
-/// 
-/// Converts a datetime object to the standard format used in military correspondence:
-/// "1 January 2024" (day without padding, full month name, four-digit year).
-/// 
-/// - date (str|datetime): Date to format for display or as-is string
+/// Checks if a string is in ISO date format (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS).
+///
+/// Performs a simple pattern check for ISO 8601 date strings by verifying:
+/// - String is at least 10 characters long
+/// - Characters at positions 4 and 7 are dashes
+///
+/// - date-str (str): String to check for ISO date pattern
+/// -> bool
+#let is-iso-date-string(date-str) = {
+  if date-str.len() >= 10 {
+    let char4 = date-str.at(4)
+    let char7 = date-str.at(7)
+    return char4 == "-" and char7 == "-"
+  }
+  return false
+}
+
+/// Extracts the date portion (YYYY-MM-DD) from an ISO date string.
+///
+/// Returns the first 10 characters which contain the date portion of an
+/// ISO 8601 date string, removing any time component if present.
+///
+/// - date-str (str): ISO date string to extract from
+/// -> str
+#let extract-iso-date(date-str) = {
+  date-str.slice(0, 10)
+}
+
+/// Formats a date in standard military format or ISO format depending on input type.
+///
+/// Intelligently handles different date input formats:
+/// - ISO string (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS): Displayed as YYYY-MM-DD
+/// - Non-ISO string: Displayed as-is
+/// - datetime object: Displayed in military format ("1 January 2024")
+///
+/// - date (str|datetime): Date to format for display
 /// -> str
 #let display-date(date) = {
   if type(date) == str {
-    date
+    if is-iso-date-string(date) {
+      extract-iso-date(date)
+    } else {
+      date
+    }
   }
   else {
     date.display("[day padding:none] [month repr:long] [year]")
