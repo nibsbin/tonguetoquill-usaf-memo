@@ -191,19 +191,20 @@
 }
 
 /// Renders a signature block with proper AFH 33-337 formatting and orphan prevention.
-/// 
+///
 /// Positions the signature block at the bottom right of the memorandum with:
-/// - 5 blank lines above for handwritten signature space
+/// - Configurable blank lines above for handwritten signature space (default: 4)
 /// - 4.5" left margin positioning (right-aligned)
 /// - Hanging indent of 1em for multi-line entries
 /// - Breakable: false to prevent orphaned signature blocks
-/// 
+///
 /// Per AFH 33-337: "The signature block is never on a page by itself."
-/// 
+///
 /// - signature-lines (array): Array of signature lines (name/rank, title, organization)
+/// - signature-blank-lines (int): Number of blank lines above signature (default: 4)
 /// -> content
-#let render-signature-block(signature-lines) = {
-  blank-lines(4, weak: false)
+#let render-signature-block(signature-lines, signature-blank-lines: 4) = {
+  blank-lines(signature-blank-lines, weak: false)
   block(breakable: false)[
     #align(left)[
       #pad(left: 4.5in - spacing.margin)[
@@ -404,6 +405,7 @@
 /// - cc (array): Array of courtesy copy recipients (optional)
 /// - new-page (bool): Whether to use new-page indorsement format
 /// - date (str|datetime): Date of the indorsement (defaults to today)
+/// - signature-blank-lines (int): Number of blank lines above signature (default: 4)
 /// - body (content): Indorsement body content
 /// -> dictionary
 #let indorsement(
@@ -418,6 +420,7 @@
   cc: none,
   new-page: false,
   date: datetime.today(),
+  signature-blank-lines: 4,
   body,
 ) = {
   let ind = (
@@ -428,6 +431,7 @@
     cc: cc,
     new-page: new-page,
     date: date,
+    signature-blank-lines: signature-blank-lines,
     body: body,
   )
 
@@ -490,7 +494,7 @@
       render-body(ind.body)
 
       // Signature block positioning per AFH 33-337
-      render-signature-block(ind.signature-block)
+      render-signature-block(ind.signature-block, signature-blank-lines: ind.signature-blank-lines)
 
 
       // Attachments section
