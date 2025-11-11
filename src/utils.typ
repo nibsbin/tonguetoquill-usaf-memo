@@ -171,7 +171,7 @@
 /// Formats a date in standard military format or ISO format depending on input type.
 ///
 /// Intelligently handles different date input formats:
-/// - ISO string (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS): Displayed as YYYY-MM-DD
+/// - ISO string (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS): Parsed via TOML and displayed in military format
 /// - Non-ISO string: Displayed as-is
 /// - datetime object: Displayed in military format ("1 January 2024")
 ///
@@ -180,7 +180,11 @@
 #let display-date(date) = {
   if type(date) == str {
     if is-iso-date-string(date) {
-      extract-iso-date(date)
+      // Parse ISO date string using TOML to get datetime object
+      let iso-date = extract-iso-date(date)
+      let toml-str = "date = " + iso-date
+      let parsed = toml(bytes(toml-str))
+      parsed.date.display("[day padding:none] [month repr:long] [year]")
     } else {
       date
     }
