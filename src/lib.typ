@@ -402,7 +402,6 @@
 /// - signature-block (array): Array of signature lines for the indorsing official
 /// - attachments (array): Array of attachment descriptions (optional)
 /// - cc (array): Array of courtesy copy recipients (optional)
-/// - leading-pagebreak (bool): Whether to force page break before this indorsement
 /// - separate-page (bool): Whether to use separate-page indorsement format
 /// - date (str|datetime): Date of the indorsement (defaults to today)
 /// - body (content): Indorsement body content
@@ -417,7 +416,6 @@
   ),
   attachments: none,
   cc: none,
-  leading-pagebreak: false,
   separate-page: false,
   date: datetime.today(),
   body,
@@ -428,7 +426,6 @@
     signature-block: signature-block,
     attachments: attachments,
     cc: cc,
-    leading-pagebreak: leading-pagebreak,
     separate-page: separate-page,
     date: date,
     body: body,
@@ -456,7 +453,7 @@
       let indorsement-number = counters.indorsement.get().first()
       let indorsement-label = format-indorsement-number(indorsement-number)
 
-      if ind.leading-pagebreak or separate-page {
+      if separate-page {
         pagebreak()
       }
 
