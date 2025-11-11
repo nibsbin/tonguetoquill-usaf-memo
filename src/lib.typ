@@ -404,7 +404,7 @@
 /// - cc (array): Array of courtesy copy recipients (optional)
 /// - leading-pagebreak (bool): Whether to force page break before this indorsement
 /// - separate-page (bool): Whether to use separate-page indorsement format
-/// - indorsement-date (str|datetime): Date of the indorsement (defaults to today)
+/// - date (str|datetime): Date of the indorsement (defaults to today)
 /// - body (content): Indorsement body content
 /// -> dictionary
 #let indorsement(
@@ -419,7 +419,7 @@
   cc: none,
   leading-pagebreak: false,
   separate-page: false,
-  indorsement-date: datetime.today(),
+  date: datetime.today(),
   body,
 ) = {
   let ind = (
@@ -430,6 +430,7 @@
     cc: cc,
     leading-pagebreak: leading-pagebreak,
     separate-page: separate-page,
+    date: date,
     body: body,
   )
 
@@ -466,7 +467,7 @@
         blank-line()
         grid(
           columns: (auto, 1fr),
-          ind.office-symbol, align(right)[#display-date(indorsement-date)],
+          ind.office-symbol, align(right)[#display-date(ind.date)],
         )
 
         blank-line()

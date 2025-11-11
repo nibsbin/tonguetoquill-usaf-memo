@@ -181,7 +181,7 @@ indorsement(
   cc: none,                                                 // Courtesy copies
   leading-pagebreak: false,                                 // Force page break
   separate-page: false,                                     // Separate page format
-  indorsement-date: datetime.today(),                       // Indorsement date
+  date: datetime.today(),                       // Indorsement date
   
   // Indorsement body content
 )[Your indorsement content]
