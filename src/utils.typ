@@ -61,9 +61,13 @@
 /// - weak (bool): Whether spacing can be compressed at page breaks
 /// -> content
 #let blank-lines(count,weak:true) = {
-  let lead = spacing.line
-  let height = spacing.line-height
-  v(lead + (height + lead) * count,weak:weak)
+  if count == 0 {
+    v(0em, weak:weak)
+  } else {
+    let lead = spacing.line
+    let height = spacing.line-height
+    v(lead + (height + lead) * count,weak:weak)
+  }
 }
 
 /// Creates vertical spacing equivalent to one blank line.
