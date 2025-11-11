@@ -473,11 +473,6 @@
           "MEMORANDUM FOR", "  ", ind.ind-for,
         )
       } else {
-        // Standard indorsement format
-        // Add spacing only if we didn't just do a pagebreak
-        if not ind.leading-pagebreak {
-          blank-line()
-        }
         [#indorsement-label, #ind.ind-from]
 
         blank-line()
