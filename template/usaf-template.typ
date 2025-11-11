@@ -43,9 +43,9 @@
     )[
         Number each indorsement in sequence (1st Ind, 2d Ind, 3d Ind, …).~ Begin the first indorsement on the second line below the last element of the official memorandum.~ Begin subsequent indorsements on the second line below the last element of the previous indorsement.~ Follow the indorsement number with your office symbol.
         
-        When inserting a new indorsement element (either on the same page or as a separate page), the numbering will need to be reset.~ This is accomplished by right-clicking the number on the list, then selecting “Restart at 1”.
-        
-        Use a separate page indorsement when there isn't space remaining on the original memorandum or previous indorsement page.~ The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator's office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
+        When inserting a new indorsement element (either on the same page or as a new page), the numbering will need to be reset.~ This is accomplished by right-clicking the number on the list, then selecting "Restart at 1".
+
+        Use a new page indorsement when there isn't space remaining on the original memorandum or previous indorsement page.~ The new-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator's office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
         ],
     indorsement(
       date: "2001-01-01",
@@ -55,9 +55,9 @@
         "FIRST M LAST, Rank, USAF",
         "Duty Title"
       ),
-      separate-page: true,
+      new-page: true,
     )[
-        Use a separate page indorsement when there isn’t space remaining on the original memorandum or previous indorsement page.~ The separate-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator’s office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
+        Use a new page indorsement when there isn't space remaining on the original memorandum or previous indorsement page.~ The new-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator's office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
       ],
   ),
   //leading-backmatter-pagebreak: true, // Forces a break before backmatter sections (attachments, cc, distribution)

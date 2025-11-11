@@ -393,7 +393,7 @@
 /// Key features:
 /// - Automatic indorsement numbering (1st Ind, 2nd Ind, etc.)
 /// - Proper date and subject line formatting referencing the original memorandum
-/// - Support for both same-page and separate-page indorsement formats
+/// - Support for both same-page and new-page indorsement formats
 /// - Individual signature blocks and backmatter sections
 /// - Page break control for document flow management
 /// 
@@ -402,7 +402,7 @@
 /// - signature-block (array): Array of signature lines for the indorsing official
 /// - attachments (array): Array of attachment descriptions (optional)
 /// - cc (array): Array of courtesy copy recipients (optional)
-/// - separate-page (bool): Whether to use separate-page indorsement format
+/// - new-page (bool): Whether to use new-page indorsement format
 /// - date (str|datetime): Date of the indorsement (defaults to today)
 /// - body (content): Indorsement body content
 /// -> dictionary
@@ -416,7 +416,7 @@
   ),
   attachments: none,
   cc: none,
-  separate-page: false,
+  new-page: false,
   date: datetime.today(),
   body,
 ) = {
@@ -426,7 +426,7 @@
     signature-block: signature-block,
     attachments: attachments,
     cc: cc,
-    separate-page: separate-page,
+    new-page: new-page,
     date: date,
     body: body,
   )
@@ -453,12 +453,12 @@
       let indorsement-number = counters.indorsement.get().first()
       let indorsement-label = format-indorsement-number(indorsement-number)
 
-      if separate-page {
+      if new-page {
         pagebreak()
       }
 
-      if ind.separate-page {
-        // Separate-page indorsement format per AFH 33-337
+      if ind.new-page {
+        // New-page indorsement format per AFH 33-337
         [#indorsement-label to #original-office, #display-date(original-date), #original-subject]
 
         blank-line()

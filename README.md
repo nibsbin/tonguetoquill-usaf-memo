@@ -17,7 +17,7 @@ A comprehensive Typst template for creating official United States Air Force mem
 - **Comprehensive backmatter** (Attachments, CC, Distribution) with smart formatting
 - **Page numbering** starting from page 2 per AFH 33-337 standards
 - **Highly Configurable** with numerous parameters for customization
-- **Standard and Separate Page Indorsements** with full support for long indorsement chains
+- **Standard and New Page Indorsements** with full support for long indorsement chains
 
 ## Quick Start
 
@@ -180,7 +180,7 @@ indorsement(
   attachments: none,                                         // Optional attachments
   cc: none,                                                 // Courtesy copies
   leading-pagebreak: false,                                 // Force page break
-  separate-page: false,                                     // Separate page format
+  new-page: false,                                          // New page format
   date: datetime.today(),                       // Indorsement date
   
   // Indorsement body content
