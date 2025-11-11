@@ -203,7 +203,7 @@
 /// - signature-lines (array): Array of signature lines (name/rank, title, organization)
 /// -> content
 #let render-signature-block(signature-lines) = {
-  blank-lines(5, weak: false)
+  blank-lines(4, weak: false)
   block(breakable: false)[
     #align(left)[
       #pad(left: 4.5in - spacing.margin)[
