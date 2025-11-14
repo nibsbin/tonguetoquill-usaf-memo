@@ -1,7 +1,25 @@
 #!/bin/bash
 
-echo "Compiling templates and tests to PDFs..."
-typst compile --font-path . template/starkindustries.typ pdfs/starkindustries.pdf
-typst compile --font-path . template/usaf-template.typ pdfs/usaf-template.pdf
-typst compile --font-path . template/ussf-template.typ pdfs/ussf-template.pdf
-echo "All compilations completed and saved to the pdfs/ directory."
+compile_template() {
+  local template=$1
+  local input="template/${template}.typ"
+  local output="pdfs/${template}.pdf"
+
+  echo "Compiling ${template}..."
+  if typst compile --font-path . "$input" "$output"; then
+    echo "  ✓ Generated: $(pwd)/$output"
+  else
+    echo "  ✗ Failed to compile $template"
+    return 1
+  fi
+}
+
+echo "Building templates..."
+echo
+
+compile_template "starkindustries"
+compile_template "usaf-template"
+compile_template "ussf-template"
+
+echo
+echo "All compilations completed."
