@@ -1,64 +1,35 @@
-#import "@preview/tonguetoquill-usaf-memo:0.2.0": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:0.2.0": frontmatter, mainmatter, backmatter
 
-#show: official-memorandum.with(
+#show: frontmatter.with(
   letterhead-title: "STARK INDUSTRIES",
   letterhead-caption: "EXECUTIVE OFFICE",
   letterhead-seal: image("assets/starkindustries_seal.png"),
+  subject: "Immediate Compliance Required: Unauthorized Flight Operations and Workplace Safety Violations",
   memo-for: (
     "MR. ANTHONY E. STARK, CEO",
     "STARK INDUSTRIES"
   ),
-  memo-for-cols: 1, // Pushes "STARK INDUSTRIES" to a new line
+  memo-for-cols: 1,
   memo-from: (
     "STARK INDUSTRIES",
     "Executive Office",
     "10880 Malibu Point",
     "Malibu CA 90265-4823"
   ),
-  subject: "Immediate Compliance Required: Unauthorized Flight Operations and Workplace Safety Violations",
   references: (
     "FAR Part 91, General Operating and Flight Rules",
-    "AFI 13-212, 16 July 2012, Range Planning and Operations", 
+    "AFI 13-212, 16 July 2012, Range Planning and Operations",
     "OSHA 29 CFR 1926, Construction Industry Safety Standards",
     "Stark, A. E., 15 May 2008, 'I Am Iron Man' Public Declaration",
     "USAF Aircraft Accident Investigation Report, F-22 Raptor Incidents, Classified",
     "Coulson, P., SHIELD Intelligence Brief, 'Unidentified Flying Objects Over Malibu"
   ),
-  signature-block: (
-    "VIRGINIA E. POTTS",
-    "Executive Assistant to the CEO", 
-    "Stark Industries"
-  ),
-  attachments: (
-    "FAA Advisory Circular AC 90-89A, Amateur-Built Aircraft Flight Test Area",
-    "OSHA Inspection Report SI-2008-0515, Stark Industries Malibu Facility",
-    "Transcript: Stark, A. E. Congressional Testimony, 'Privatization of World Peace'",
-    "Video Evidence: Iron Man vs. F-22 Raptors, Edwards AFB Security Footage",
-    "Insurance Claims: Progressive Auto, 'Unusual Circumstances - Flying Car Damage'"
-  ),
-  cc: (
-    "USAF/A4 (Logistics)",
-    "AFMC/CC",
-    "Secretary of Defense",
-    "Director, SHIELD (N. Fury)",
-    "FAA Administrator"
-  ),
-  distribution: (
-    "HQ USAF/CC",
-    "SECAF",
-    "Joint Chiefs of Staff",
-    "FBI Counterintelligence Division",
-    "Department of Energy",
-    "Nuclear Regulatory Commission",
-    "Environmental Protection Agency",
-    "Malibu Fire Department (Chief Anderson)",
-    "National Transportation Safety Board",
-    "Congressional Armed Services Committee",
-    "Happy Hogan, Head of Security, Stark Industries"
-  ),
   footer-tag-line: "Peace Through Power",
-  classification-level: "CONFIDENTIAL"
+  classification-level: "CONFIDENTIAL",
 )
+
+#show: mainmatter
+
 Mr. Stark, following your public declaration of identity as "Iron Man" and subsequent unauthorized flight activities, I have received numerous calls from federal agencies expressing serious concerns regarding regulatory compliance, airspace violations, and workplace safety standards.~ This memorandum serves as official consolidation of all the complaints I've fielded from various government officials who seem to think you should follow the same rules as everyone else.~ Imagine that.
 
 + *Airspace and Flight Operations Violations*.~ Your recent flight activities have resulted in numerous breaches of federal aviation regulations and military airspace restrictions:
@@ -101,8 +72,43 @@ Mr. Stark, following your public declaration of identity as "Iron Man" and subse
 
   + Provide detailed technical specifications to authorized government personnel for security classification review and technology transfer control assessment.
 
-Failure to achieve compliance within 30 days will result in suspension of all classified contracts, revocation of security clearances for key personnel, and potential criminal referral for violations of federal aviation, environmental, and weapons export regulations.~ 
+Failure to achieve compliance within 30 days will result in suspension of all classified contracts, revocation of security clearances for key personnel, and potential criminal referral for violations of federal aviation, environmental, and weapons export regulations.~
 
-I understand that your newfound capabilities are exciting, Mr. Stark, but I'm running out of ways to explain to government officials why our CEO thinks traffic laws don't apply to him when he's wearing metal pajamas.~ Please schedule a meeting with the appropriate agencies to discuss compliance.~ 
+I understand that your newfound capabilities are exciting, Mr. Stark, but I'm running out of ways to explain to government officials why our CEO thinks traffic laws don't apply to him when he's wearing metal pajamas.~ Please schedule a meeting with the appropriate agencies to discuss compliance.~
 
-Also, please remind DUM-E that government inspectors are not appropriate targets for fire extinguisher practice, regardless of how "suspicious" they appear.~ 
+Also, please remind DUM-E that government inspectors are not appropriate targets for fire extinguisher practice, regardless of how "suspicious" they appear.~
+
+#show: backmatter.with(
+  signature-block: (
+    "VIRGINIA E. POTTS",
+    "Executive Assistant to the CEO",
+    "Stark Industries"
+  ),
+  attachments: (
+    "FAA Advisory Circular AC 90-89A, Amateur-Built Aircraft Flight Test Area",
+    "OSHA Inspection Report SI-2008-0515, Stark Industries Malibu Facility",
+    "Transcript: Stark, A. E. Congressional Testimony, 'Privatization of World Peace'",
+    "Video Evidence: Iron Man vs. F-22 Raptors, Edwards AFB Security Footage",
+    "Insurance Claims: Progressive Auto, 'Unusual Circumstances - Flying Car Damage'"
+  ),
+  cc: (
+    "USAF/A4 (Logistics)",
+    "AFMC/CC",
+    "Secretary of Defense",
+    "Director, SHIELD (N. Fury)",
+    "FAA Administrator"
+  ),
+  distribution: (
+    "HQ USAF/CC",
+    "SECAF",
+    "Joint Chiefs of Staff",
+    "FBI Counterintelligence Division",
+    "Department of Energy",
+    "Nuclear Regulatory Commission",
+    "Environmental Protection Agency",
+    "Malibu Fire Department (Chief Anderson)",
+    "National Transportation Safety Board",
+    "Congressional Armed Services Committee",
+    "Happy Hogan, Head of Security, Stark Industries"
+  ),
+)
