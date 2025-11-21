@@ -29,7 +29,7 @@
 //
 // #show: indorsement.with(
 //   from: "ORG/SYMBOL",
-//   for: "RECIPIENT/SYMBOL",
+//   to: "RECIPIENT/SYMBOL",
 //   signature-block: ("NAME, Rank, USAF", "Title"),
 // )
 //

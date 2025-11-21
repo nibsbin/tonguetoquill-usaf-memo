@@ -79,7 +79,7 @@ The example of this memorandum applies to many official memorandums that Airmen 
 
 #show: indorsement.with(
   from: "ORG/SYMBOL [Office symbol for 1st Indorsement Official]",
-  for: "ORG/SYMBOL [Office symbol for 2d Indorsement official]",
+  to: "ORG/SYMBOL [Office symbol for 2d Indorsement official]",
   signature-block: (
     "FIRST M LAST, Rank, USAF",
     "Duty Title"
@@ -95,7 +95,7 @@ Use a new page indorsement when there isn't space remaining on the original memo
 
 #show: indorsement.with(
   from: "[Indorser ORG/SYMBOL]",
-  for: "ORG/SYMBOL [Originator]",
+  to: "ORG/SYMBOL [Originator]",
   signature-block: (
     "FIRST M LAST, Rank, USAF",
     "Duty Title"

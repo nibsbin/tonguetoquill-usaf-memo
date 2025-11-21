@@ -6,7 +6,7 @@
 
 #let indorsement(
   from: none,
-  for: none,
+  to: none,
   signature-block: none,
   signature-blank-lines: 3,
   attachments: none,
@@ -15,12 +15,12 @@
   date: none,
 ) = {
   assert(from != none, message: "from is required")
-  assert(for != none, message: "for is required")
+  assert(to != none, message: "to is required")
   assert(signature-block != none, message: "signature-block is required")
 
   let actual-date = if date == none { datetime.today() } else { date }
   let ind-from = if type(from) == array { from.at(0) } else { from }
-  let ind-for = for
+  let ind-for = to
 
   it => {
     context {

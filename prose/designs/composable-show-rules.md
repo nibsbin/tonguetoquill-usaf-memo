@@ -85,7 +85,7 @@ Transform the USAF memo template from a monolithic state-based approach into a c
 ```typst
 #show: indorsement.with(
   from: (str, str),  // (office-symbol, title)
-  for: str,          // recipient office symbol
+  to: str,           // recipient office symbol
   signature-block: array,
   signature-blank-lines: int,
   attachments: array | none,
@@ -98,7 +98,7 @@ Transform the USAF memo template from a monolithic state-based approach into a c
 **Responsibilities:**
 - Render indorsement header (1st Ind, 2nd Ind, etc.)
 - Auto-increment indorsement counter
-- Render from/for sections
+- Render from/to sections
 - Process indorsement body
 - Render indorsement signature block
 - Render indorsement backmatter (attachments, cc)
