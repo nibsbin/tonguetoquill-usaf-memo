@@ -46,7 +46,7 @@
 /// -> content
 #let configure(body-font, font-size: 12pt, ctx) = {
   context{
-    set par(leading: spacing.line, spacing:spacing.line, justify: true)
+    set par(leading: spacing.line, spacing:spacing.line, justify: false)
     set block(above:spacing.line, below:0em,spacing: 0em)
     set text(font: body-font, size: font-size, fallback: false)
     ctx
@@ -369,7 +369,7 @@
 // =============================================================================
 
 /// Gets the numbering format for a specific paragraph level.
-/// 
+///
 /// Returns the appropriate numbering format for AFH 33-337 compliant
 /// hierarchical paragraph numbering:
 /// - Level 0: "1." (1., 2., 3., etc.)
@@ -377,75 +377,81 @@
 /// - Level 2: "(1)" ((1), (2), (3), etc.)
 /// - Level 3: "(a)" ((a), (b), (c), etc.)
 /// - Level 4+: Underlined format for deeper nesting
-/// 
+///
 /// - level (int): Paragraph nesting level (0-based)
 /// -> str | function
 #let get-paragraph-numbering-format(level) = {
-  if level < paragraph-config.numbering-formats.len() {
-    paragraph-config.numbering-formats.at(level)
-  } else {
-    "i."  // Fallback for deep nesting
-  }
+  paragraph-config.numbering-formats.at(level, default: "i.")
 }
 
 /// Generates paragraph number for a given level with proper formatting.
-/// 
+///
 /// Creates properly formatted paragraph numbers for the hierarchical numbering
-/// system. Can either use the current counter value or accept an explicit value.
-/// Supports both automatic counter incrementation and manual counter control.
-/// 
+/// system using Typst's native counter display capabilities.
+///
 /// - level (int): Paragraph nesting level (0-based)
-/// - counter-value (none | int): Optional explicit counter value to use
+/// - counter-value (none | int): Optional explicit counter value to use (for measuring widths)
 /// - increment (bool): Whether to increment the counter after display
 /// -> content
 #let generate-paragraph-number(level, counter-value: none, increment: false) = {
   let paragraph-counter = counter(paragraph-config.counter-prefix + str(level))
-  
+  let numbering-format = get-paragraph-numbering-format(level)
+
   if counter-value != none {
-    assert(counter-value >= 0,message: "Counter value of `" + str(counter-value) + "` cannot be less than 0")
+    // For measuring widths: create temporary counter at specific value
+    assert(counter-value >= 0, message: "Counter value of `" + str(counter-value) + "` cannot be less than 0")
     let temp-counter = counter("temp-counter")
     temp-counter.update(counter-value)
-    let numbering-format = get-paragraph-numbering-format(level)
     temp-counter.display(numbering-format)
   } else {
-    let numbering-format = get-paragraph-numbering-format(level)
+    // Standard case: display and optionally increment
     let result = paragraph-counter.display(numbering-format)
-    if increment { 
-      paragraph-counter.step() 
+    if increment {
+      paragraph-counter.step()
     }
     result
   }
 }
 
 /// Calculates proper indentation width for a paragraph level.
-/// 
+///
 /// Computes the exact indentation needed for hierarchical paragraph alignment
-/// by measuring the width of parent paragraph numbers and adding appropriate
-/// spacing. Ensures consistent alignment with AFH 33-337 tab stop standards.
-/// 
+/// by measuring the cumulative width of all ancestor paragraph numbers and their
+/// spacing. Uses direct iteration instead of recursion for better performance.
+///
+/// Per AFH 33-337: Sub-paragraph text aligns with first character of parent text,
+/// which means indentation = sum of all ancestor number widths + spacing.
+///
 /// - level (int): Paragraph nesting level (0-based)
-/// -> length
 /// -> length
 #let calculate-paragraph-indent(level) = {
   assert(level >= 0)
-  if level == 0 { 
-    return 0pt 
+  if level == 0 {
+    return 0pt
   }
-  
-  let parent-level = level - 1
-  let parent-indent = calculate-paragraph-indent(parent-level)
-  let parent-counter = counter(paragraph-config.counter-prefix + str(parent-level)).get().at(0) 
-  let parent-counter-value = counter(paragraph-config.counter-prefix + str(parent-level)).get().at(0)
-  let parent-number = generate-paragraph-number(parent-level, counter-value: parent-counter-value)
 
-  let indent-buffer = [#h(parent-indent)#parent-number#"  "]
-  return measure(indent-buffer).width
+  // Accumulate widths of all ancestor numbers iteratively
+  let total-indent = 0pt
+  for ancestor-level in range(level) {
+    let ancestor-counter-value = counter(paragraph-config.counter-prefix + str(ancestor-level)).get().at(0)
+    let ancestor-number = generate-paragraph-number(ancestor-level, counter-value: ancestor-counter-value)
+    // Measure number + spacing buffer
+    let width = measure([#ancestor-number#"  "]).width
+    total-indent += width
+  }
+
+  total-indent
 }
 
 /// Global state for tracking current paragraph level.
 /// Used internally by the paragraph numbering system to maintain proper nesting.
 /// -> state
 #let PAR_LEVEL_STATE = state("PAR_LEVEL", 0)
+
+/// Global state for tracking whether we're in backmatter.
+/// Used to disable paragraph numbering in backmatter sections.
+/// -> state
+#let IN_BACKMATTER_STATE = state("IN_BACKMATTER", false)
 
 /// Sets the current paragraph level state.
 /// 
@@ -461,32 +467,30 @@
 }
 
 /// Creates a formatted paragraph with automatic numbering and indentation.
-/// 
+///
 /// Generates a properly formatted paragraph with AFH 33-337 compliant numbering,
 /// indentation, and spacing. Automatically manages counter incrementation and
 /// nested paragraph state. Used internally by the body rendering system.
-/// 
+///
 /// Features:
 /// - Automatic paragraph number generation and formatting
-/// - Proper indentation based on nesting level
+/// - Proper indentation based on nesting level via direct width measurement
 /// - Counter management for hierarchical numbering
 /// - Widow/orphan prevention settings
-/// - Support for both block and hanging indent styles
-/// 
+///
 /// - content (content): Paragraph content to format
 /// -> content
-#let memo-par(content) = {
-  context {
-    let level = PAR_LEVEL_STATE.get()
-    let paragraph-number = generate-paragraph-number(level, increment: true)
-    counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
-    let indent-width = calculate-paragraph-indent(level)
-    set text(costs: (widow: 0%)) 
+#let memo-par(content) = context {
+  let level = PAR_LEVEL_STATE.get()
+  let paragraph-number = generate-paragraph-number(level, increment: true)
+  // Reset child level counter
+  counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
+  let indent-width = calculate-paragraph-indent(level)
 
-    // Potential bug with spacing; use h(.25em) as an extra spacer
-    let output = pad(left: indent-width, paragraph-number + h(.25em) + " " + content)
-    output
-  }
+  set text(costs: (widow: 0%))
+
+  // Number + two spaces + content, with left padding for nesting
+  pad(left: indent-width, paragraph-number + "  " + content)
 }
 
 // =============================================================================
