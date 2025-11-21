@@ -14,16 +14,15 @@
 ) = {
   assert(signature_block != none, message: "signature_block is required")
 
-  // Reset paragraph numbering show rules from mainmatter
-  // Wrap all content to prevent mainmatter show rules from applying
-  [
-    #show par: it => it
-    #render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)
-    #render-backmatter-sections(
-      attachments: attachments,
-      cc: cc,
-      distribution: distribution,
-      leading-pagebreak: leading_pagebreak,
-    )
-  ]
+  // Set backmatter state to disable paragraph numbering
+  IN_BACKMATTER_STATE.update(true)
+
+  // Render backmatter sections without paragraph numbering
+  render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)
+  render-backmatter-sections(
+    attachments: attachments,
+    cc: cc,
+    distribution: distribution,
+    leading-pagebreak: leading_pagebreak,
+  )
 }

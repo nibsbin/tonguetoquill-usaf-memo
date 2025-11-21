@@ -135,7 +135,6 @@
     // Use text() wrapper to prevent section label from being treated as a paragraph
     text()[#section-label]
     linebreak()
-    v(spacing.line, weak: false)
     if numbering-style != none {
       let items = if type(content) == array { content } else { (content,) }
       enum(..items, numbering: numbering-style)
@@ -254,11 +253,16 @@
 
     // Intercept paragraphs for numbering
     show par: it => context {
-      blank-line()
-      let paragraph = memo-par([#it.body])
-      // Apply widow/orphan prevention
-      set text(costs: (orphan: 0%))
-      block(breakable: true)[#paragraph]
+      // Check if we're in backmatter - if so, don't number paragraphs
+      if IN_BACKMATTER_STATE.get() {
+        it
+      } else {
+        blank-line()
+        let paragraph = memo-par([#it.body])
+        // Apply widow/orphan prevention
+        set text(costs: (orphan: 0%))
+        block(breakable: true)[#paragraph]
+      }
     }
 
     // Reset to base level and render content

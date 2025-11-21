@@ -46,7 +46,7 @@
 /// -> content
 #let configure(body-font, font-size: 12pt, ctx) = {
   context{
-    set par(leading: spacing.line, spacing:spacing.line, justify: true)
+    set par(leading: spacing.line, spacing:spacing.line, justify: false)
     set block(above:spacing.line, below:0em,spacing: 0em)
     set text(font: body-font, size: font-size, fallback: false)
     ctx
@@ -447,6 +447,11 @@
 /// Used internally by the paragraph numbering system to maintain proper nesting.
 /// -> state
 #let PAR_LEVEL_STATE = state("PAR_LEVEL", 0)
+
+/// Global state for tracking whether we're in backmatter.
+/// Used to disable paragraph numbering in backmatter sections.
+/// -> state
+#let IN_BACKMATTER_STATE = state("IN_BACKMATTER", false)
 
 /// Sets the current paragraph level state.
 /// 
