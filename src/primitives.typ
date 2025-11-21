@@ -215,7 +215,29 @@
   // Initialize base level counter
   counter("par-counter-0").update(1)
 
+  // Count paragraphs first (AFH 33-337: "A single paragraph is not numbered.")
+  let par-count-state = state("body-par-count", 0)
+
   context {
+    par-count-state.update(0)
+
+    // Counting pass - render content with minimal processing
+    {
+      show par: it => {
+        par-count-state.update(n => n + 1)
+        none
+      }
+      // Suppress all other output during counting
+      show: it => none
+      content
+    }
+  }
+
+  // Render with appropriate numbering
+  context {
+    let total-pars = par-count-state.get()
+    let should-number = total-pars > 1
+
     // Track nesting level for enum/list items
     let enum-level = state("enum-level", 1)
 
@@ -256,7 +278,12 @@
       // Check if we're in backmatter - if so, don't number paragraphs
       if IN_BACKMATTER_STATE.get() {
         it
+      } else if not should-number {
+        // Single paragraph - don't number per AFH 33-337
+        blank-line()
+        it
       } else {
+        // Multiple paragraphs - apply numbering
         blank-line()
         let paragraph = memo-par([#it.body])
         // Apply widow/orphan prevention
