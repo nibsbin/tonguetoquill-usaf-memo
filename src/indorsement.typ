@@ -13,7 +13,8 @@
   cc: none,
   same_page: true,
   date: none,
-) = it => {
+  it
+) = {
   assert(from != none, message: "from is required")
   assert(to != none, message: "to is required")
   assert(signature_block != none, message: "signature_block is required")

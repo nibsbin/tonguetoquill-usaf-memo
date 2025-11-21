@@ -11,7 +11,8 @@
   cc: none,
   distribution: none,
   leading_pagebreak: false,
-) = it => {
+  it
+) = {
   assert(signature_block != none, message: "signature_block is required")
 
   render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)

@@ -22,7 +22,8 @@
 
   classification_level: none,
   footer_tag_line: none,
-) = it => {
+  it
+) = {
   assert(subject != none, message: "subject is required")
   assert(memo_for != none, message: "memo_for is required")
   assert(memo_from != none, message: "memo_from is required")
