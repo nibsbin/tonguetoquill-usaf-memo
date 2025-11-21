@@ -213,80 +213,56 @@
 // =============================================================================
 
 #let render-paragraph-body(content) = {
+  // Initialize base level counter
   counter("par-counter-0").update(1)
-  let s = state("par-count", 0)
 
   context {
-    let processed_content = context {
-      show enum.item: _enum_item => {}
-      show list.item: _enum_item => {}
+    // Track nesting level for enum/list items
+    let enum-level = state("enum-level", 1)
 
-      let enum-level = state("enum-level", 1)
+    // Suppress default enum/list rendering - we'll handle it via nested paragraphs
+    show enum.item: _enum_item => {}
+    show list.item: _list_item => {}
 
-      show enum.item: _enum_item => {
-        context {
-          enum-level.update(l => l + 1)
-          SET_LEVEL(enum-level.get())
-          let paragraph = _enum_item.body
-          _enum_item
+    // Intercept enum items to set nesting level
+    show enum.item: _enum_item => context {
+      enum-level.update(l => l + 1)
+      SET_LEVEL(enum-level.get())
 
-          v(0em, weak: true)
-          _enum_item.body
-          SET_LEVEL(0)
-          enum-level.update(l => l - 1)
-        }
-      }
+      // Don't render the enum marker - render body content as nested paragraphs instead
+      v(0em, weak: true)
+      _enum_item.body
 
-      show list.item: list_item => {
-        context {
-          enum-level.update(l => l + 1)
-          SET_LEVEL(enum-level.get())
-          let paragraph = list_item.body
-          list_item
-
-          v(0em, weak: true)
-          list_item.body
-          SET_LEVEL(0)
-          enum-level.update(l => l - 1)
-        }
-      }
-      content
-    }
-
-    let total-par-counter = counter("total-par-counter")
-    total-par-counter.update(0)
-
-    let total-par-count-content = {
+      // Reset level after nested content
       SET_LEVEL(0)
-      show par: it => {
-        context {
-          total-par-counter.step()
-        }
-      }
-      processed_content
+      enum-level.update(l => l - 1)
     }
 
-    let par-counter = counter("par-counter")
-    par-counter.update(1)
-    context {
-      show par: it => {
-        context {
-          blank-line()
-          par-counter.step()
-          let cur_count = par-counter.get().at(0)
-          let par_count = total-par-counter.get().at(0)
-          let paragraph = memo-par([#it.body])
-          if cur_count == par_count {
-            set text(costs: (orphan: 0%))
-            block(breakable: true, sticky: true)[#paragraph]
-          } else {
-            block(breakable: true)[#paragraph]
-          }
-        }
-      }
-      total-par-count-content
+    // Intercept list items to set nesting level
+    show list.item: list_item => context {
+      enum-level.update(l => l + 1)
+      SET_LEVEL(enum-level.get())
+
+      // Don't render the list marker - render body content as nested paragraphs instead
+      v(0em, weak: true)
+      list_item.body
+
+      // Reset level after nested content
       SET_LEVEL(0)
-      processed_content
+      enum-level.update(l => l - 1)
     }
+
+    // Intercept paragraphs for numbering
+    show par: it => context {
+      blank-line()
+      let paragraph = memo-par([#it.body])
+      // Apply widow/orphan prevention with sticky block
+      set text(costs: (orphan: 0%))
+      block(breakable: true, sticky: true)[#paragraph]
+    }
+
+    // Reset to base level and render content
+    SET_LEVEL(0)
+    content
   }
 }
