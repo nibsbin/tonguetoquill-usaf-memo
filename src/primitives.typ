@@ -114,9 +114,7 @@
     #align(left)[
       #pad(left: 4.5in - spacing.margin)[
         #text(hyphenate: false)[
-          #for line in signature-lines {
-            par(hanging-indent: 1em, justify: false)[#line]
-          }
+          #signature-lines.join(linebreak())
         ]
       ]
     ]
@@ -134,8 +132,9 @@
   continuation-label: none
 ) = {
   let formatted-content = {
-    [#section-label]
-    parbreak()
+    // Use text() wrapper to prevent section label from being treated as a paragraph
+    text()[#section-label]
+    linebreak()
     if numbering-style != none {
       let items = if type(content) == array { content } else { (content,) }
       enum(..items, numbering: numbering-style)
@@ -152,9 +151,9 @@
     let available-space = page.height - here().position().y - 1in
     if measure(formatted-content).height > available-space {
       let continuation-text = if continuation-label != none {
-        continuation-label
+        text()[#continuation-label]
       } else {
-        section-label + " (listed on next page):"
+        text()[#section-label + " (listed on next page):"]
       }
       continuation-text
       pagebreak()
@@ -213,80 +212,88 @@
 // =============================================================================
 
 #let render-paragraph-body(content) = {
+  // Initialize base level counter
   counter("par-counter-0").update(1)
-  let s = state("par-count", 0)
+
+  // Count paragraphs first (AFH 33-337: "A single paragraph is not numbered.")
+  let par-count-state = state("body-par-count", 0)
 
   context {
-    let processed_content = context {
-      show enum.item: _enum_item => {}
-      show list.item: _enum_item => {}
+    par-count-state.update(0)
 
-      let enum-level = state("enum-level", 1)
-
-      show enum.item: _enum_item => {
-        context {
-          enum-level.update(l => l + 1)
-          SET_LEVEL(enum-level.get())
-          let paragraph = _enum_item.body
-          _enum_item
-
-          v(0em, weak: true)
-          _enum_item.body
-          SET_LEVEL(0)
-          enum-level.update(l => l - 1)
-        }
+    // Counting pass - render content with minimal processing
+    {
+      show par: it => {
+        par-count-state.update(n => n + 1)
+        none
       }
-
-      show list.item: list_item => {
-        context {
-          enum-level.update(l => l + 1)
-          SET_LEVEL(enum-level.get())
-          let paragraph = list_item.body
-          list_item
-
-          v(0em, weak: true)
-          list_item.body
-          SET_LEVEL(0)
-          enum-level.update(l => l - 1)
-        }
-      }
+      // Suppress all other output during counting
+      show: it => none
       content
     }
+  }
 
-    let total-par-counter = counter("total-par-counter")
-    total-par-counter.update(0)
+  // Render with appropriate numbering
+  context {
+    let total-pars = par-count-state.get()
+    let should-number = total-pars > 1
 
-    let total-par-count-content = {
+    // Track nesting level for enum/list items
+    let enum-level = state("enum-level", 1)
+
+    // Suppress default enum/list rendering - we'll handle it via nested paragraphs
+    show enum.item: _enum_item => {}
+    show list.item: _list_item => {}
+
+    // Intercept enum items to set nesting level
+    show enum.item: _enum_item => context {
+      enum-level.update(l => l + 1)
+      SET_LEVEL(enum-level.get())
+
+      // Don't render the enum marker - render body content as nested paragraphs instead
+      v(0em, weak: true)
+      _enum_item.body
+
+      // Reset level after nested content
       SET_LEVEL(0)
-      show par: it => {
-        context {
-          total-par-counter.step()
-        }
-      }
-      processed_content
+      enum-level.update(l => l - 1)
     }
 
-    let par-counter = counter("par-counter")
-    par-counter.update(1)
-    context {
-      show par: it => {
-        context {
-          blank-line()
-          par-counter.step()
-          let cur_count = par-counter.get().at(0)
-          let par_count = total-par-counter.get().at(0)
-          let paragraph = memo-par([#it.body])
-          if cur_count == par_count {
-            set text(costs: (orphan: 0%))
-            block(breakable: true, sticky: true)[#paragraph]
-          } else {
-            block(breakable: true)[#paragraph]
-          }
-        }
-      }
-      total-par-count-content
+    // Intercept list items to set nesting level
+    show list.item: list_item => context {
+      enum-level.update(l => l + 1)
+      SET_LEVEL(enum-level.get())
+
+      // Don't render the list marker - render body content as nested paragraphs instead
+      v(0em, weak: true)
+      list_item.body
+
+      // Reset level after nested content
       SET_LEVEL(0)
-      processed_content
+      enum-level.update(l => l - 1)
     }
+
+    // Intercept paragraphs for numbering
+    show par: it => context {
+      // Check if we're in backmatter - if so, don't number paragraphs
+      if IN_BACKMATTER_STATE.get() {
+        it
+      } else if not should-number {
+        // Single paragraph - don't number per AFH 33-337
+        blank-line()
+        it
+      } else {
+        // Multiple paragraphs - apply numbering
+        blank-line()
+        let paragraph = memo-par([#it.body])
+        // Apply widow/orphan prevention
+        set text(costs: (orphan: 0%))
+        block(breakable: true)[#paragraph]
+      }
+    }
+
+    // Reset to base level and render content
+    SET_LEVEL(0)
+    content
   }
 }
