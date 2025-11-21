@@ -15,6 +15,8 @@
 ) = {
   assert(signature_block != none, message: "signature_block is required")
 
+  it
+
   render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)
 
   render-backmatter-sections(
@@ -23,6 +25,4 @@
     distribution: distribution,
     leading-pagebreak: leading_pagebreak,
   )
-
-  it
 }
