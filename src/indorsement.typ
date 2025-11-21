@@ -1,4 +1,4 @@
-// indorsement.typ: Indorsement show rule for USAF memorandum
+// indorsement.typ: Indorsement rendering for USAF memorandum
 
 #import "config.typ": *
 #import "utils.typ": *
@@ -13,7 +13,7 @@
   cc: none,
   same_page: true,
   date: none,
-  it
+  content
 ) = {
   assert(from != none, message: "from is required")
   assert(to != none, message: "to is required")
@@ -63,7 +63,7 @@
     }
   }
 
-  render-paragraph-body(it)
+  render-paragraph-body(content)
 
   render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)
 

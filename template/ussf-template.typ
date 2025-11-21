@@ -27,7 +27,7 @@ All formatting, spacing, fonts, and organizational elements remain consistent wi
 
 This template ensures full compliance with official correspondence standards while maintaining Space Force identity and organizational structure.
 
-#show: backmatter.with(
+#backmatter(
   signature_block: (
     "JOHN A. GUARDIAN, Colonel, USSF",
     "Commander",

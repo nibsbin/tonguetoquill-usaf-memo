@@ -1,10 +1,11 @@
 // lib.typ: Public API for USAF memorandum template
 //
-// This module provides a composable show rule API for creating United States Air Force
+// This module provides a composable API for creating United States Air Force
 // memorandums that comply with AFH 33-337 "The Tongue and Quill" formatting standards.
 //
 // Key features:
-// - Composable show rules for frontmatter, mainmatter, backmatter, and indorsements
+// - Composable show rules for frontmatter and mainmatter
+// - Function-based backmatter and indorsements for correct ordering
 // - No global state - configuration flows through metadata
 // - Reusable primitives for common rendering tasks
 // - AFH 33-337 compliant formatting throughout
@@ -23,17 +24,19 @@
 //
 // Your memo body content here.
 //
-// #show: backmatter.with(
+// #backmatter(
 //   signature_block: ("NAME, Rank, USAF", "Title"),
+//   attachments: (...),
+//   cc: (...),
 // )
 //
-// #show: indorsement.with(
+// #indorsement(
 //   from: "ORG/SYMBOL",
 //   to: "RECIPIENT/SYMBOL",
 //   signature_block: ("NAME, Rank, USAF", "Title"),
-// )
-//
-// Indorsement content here.
+// )[
+//   Indorsement content here.
+// ]
 
 #import "frontmatter.typ": frontmatter
 #import "mainmatter.typ": mainmatter

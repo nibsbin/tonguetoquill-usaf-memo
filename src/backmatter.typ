@@ -1,4 +1,4 @@
-// backmatter.typ: Backmatter show rule for USAF memorandum
+// backmatter.typ: Backmatter rendering for USAF memorandum
 
 #import "config.typ": *
 #import "utils.typ": *
@@ -11,7 +11,6 @@
   cc: none,
   distribution: none,
   leading_pagebreak: false,
-  it
 ) = {
   assert(signature_block != none, message: "signature_block is required")
 
@@ -23,6 +22,4 @@
     distribution: distribution,
     leading-pagebreak: leading_pagebreak,
   )
-
-  it
 }

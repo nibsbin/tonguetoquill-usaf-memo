@@ -78,7 +78,7 @@ I understand that your newfound capabilities are exciting, Mr. Stark, but I'm ru
 
 Also, please remind DUM-E that government inspectors are not appropriate targets for fire extinguisher practice, regardless of how "suspicious" they appear.~
 
-#show: backmatter.with(
+#backmatter(
   signature_block: (
     "VIRGINIA E. POTTS",
     "Executive Assistant to the CEO",
