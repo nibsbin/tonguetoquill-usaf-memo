@@ -6,31 +6,31 @@
 
 #let frontmatter(
   subject: none,
-  memo-for: none,
-  memo-from: none,
+  memo_for: none,
+  memo_from: none,
   date: none,
   references: none,
 
-  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead-caption: "[YOUR SQUADRON/UNIT NAME]",
-  letterhead-seal: none,
-  letterhead-font: DEFAULT_LETTERHEAD_FONTS,
+  letterhead_title: "DEPARTMENT OF THE AIR FORCE",
+  letterhead_caption: "[YOUR SQUADRON/UNIT NAME]",
+  letterhead_seal: none,
+  letterhead_font: DEFAULT_LETTERHEAD_FONTS,
 
-  body-font: DEFAULT_BODY_FONTS,
-  font-size: 12pt,
-  memo-for-cols: 3,
+  body_font: DEFAULT_BODY_FONTS,
+  font_size: 12pt,
+  memo_for_cols: 3,
 
-  classification-level: none,
-  footer-tag-line: none,
-) = {
+  classification_level: none,
+  footer_tag_line: none,
+) = it => {
   assert(subject != none, message: "subject is required")
-  assert(memo-for != none, message: "memo-for is required")
-  assert(memo-from != none, message: "memo-from is required")
+  assert(memo_for != none, message: "memo_for is required")
+  assert(memo_from != none, message: "memo_from is required")
 
-  let actual-date = if date == none { datetime.today() } else { date }
-  let classification-color = get-classification-level-color(classification-level)
+  let actual_date = if date == none { datetime.today() } else { date }
+  let classification_color = get-classification-level-color(classification_level)
 
-  it => configure(body-font, font-size: font-size, {
+  configure(body_font, font-size: font_size, {
     set page(
       paper: "us-letter",
       margin: (
@@ -52,11 +52,11 @@
           )
         }
 
-        if classification-level != none {
+        if classification_level != none {
           place(
             top + center,
             dy: 0.375in,
-            text(12pt, font: DEFAULT_BODY_FONTS, fill: classification-color)[#strong(classification-level)]
+            text(12pt, font: DEFAULT_BODY_FONTS, fill: classification_color)[#strong(classification_level)]
           )
         }
       },
@@ -64,15 +64,15 @@
         place(
           bottom + center,
           dy: -.375in,
-          text(12pt, font: DEFAULT_BODY_FONTS, fill: classification-color)[#strong(classification-level)]
+          text(12pt, font: DEFAULT_BODY_FONTS, fill: classification_color)[#strong(classification_level)]
         )
 
-        if not falsey(footer-tag-line) {
+        if not falsey(footer_tag_line) {
           place(
             bottom + center,
             dy: -0.625in,
             align(center)[
-              #text(fill: LETTERHEAD_COLOR, font: "cinzel", size: 15pt)[#footer-tag-line]
+              #text(fill: LETTERHEAD_COLOR, font: "cinzel", size: 15pt)[#footer_tag_line]
             ]
           )
         }
@@ -81,23 +81,23 @@
 
     paragraph-config.block-indent-state.update(false)
 
-    render-letterhead(letterhead-title, letterhead-caption, letterhead-seal, letterhead-font)
+    render-letterhead(letterhead_title, letterhead_caption, letterhead_seal, letterhead_font)
 
     v(1.75in - spacing.margin)
     context {
-      render-date-section(actual-date)
+      render-date-section(actual_date)
     }
-    render-for-section(memo-for, memo-for-cols)
-    render-from-section(memo-from)
+    render-for-section(memo_for, memo_for_cols)
+    render-from-section(memo_from)
     render-subject-section(subject)
     render-references-section(references)
 
     metadata((
       subject: subject,
-      original-date: actual-date,
-      original-from: if type(memo-from) == array { memo-from.at(0) } else { memo-from },
-      body-font: body-font,
-      font-size: font-size,
+      original_date: actual_date,
+      original_from: if type(memo_from) == array { memo_from.at(0) } else { memo_from },
+      body_font: body_font,
+      font_size: font_size,
     ))
 
     it

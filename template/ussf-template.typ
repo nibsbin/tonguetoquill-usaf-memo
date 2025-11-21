@@ -1,18 +1,18 @@
 #import "../src/lib.typ": frontmatter, mainmatter, backmatter
 
 #show: frontmatter.with(
-  letterhead-title: "DEPARTMENT OF THE SPACE FORCE",
-  letterhead-caption: "1ST SPACE OPERATIONS SQUADRON",
-  letterhead-seal: image("assets/dow_seal.png"),
+  letterhead_title: "DEPARTMENT OF THE SPACE FORCE",
+  letterhead_caption: "1ST SPACE OPERATIONS SQUADRON",
+  letterhead_seal: image("assets/dow_seal.png"),
   subject: "Space Force Memorandum Template Format",
-  memo-for: "SPACECOM/CC",
-  memo-from: (
+  memo_for: "SPACECOM/CC",
+  memo_from: (
     "1 SOPS/CC",
     "1st Space Operations Squadron",
     "Schriever Space Force Base",
     "Colorado Springs CO 80912-7001"
   ),
-  footer-tag-line: "semper supra",
+  footer_tag_line: "semper supra",
 )
 
 #show: mainmatter
@@ -28,7 +28,7 @@ All formatting, spacing, fonts, and organizational elements remain consistent wi
 This template ensures full compliance with official correspondence standards while maintaining Space Force identity and organizational structure.
 
 #show: backmatter.with(
-  signature-block: (
+  signature_block: (
     "JOHN A. GUARDIAN, Colonel, USSF",
     "Commander",
     "1st Space Operations Squadron"

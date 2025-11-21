@@ -1,14 +1,14 @@
 #import "../src/lib.typ": frontmatter, mainmatter, backmatter, indorsement
 
 #show: frontmatter.with(
-  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead-caption: "123RD EXAMPLE SQUADRON",
-  letterhead-seal: image("assets/dow_seal.png"),
+  letterhead_title: "DEPARTMENT OF THE AIR FORCE",
+  letterhead_caption: "123RD EXAMPLE SQUADRON",
+  letterhead_seal: image("assets/dow_seal.png"),
   subject: "Format for the Official Memorandum",
-  memo-for: (
+  memo_for: (
     "123 ES/CC", "123 ES/DO", "123 ES/CSS", "456 ES/CC", "456 ES/DO", "456 ES/CSS"
   ),
-  memo-from: (
+  memo_from: (
     "ORG/SYMBOL",
     "Organization",
     "Street Address",
@@ -61,7 +61,7 @@ To add classification banner markings (including FOUO markings), click on the he
 The example of this memorandum applies to many official memorandums that Airmen may be tasked to prepare; however, there are additional elements for special uses of the official memorandum.~ Refer to the Tongue and Quill discussion on the official memorandum for more details, or consult published guidance applicable to your duties.
 
 #show: backmatter.with(
-  signature-block: (
+  signature_block: (
     "FIRST M. LAST, Rank, USAF",
     "Duty Title"
   ),
@@ -80,11 +80,11 @@ The example of this memorandum applies to many official memorandums that Airmen 
 #show: indorsement.with(
   from: "ORG/SYMBOL [Office symbol for 1st Indorsement Official]",
   to: "ORG/SYMBOL [Office symbol for 2d Indorsement official]",
-  signature-block: (
+  signature_block: (
     "FIRST M LAST, Rank, USAF",
     "Duty Title"
   ),
-  same-page: true,
+  same_page: true,
 )
 
 Number each indorsement in sequence (1st Ind, 2d Ind, 3d Ind, …).~ Begin the first indorsement on the second line below the last element of the official memorandum.~ Begin subsequent indorsements on the second line below the last element of the previous indorsement.~ Follow the indorsement number with your office symbol.
@@ -96,11 +96,11 @@ Use a new page indorsement when there isn't space remaining on the original memo
 #show: indorsement.with(
   from: "[Indorser ORG/SYMBOL]",
   to: "ORG/SYMBOL [Originator]",
-  signature-block: (
+  signature_block: (
     "FIRST M LAST, Rank, USAF",
     "Duty Title"
   ),
-  same-page: false,
+  same_page: false,
   date: "2001-01-01",
 )
 

@@ -15,8 +15,8 @@
 //
 // #show: frontmatter.with(
 //   subject: "Your Subject Here",
-//   memo-for: ("OFFICE/SYMBOL",),
-//   memo-from: ("YOUR/SYMBOL",),
+//   memo_for: ("OFFICE/SYMBOL",),
+//   memo_from: ("YOUR/SYMBOL",),
 // )
 //
 // #show: mainmatter
@@ -24,13 +24,13 @@
 // Your memo body content here.
 //
 // #show: backmatter.with(
-//   signature-block: ("NAME, Rank, USAF", "Title"),
+//   signature_block: ("NAME, Rank, USAF", "Title"),
 // )
 //
 // #show: indorsement.with(
 //   from: "ORG/SYMBOL",
 //   to: "RECIPIENT/SYMBOL",
-//   signature-block: ("NAME, Rank, USAF", "Title"),
+//   signature_block: ("NAME, Rank, USAF", "Title"),
 // )
 //
 // Indorsement content here.
