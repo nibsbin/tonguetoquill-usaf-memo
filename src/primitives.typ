@@ -114,9 +114,7 @@
     #align(left)[
       #pad(left: 4.5in - spacing.margin)[
         #text(hyphenate: false)[
-          #for line in signature-lines {
-            par(hanging-indent: 1em, justify: false)[#line]
-          }
+          #signature-lines.join(linebreak())
         ]
       ]
     ]
@@ -134,8 +132,10 @@
   continuation-label: none
 ) = {
   let formatted-content = {
-    [#section-label]
-    parbreak()
+    // Use text() wrapper to prevent section label from being treated as a paragraph
+    text()[#section-label]
+    linebreak()
+    v(spacing.line, weak: false)
     if numbering-style != none {
       let items = if type(content) == array { content } else { (content,) }
       enum(..items, numbering: numbering-style)
@@ -152,9 +152,9 @@
     let available-space = page.height - here().position().y - 1in
     if measure(formatted-content).height > available-space {
       let continuation-text = if continuation-label != none {
-        continuation-label
+        text()[#continuation-label]
       } else {
-        section-label + " (listed on next page):"
+        text()[#section-label + " (listed on next page):"]
       }
       continuation-text
       pagebreak()
@@ -256,9 +256,9 @@
     show par: it => context {
       blank-line()
       let paragraph = memo-par([#it.body])
-      // Apply widow/orphan prevention with sticky block
+      // Apply widow/orphan prevention
       set text(costs: (orphan: 0%))
-      block(breakable: true, sticky: true)[#paragraph]
+      block(breakable: true)[#paragraph]
     }
 
     // Reset to base level and render content

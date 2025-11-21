@@ -29,8 +29,9 @@
     let original_date = config.original_date
     let original_from = config.original_from
 
+    // Increment counter and read value with fallback to 1 if empty
     counters.indorsement.step()
-    let indorsement_number = counters.indorsement.get().first()
+    let indorsement_number = counters.indorsement.get().at(0, default: 1)
     let indorsement_label = format-indorsement-number(indorsement_number)
 
     if not same_page {
@@ -72,15 +73,17 @@
     let attachment_count = attachments.len()
     let section_label = if attachment_count == 1 { "Attachment:" } else { str(attachment_count) + " Attachments:" }
 
-    [#section_label]
-    parbreak()
+    text()[#section_label]
+    linebreak()
+    v(spacing.line, weak: false)
     enum(..attachments, numbering: "1.")
   }
 
   if not falsey(cc) {
     calculate-backmatter-spacing(falsey(attachments))
-    [cc:]
-    parbreak()
+    text()[cc:]
+    linebreak()
+    v(spacing.line, weak: false)
     cc.join("\n")
   }
 }
