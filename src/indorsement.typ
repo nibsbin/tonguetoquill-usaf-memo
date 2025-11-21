@@ -29,9 +29,9 @@
     let original_date = config.original_date
     let original_from = config.original_from
 
-    // Increment counter and read value with fallback to 1 if empty
-    counters.indorsement.step()
-    let indorsement_number = counters.indorsement.get().at(0, default: 1)
+    // Increment counter and read value (starting from 1 for first indorsement)
+    let indorsement_number = counters.indorsement.get().at(0, default: 0) + 1
+    counters.indorsement.update(indorsement_number)
     let indorsement_label = format-indorsement-number(indorsement_number)
 
     if not same_page {
@@ -64,8 +64,14 @@
     }
   }
 
+  blank-line()
+
+  // Enable paragraph numbering for indorsement body (same as mainmatter)
+  IN_BACKMATTER_STATE.update(false)
   render-paragraph-body(content)
 
+  // Disable paragraph numbering for indorsement backmatter sections
+  IN_BACKMATTER_STATE.update(true)
   render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)
 
   if not falsey(attachments) {
