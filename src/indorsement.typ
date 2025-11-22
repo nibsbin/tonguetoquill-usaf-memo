@@ -16,7 +16,7 @@
   signature_blank_lines: 3,
   attachments: none,
   cc: none,
-  same_page: true,
+  new_page: false,
   date: none,
   content
 ) = {
@@ -39,7 +39,7 @@
     counters.indorsement.update(indorsement_number)
     let indorsement_label = format-indorsement-number(indorsement_number)
 
-    if not same_page {
+    if new_page {
       pagebreak()
       [#indorsement_label to #original_from, #display-date(original_date), #original_subject]
 
