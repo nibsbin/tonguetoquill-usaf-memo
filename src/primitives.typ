@@ -211,9 +211,12 @@
 // PARAGRAPH BODY RENDERING
 // =============================================================================
 
-#let render-paragraph-body(content) = {
+#let render-paragraph-body(content, enable-heading-handling: false) = {
   // Initialize base level counter
   counter("par-counter-0").update(1)
+
+  // State for storing heading text to prepend to next paragraph
+  let pending-heading = state("pending-heading", none)
 
   // Count paragraphs first (AFH 33-337: "A single paragraph is not numbered.")
   let par-count-state = state("body-par-count", 0)
@@ -223,6 +226,8 @@
 
     // Counting pass - render content with minimal processing
     {
+      // Suppress headings during counting - they shouldn't create paragraphs
+      show heading: it => none
       show par: it => {
         par-count-state.update(n => n + 1)
         none
@@ -240,6 +245,14 @@
 
     // Track nesting level for enum/list items
     let enum-level = state("enum-level", 1)
+
+    // Handle heading standardization if enabled
+    if enable-heading-handling {
+      show heading: h => {
+        pending-heading.update(h.body)
+        none
+      }
+    }
 
     // Suppress default enum/list rendering - we'll handle it via nested paragraphs
     show enum.item: _enum_item => {}
@@ -275,17 +288,31 @@
 
     // Intercept paragraphs for numbering
     show par: it => context {
+      // Prepend any pending heading text if heading handling is enabled
+      let paragraph-body = if enable-heading-handling {
+        let heading-text = pending-heading.get()
+        if heading-text != none {
+          pending-heading.update(none)
+          [*#heading-text.* #it.body]
+        } else {
+          it.body
+        }
+      } else {
+        it.body
+      }
+
       // Check if we're in backmatter - if so, don't number paragraphs
       if IN_BACKMATTER_STATE.get() {
-        it
+        // Reconstruct paragraph with potentially modified body
+        par(paragraph-body)
       } else if not should-number {
         // Single paragraph - don't number per AFH 33-337
         blank-line()
-        it
+        par(paragraph-body)
       } else {
         // Multiple paragraphs - apply numbering
         blank-line()
-        let paragraph = memo-par([#it.body])
+        let paragraph = memo-par(paragraph-body)
         // Apply widow/orphan prevention
         set text(costs: (orphan: 0%))
         block(breakable: true)[#paragraph]
