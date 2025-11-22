@@ -254,6 +254,87 @@
 }
 
 // =============================================================================
+// TYPE NORMALIZATION UTILITIES
+// =============================================================================
+
+/// Ensures the input is an array. If already an array, returns as-is.
+/// If not an array, wraps the value in a tuple.
+///
+/// This utility eliminates repetitive `if type(x) == array` checks throughout
+/// the codebase by providing a canonical "normalize to array" function.
+///
+/// - value: Any value to normalize to array form
+/// - Returns: Array containing the value(s)
+///
+/// Examples:
+/// - ensure-array("foo") → ("foo",)
+/// - ensure-array(("a", "b")) → ("a", "b")
+/// - ensure-array(none) → ()
+#let ensure-array(value) = {
+  if value == none {
+    ()
+  } else if type(value) == array {
+    value
+  } else {
+    (value,)
+  }
+}
+
+/// Ensures the input is a string. If already a string, returns as-is.
+/// If an array, joins elements with the specified separator.
+///
+/// This utility eliminates repetitive `if type(x) == array { x.join(...) }`
+/// checks throughout the codebase by providing a canonical "normalize to string"
+/// function.
+///
+/// - value: Any value to normalize to string form
+/// - separator: String to use when joining array elements (default: "\n")
+/// - Returns: String representation of the value
+///
+/// Examples:
+/// - ensure-string("foo") → "foo"
+/// - ensure-string(("a", "b")) → "a\nb"
+/// - ensure-string(("a", "b"), ", ") → "a, b"
+/// - ensure-string(none) → ""
+#let ensure-string(value, separator: "\n") = {
+  if value == none {
+    ""
+  } else if type(value) == array {
+    value.join(separator)
+  } else {
+    str(value)
+  }
+}
+
+/// Extracts the first element from an array, or returns the value if not an array.
+///
+/// This utility eliminates repetitive ternary operators like
+/// `if type(x) == array { x.at(0) } else { x }` by providing a canonical
+/// "first element or self" function.
+///
+/// - value: Any value to extract from
+/// - Returns: First array element if array, otherwise the value itself
+///
+/// Examples:
+/// - first-or-value("foo") → "foo"
+/// - first-or-value(("a", "b")) → "a"
+/// - first-or-value(()) → none
+/// - first-or-value(none) → none
+#let first-or-value(value) = {
+  if value == none {
+    none
+  } else if type(value) == array {
+    if value.len() > 0 {
+      value.at(0)
+    } else {
+      none
+    }
+  } else {
+    value
+  }
+}
+
+// =============================================================================
 // PARAGRAPH NUMBERING UTILITIES
 // =============================================================================
 
