@@ -81,20 +81,17 @@
 
   if not falsey(attachments) {
     calculate-backmatter-spacing(true)
-    let attachment_count = attachments.len()
-    let section_label = if attachment_count == 1 { "Attachment:" } else { str(attachment_count) + " Attachments:" }
-
-    text()[#section_label]
-    linebreak()
-    v(spacing.line, weak: false)
-    enum(..attachments, numbering: "1.")
+    let attachment-count = attachments.len()
+    let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
+    let continuation-label = (
+      (if attachment-count == 1 { "Attachment" } else { str(attachment-count) + " Attachments" })
+        + " (listed on next page):"
+    )
+    render-backmatter-section(attachments, section-label, numbering-style: "1.", continuation-label: continuation-label)
   }
 
   if not falsey(cc) {
     calculate-backmatter-spacing(falsey(attachments))
-    text()[cc:]
-    linebreak()
-    v(spacing.line, weak: false)
-    cc.join("\n")
+    render-backmatter-section(cc, "cc:")
   }
 }
