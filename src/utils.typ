@@ -13,24 +13,15 @@
 // - Indorsement processing and ordinal number generation
 
 // =============================================================================
-// CONFIGURATION CONSTANTS
+// CONFIGURATION IMPORTS
 // =============================================================================
+// Import configuration constants from single source of truth
 
-/// Spacing constants following AFH 33-337 standards.
-/// 
-/// Defines standard measurements used throughout the memorandum template:
-/// - line: Line spacing within paragraphs for proper readability
-/// - line-height: Base height for line calculations
-/// - tab: Tab stop distance for paragraph indentation alignment
-/// - margin: Standard page margin (1 inch on all sides)
-/// 
-/// -> dictionary
-#let spacing = (
-  line:.5em,            // Line spacing within paragraphs
-  line-height:.7em,      //base height for lines
-  tab: 0.5in,             // Tab stop for alignment
-  margin:1in            // Standard page margin
-)
+#import "config.typ": spacing, paragraph-config, counters, CLASSIFICATION_COLORS
+
+// =============================================================================
+// UTILITY FUNCTIONS - CONFIGURATION
+// =============================================================================
 
 /// Configures document-wide typography and spacing settings.
 ///
@@ -73,36 +64,10 @@
 
 /// Creates vertical spacing equivalent to one blank line.
 /// Convenience function for single line spacing.
-/// 
+///
 /// - weak (bool): Whether spacing can be compressed at page breaks
 /// -> content
 #let blank-line(weak:true) = blank-lines(1,weak:weak)
-
-/// Paragraph numbering configuration dictionary.
-/// 
-/// Defines the hierarchical numbering system for AFH 33-337 compliant paragraphs:
-/// - Level 0: 1., 2., 3., etc. (base paragraphs)
-/// - Level 1: a., b., c., etc. (subparagraphs)  
-/// - Level 2: (1), (2), (3), etc. (sub-subparagraphs)
-/// - Level 3: (a), (b), (c), etc. (sub-sub-subparagraphs)
-/// - Level 4+: Underlined numbers/letters for deeper nesting
-/// 
-/// -> dictionary
-#let paragraph-config = (
-  counter-prefix: "par-counter-",
-  numbering-formats: ("1.", "a.", "(1)", "(a)", n => underline(str(n)), n => underline(str(n))),
-  block-indent-state: state("BLOCK_INDENT", true),
-)
-
-/// Global counters for document structure.
-/// 
-/// Maintains state for document-wide numbering systems:
-/// - indorsement: Sequential numbering of indorsements (1st Ind, 2nd Ind, etc.)
-/// 
-/// -> dictionary
-#let counters = (
-  indorsement: counter("indorsement"),
-)
 
 // =============================================================================
 // GENERAL UTILITY FUNCTIONS
@@ -203,13 +168,6 @@
   }
 }
 
-// Colors from: https://security.stackexchange.com/questions/161829/is-there-a-specification-for-the-color-values-representing-information-classific
-#let CLASSIFICATION_COLORS = (
-  "UNCLASSIFIED": rgb(0, 122, 51),    // #007A33 - Forest green
-  "CONFIDENTIAL": rgb(0, 51, 160),    // #0033A0 - Deep blue
-  "SECRET": rgb(200, 16, 46),         // #C8102E - Crimson red
-  "TOP SECRET": rgb(255, 103, 31),    // #FF671F - Burnt orange
-)
 /// Gets the color associated with a classification level.
 /// 
 /// - level (str): Classification level string
