@@ -5,3 +5,4 @@ pdfs/
 tests/
 build.sh
 .gitignore~*
+# Keep README.md and LIMITATIONS.md for package distribution
