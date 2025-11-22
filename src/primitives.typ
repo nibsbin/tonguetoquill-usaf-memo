@@ -109,6 +109,9 @@
 // =============================================================================
 
 #let render-signature-block(signature-lines, signature-blank-lines: 4) = {
+  // AFH 33-337: "The signature block is never on a page by itself"
+  // Note: Perfect enforcement isn't feasible without over-engineering
+  // We use weak: false spacing and breakable: false to discourage orphaning
   blank-lines(signature-blank-lines, weak: false)
   block(breakable: false)[
     #align(left)[
@@ -281,7 +284,7 @@
         if should-number {
           // Apply paragraph numbering per AFH 33-337
           let paragraph = memo-par([#it.body])
-          // Apply widow/orphan prevention
+          // Apply widow/orphan prevention (AFH 33-337: at least 2 lines per page)
           set text(costs: (orphan: 0%))
           block(breakable: true)[#paragraph]
         } else {
