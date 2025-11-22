@@ -8,7 +8,8 @@
   // Standardize heading rendering: all heading levels become bold inline text
   // prepended to the following paragraph, consistent with AFH 33-337 memo format
   show heading: h => {
-    [*#h.body.* ]
+    // Use box() to ensure heading is inline and doesn't create a paragraph element
+    box[*#h.body.* ]
   }
 
   render-paragraph-body(it)
