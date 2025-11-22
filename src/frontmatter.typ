@@ -1,4 +1,11 @@
 // frontmatter.typ: Frontmatter show rule for USAF memorandum
+//
+// This module implements the frontmatter (heading section) of a USAF memorandum
+// per AFH 33-337 Chapter 14 "The Heading Section". It handles:
+// - Page setup with proper margins
+// - Letterhead rendering
+// - Date, MEMORANDUM FOR, FROM, SUBJECT, and References placement
+// - Classification markings in headers/footers
 
 #import "config.typ": *
 #import "utils.typ": *
@@ -34,6 +41,7 @@
   configure(body_font, font-size: font_size, {
     set page(
       paper: "us-letter",
+      // AFH 33-337 §4: "Use 1-inch margins on the left, right and bottom"
       margin: (
         left: spacing.margin,
         right: spacing.margin,
@@ -41,6 +49,9 @@
         bottom: spacing.margin
       ),
       header: context {
+        // AFH 33-337 "Page numbering" §12: "The first page of a memorandum is never numbered.
+        // Number the succeeding pages starting with page 2. Place page numbers 0.5-inch from
+        // the top of the page, flush with the right margin."
         if counter(page).get().first() > 1 {
           place(
             dy: +.5in,
@@ -84,6 +95,8 @@
 
     render-letterhead(letterhead_title, letterhead_caption, letterhead_seal, letterhead_font)
 
+    // AFH 33-337 "Date": "Place the date 1 inch from the right edge, 1.75 inches from the top"
+    // Since we have a 1-inch top margin, we need (1.75in - margin) vertical space
     v(1.75in - spacing.margin)
     context {
       render-date-section(actual_date)
