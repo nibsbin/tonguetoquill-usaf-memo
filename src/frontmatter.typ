@@ -7,8 +7,6 @@
 // - Date, MEMORANDUM FOR, FROM, SUBJECT, and References placement
 // - Classification markings in headers/footers
 
-#import "config.typ": *
-#import "utils.typ": *
 #import "primitives.typ": *
 
 #let frontmatter(

@@ -7,8 +7,6 @@
 // - Courtesy copy (cc:) distribution
 // - Distribution lists
 
-#import "config.typ": *
-#import "utils.typ": *
 #import "primitives.typ": *
 
 #let backmatter(

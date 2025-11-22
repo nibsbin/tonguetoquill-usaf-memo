@@ -5,8 +5,6 @@
 // They follow the format: "1st Ind", "2d Ind", "3d Ind", etc.
 // Each indorsement includes its own body text and signature block.
 
-#import "config.typ": *
-#import "utils.typ": *
 #import "primitives.typ": *
 
 #let indorsement(

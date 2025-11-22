@@ -3,8 +3,6 @@
 // This module implements the mainmatter (body text) of a USAF memorandum per
 // AFH 33-337 Chapter 14 "The Text of the Official Memorandum" (§1-12).
 
-#import "config.typ": *
-#import "utils.typ": *
 #import "primitives.typ": *
 
 /// Mainmatter show rule for USAF memorandum body content.
