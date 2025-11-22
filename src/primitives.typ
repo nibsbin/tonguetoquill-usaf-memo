@@ -1,4 +1,8 @@
 // primitives.typ: Reusable rendering primitives for USAF memorandum sections
+//
+// This module implements the visual rendering functions that produce AFH 33-337
+// compliant formatting for all sections of a USAF memorandum. Each function
+// corresponds to specific placement and formatting requirements from Chapter 14.
 
 #import "config.typ": *
 #import "utils.typ": *
@@ -6,6 +10,9 @@
 // =============================================================================
 // LETTERHEAD RENDERING
 // =============================================================================
+// AFH 33-337 §1: "Use printed letterhead, computer-generated letterhead, or plain bond paper"
+// Letterhead placement is not explicitly specified in AFH 33-337, but follows
+// standard USAF memo formatting conventions
 
 #let render-letterhead(title, caption, letterhead-seal, font) = {
   if type(font) != array {
@@ -53,11 +60,18 @@
 // =============================================================================
 // HEADER SECTIONS
 // =============================================================================
+// AFH 33-337 "The Heading Section" specifies exact placement and format for:
+// - Date: 1 inch from right edge, 1.75 inches from top
+// - MEMORANDUM FOR: Second line below date
+// - FROM: Second line below MEMORANDUM FOR
+// - SUBJECT: Second line below FROM
 
+// AFH 33-337 "Date": "Place the date 1 inch from the right edge, 1.75 inches from the top"
 #let render-date-section(date) = {
   align(right)[#display-date(date)]
 }
 
+// AFH 33-337 "MEMORANDUM FOR": "Place 'MEMORANDUM FOR' on the second line below the date"
 #let render-for-section(recipients, cols) = {
   blank-line()
   grid(
@@ -74,6 +88,8 @@
   )
 }
 
+// AFH 33-337 "FROM:": "Place 'FROM:' in uppercase, flush with the left margin,
+// on the second line below the last line of the MEMORANDUM FOR element"
 #let render-from-section(from-info) = {
   blank-line()
   if type(from-info) == array {
@@ -86,6 +102,8 @@
   )
 }
 
+// AFH 33-337 "SUBJECT:": "In all uppercase letters place 'SUBJECT:', flush with the
+// left margin, on the second line below the last line of the FROM element"
 #let render-subject-section(subject-text) = {
   blank-line()
   grid(
@@ -107,14 +125,20 @@
 // =============================================================================
 // SIGNATURE BLOCK
 // =============================================================================
+// AFH 33-337 "Signature Block": "Start the signature block on the fifth line below
+// the last line of text and 4.5 inches from the left edge of the page"
+// AFH 33-337 "Do not place the signature element on a continuation page by itself"
 
 #let render-signature-block(signature-lines, signature-blank-lines: 4) = {
   // AFH 33-337: "The signature block is never on a page by itself"
   // Note: Perfect enforcement isn't feasible without over-engineering
   // We use weak: false spacing and breakable: false to discourage orphaning
+  // AFH 33-337: "fifth line below" = 4 blank lines between text and signature block
   blank-lines(signature-blank-lines, weak: false)
   block(breakable: false)[
     #align(left)[
+      // AFH 33-337: "4.5 inches from the left edge of the page"
+      // We use (4.5in - margin) because Typst's pad() is relative to the text area, not page edge
       #pad(left: 4.5in - spacing.margin)[
         #text(hyphenate: false)[
           #signature-lines.join(linebreak())
@@ -127,6 +151,11 @@
 // =============================================================================
 // BACKMATTER SECTIONS
 // =============================================================================
+// AFH 33-337 "Attachment or Attachments": "Place 'Attachment:' (for a single attachment)
+// or '# Attachments:' (for two or more attachments) at the left margin, on the third
+// line below the signature element"
+// AFH 33-337 "Courtesy Copy Element": "place 'cc:' flush with the left margin, on the
+// second line below the attachment element"
 
 #let render-backmatter-section(
   content,
@@ -213,6 +242,12 @@
 // =============================================================================
 // PARAGRAPH BODY RENDERING
 // =============================================================================
+// AFH 33-337 "The Text of the Official Memorandum" §1-12 specifies:
+// - Single-space text, double-space between paragraphs
+// - Number and letter each paragraph and subparagraph
+// - "A single paragraph is not numbered" (§2)
+// - First paragraph flush left, never indented
+// - Indent sub-paragraphs to align with first character of parent paragraph text
 
 /// Attempt to detect multiple paragraphs by examining raw markup
 #let detect-multiple-paragraphs(content) = {
@@ -282,13 +317,15 @@
       } else {
         blank-line()
         if should-number {
-          // Apply paragraph numbering per AFH 33-337
+          // Apply paragraph numbering per AFH 33-337 §2
           let paragraph = memo-par([#it.body])
-          // Apply widow/orphan prevention (AFH 33-337: at least 2 lines per page)
+          // AFH 33-337 "Continuation Pages" §11: "Type at least two lines of the text on each page.
+          // Avoid dividing a paragraph of less than four lines between two pages."
+          // We use Typst's orphan cost control to discourage single-line orphans
           set text(costs: (orphan: 0%))
           block(breakable: true)[#paragraph]
         } else {
-          // No numbering (for rare single-paragraph memos)
+          // AFH 33-337 §2: "A single paragraph is not numbered"
           // Return body content wrapped in block (like numbered case, but without numbering)
           set text(costs: (orphan: 0%))
           block(breakable: true)[#it.body]

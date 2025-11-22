@@ -175,6 +175,10 @@
 
 /// Formats a date in standard military format or ISO format depending on input type.
 ///
+/// AFH 33-337 "Date": "Use the 'Day Month Year' or 'DD Mmm YY' format for documents
+/// addressed to a military organization. For civilian addressees, use the 'Month Day, Year' format."
+/// Examples: "15 October 2014" or "15 Oct 14" for military, "October 15, 2014" for civilian
+///
 /// Intelligently handles different date input formats:
 /// - ISO string (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS): Parsed via TOML and displayed in military format
 /// - Non-ISO string: Displayed as-is
@@ -370,6 +374,10 @@
 
 /// Gets the numbering format for a specific paragraph level.
 ///
+/// AFH 33-337 "The Text of the Official Memorandum" §2: "Number and letter each
+/// paragraph and subparagraph" with hierarchical numbering implied by examples.
+/// Standard military format follows the pattern: 1., a., (1), (a), etc.
+///
 /// Returns the appropriate numbering format for AFH 33-337 compliant
 /// hierarchical paragraph numbering:
 /// - Level 0: "1." (1., 2., 3., etc.)
@@ -414,6 +422,11 @@
 }
 
 /// Calculates proper indentation width for a paragraph level.
+///
+/// AFH 33-337 "The Text of the Official Memorandum" §4-5:
+/// - "The first paragraph is never indented; it is numbered and flush left"
+/// - "Indent the first line of sub-paragraphs to align the number or letter with
+///    the first character of its parent level paragraph"
 ///
 /// Computes the exact indentation needed for hierarchical paragraph alignment
 /// by measuring the cumulative width of all ancestor paragraph numbers and their
@@ -498,12 +511,15 @@
 // =============================================================================
 
 /// Converts number to ordinal suffix for indorsements following AFH 33-337 conventions.
-/// 
+///
+/// AFH 33-337 Chapter 14 indorsement examples show "1st Ind", "2d Ind", "3d Ind" format.
+/// Note: Military style uses "2d" and "3d" instead of "2nd" and "3rd" per DoD correspondence standards.
+///
 /// Generates proper ordinal suffixes for indorsement numbering:
 /// - 1st, 2d, 3d, 4th, 5th, etc. (note: military uses "2d" and "3d", not "2nd" and "3rd")
 /// - Special handling for 11th, 12th, 13th (all use "th")
 /// - Follows official military correspondence standards
-/// 
+///
 /// - number (int): The indorsement number (1, 2, 3, etc.)
 /// -> str
 #let get-ordinal-suffix(number) = {

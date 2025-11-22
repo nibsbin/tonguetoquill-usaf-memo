@@ -1,4 +1,11 @@
 // backmatter.typ: Backmatter rendering for USAF memorandum
+//
+// This module implements the backmatter (closing section) of a USAF memorandum per
+// AFH 33-337 Chapter 14 "The Closing Section". It handles:
+// - Signature block placement and formatting
+// - Attachments listing
+// - Courtesy copy (cc:) distribution
+// - Distribution lists
 
 #import "config.typ": *
 #import "utils.typ": *

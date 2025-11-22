@@ -1,4 +1,9 @@
 // indorsement.typ: Indorsement rendering for USAF memorandum
+//
+// This module implements indorsements (endorsements) per AFH 33-337 Chapter 14.
+// Indorsements are used to forward memorandums with additional commentary.
+// They follow the format: "1st Ind", "2d Ind", "3d Ind", etc.
+// Each indorsement includes its own body text and signature block.
 
 #import "config.typ": *
 #import "utils.typ": *

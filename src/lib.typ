@@ -1,7 +1,17 @@
 // lib.typ: Public API for USAF memorandum template
 //
 // This module provides a composable API for creating United States Air Force
-// memorandums that comply with AFH 33-337 "The Tongue and Quill" formatting standards.
+// memorandums that comply with AFH 33-337 "The Tongue and Quill" Chapter 14
+// "The Official Memorandum" formatting standards.
+//
+// AFH 33-337 Chapter 14 specifies exact requirements for:
+// - Margins: 1 inch on all sides (§4)
+// - Font: 12pt Times New Roman (§5)
+// - Date placement: 1.75 inches from top, 1 inch from right (Date section)
+// - Heading elements: MEMORANDUM FOR, FROM, SUBJECT with 2-line spacing
+// - Paragraph numbering: Hierarchical 1., a., (1), (a) format (§2)
+// - Signature block: 4.5 inches from left, never orphaned (Signature Block section)
+// - Backmatter: Attachments, cc:, distribution with specific spacing
 //
 // Key features:
 // - Composable show rules for frontmatter and mainmatter
