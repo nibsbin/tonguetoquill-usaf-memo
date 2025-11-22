@@ -1,4 +1,4 @@
-#import "../src/lib.typ": frontmatter, mainmatter, backmatter, indorsement
+#import "@preview/tonguetoquill-usaf-memo:1.0.0": frontmatter, mainmatter, backmatter, indorsement
 
 #show: frontmatter.with(
   letterhead_title: "DEPARTMENT OF THE AIR FORCE",

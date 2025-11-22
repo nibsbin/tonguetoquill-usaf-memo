@@ -1,4 +1,4 @@
-#import "../src/lib.typ": frontmatter, mainmatter, backmatter
+#import "@preview/tonguetoquill-usaf-memo:1.0.0": frontmatter, mainmatter, backmatter
 
 #show: frontmatter.with(
   letterhead_title: "STARK INDUSTRIES",
