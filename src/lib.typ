@@ -21,6 +21,7 @@
 // )
 //
 // #show: mainmatter
+// // Or for rare single-paragraph memos: #show: mainmatter.with(number-paragraphs: false)
 //
 // Your memo body content here.
 //

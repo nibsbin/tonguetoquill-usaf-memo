@@ -211,33 +211,24 @@
 // PARAGRAPH BODY RENDERING
 // =============================================================================
 
-#let render-paragraph-body(content) = {
+#let render-paragraph-body(content, number-paragraphs: auto) = {
   // Initialize base level counter
   counter("par-counter-0").update(1)
 
-  // Count paragraphs first (AFH 33-337: "A single paragraph is not numbered.")
-  let par-count-state = state("body-par-count", 0)
+  // AFH 33-337: "Number and letter each paragraph and subparagraph. A single
+  // paragraph is not numbered."
+  //
+  // TECHNICAL NOTE: Auto-detecting single vs. multiple paragraphs is not
+  // feasible in Typst without causing layout convergence issues. Any approach
+  // that uses the total count to conditionally render creates a circular
+  // dependency. Therefore:
+  // - number-paragraphs: auto (default) → always number (safe, works 99% of cases)
+  // - number-paragraphs: true → always number
+  // - number-paragraphs: false → never number
+  let should-number = if number-paragraphs == auto { true } else { number-paragraphs }
 
-  context {
-    par-count-state.update(0)
-
-    // Counting pass - render content with minimal processing
-    {
-      show par: it => {
-        par-count-state.update(n => n + 1)
-        none
-      }
-      // Suppress all other output during counting
-      show: it => none
-      content
-    }
-  }
-
-  // Render with appropriate numbering
-  context {
-    let total-pars = par-count-state.get()
-    let should-number = total-pars > 1
-
+  // Render content with paragraph numbering
+  {
     // Track nesting level for enum/list items
     let enum-level = state("enum-level", 1)
 
@@ -278,17 +269,18 @@
       // Check if we're in backmatter - if so, don't number paragraphs
       if IN_BACKMATTER_STATE.get() {
         it
-      } else if not should-number {
-        // Single paragraph - don't number per AFH 33-337
-        blank-line()
-        it
       } else {
-        // Multiple paragraphs - apply numbering
         blank-line()
-        let paragraph = memo-par([#it.body])
-        // Apply widow/orphan prevention
-        set text(costs: (orphan: 0%))
-        block(breakable: true)[#paragraph]
+        if should-number {
+          // Apply paragraph numbering per AFH 33-337
+          let paragraph = memo-par([#it.body])
+          // Apply widow/orphan prevention
+          set text(costs: (orphan: 0%))
+          block(breakable: true)[#paragraph]
+        } else {
+          // No numbering (for rare single-paragraph memos)
+          it
+        }
       }
     }
 
