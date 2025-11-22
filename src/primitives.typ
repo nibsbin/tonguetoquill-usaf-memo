@@ -211,21 +211,28 @@
 // PARAGRAPH BODY RENDERING
 // =============================================================================
 
-#let render-paragraph-body(content, number-paragraphs: auto) = {
+/// Attempt to detect multiple paragraphs by examining raw markup
+#let detect-multiple-paragraphs(content) = {
+  // Try to get string representation of content
+  let content-str = repr(content)
+
+  // Look for patterns that indicate paragraph breaks:
+  // - Double newlines in various forms
+  // - Multiple spaces/newlines that suggest paragraph separation
+  let has-double-newline = content-str.contains("\n\n") or content-str.contains("\\n\\n")
+  let has-parbreak = content-str.contains("parbreak()")
+
+  return has-double-newline or has-parbreak
+}
+
+#let render-paragraph-body(content) = {
   // Initialize base level counter
   counter("par-counter-0").update(1)
 
   // AFH 33-337: "Number and letter each paragraph and subparagraph. A single
   // paragraph is not numbered."
-  //
-  // TECHNICAL NOTE: Auto-detecting single vs. multiple paragraphs is not
-  // feasible in Typst without causing layout convergence issues. Any approach
-  // that uses the total count to conditionally render creates a circular
-  // dependency. Therefore:
-  // - number-paragraphs: auto (default) → always number (safe, works 99% of cases)
-  // - number-paragraphs: true → always number
-  // - number-paragraphs: false → never number
-  let should-number = if number-paragraphs == auto { true } else { number-paragraphs }
+  // Auto-detect by parsing raw markup for paragraph breaks
+  let should-number = detect-multiple-paragraphs(content)
 
   // Render content with paragraph numbering
   {
@@ -279,7 +286,9 @@
           block(breakable: true)[#paragraph]
         } else {
           // No numbering (for rare single-paragraph memos)
-          it
+          // Return body content wrapped in block (like numbered case, but without numbering)
+          set text(costs: (orphan: 0%))
+          block(breakable: true)[#it.body]
         }
       }
     }

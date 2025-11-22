@@ -13,7 +13,6 @@
   cc: none,
   same_page: true,
   date: none,
-  number-paragraphs: auto,
   content
 ) = {
   assert(from != none, message: "from is required")
@@ -69,7 +68,7 @@
 
   // Enable paragraph numbering for indorsement body (same as mainmatter)
   IN_BACKMATTER_STATE.update(false)
-  render-paragraph-body(content, number-paragraphs: number-paragraphs)
+  render-paragraph-body(content)
 
   // Disable paragraph numbering for indorsement backmatter sections
   IN_BACKMATTER_STATE.update(true)

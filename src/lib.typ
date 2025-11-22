@@ -21,9 +21,9 @@
 // )
 //
 // #show: mainmatter
-// // Or for rare single-paragraph memos: #show: mainmatter.with(number-paragraphs: false)
 //
 // Your memo body content here.
+// (Paragraphs are automatically numbered per AFH 33-337)
 //
 // #backmatter(
 //   signature_block: ("NAME, Rank, USAF", "Title"),

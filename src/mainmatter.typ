@@ -7,14 +7,11 @@
 /// Mainmatter show rule for USAF memorandum body content.
 ///
 /// Applies AFH 33-337 paragraph numbering and formatting to the main body
-/// of the memorandum.
+/// of the memorandum. Automatically detects single vs. multiple paragraphs
+/// to comply with AFH 33-337 numbering requirements.
 ///
-/// - number-paragraphs (auto | bool): Controls paragraph numbering behavior.
-///   - auto (default): Always number paragraphs (appropriate for 99% of memos)
-///   - true: Always number paragraphs
-///   - false: Never number paragraphs (for rare single-paragraph memos)
 /// - content (content): The body content to render
 /// -> content
-#let mainmatter(it, number-paragraphs: auto) = {
-  render-paragraph-body(it, number-paragraphs: number-paragraphs)
+#let mainmatter(it) = {
+  render-paragraph-body(it)
 }
