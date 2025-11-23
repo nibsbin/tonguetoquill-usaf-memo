@@ -17,7 +17,7 @@
 // =============================================================================
 // Import configuration constants from single source of truth
 
-#import "config.typ": spacing, paragraph-config, counters, CLASSIFICATION_COLORS
+#import "config.typ": spacing, paragraph-config, counters, CLASSIFICATION_COLORS, RENDER_CONTEXT
 
 // =============================================================================
 // UTILITY FUNCTIONS - CONFIGURATION
@@ -422,26 +422,82 @@
   total-indent
 }
 
-/// Global state for tracking current paragraph level.
-/// Used internally by the paragraph numbering system to maintain proper nesting.
-/// -> state
-#let PAR_LEVEL_STATE = state("PAR_LEVEL", 0)
+// =============================================================================
+// RENDERING CONTEXT HELPERS
+// =============================================================================
+// CASCADE #5: Helper functions for unified rendering context access
 
-/// Global state for tracking whether we're in backmatter.
-/// Used to disable paragraph numbering in backmatter sections.
-/// -> state
-#let IN_BACKMATTER_STATE = state("IN_BACKMATTER", false)
+/// Returns the current rendering context.
+/// -> dictionary
+#let get-render-context() = {
+  RENDER_CONTEXT.get()
+}
+
+/// Updates the rendering context using an updater function.
+/// - updater (function): Function that takes current context and returns new context
+/// -> content
+#let update-render-context(updater) = {
+  RENDER_CONTEXT.update(updater)
+}
+
+/// Checks if currently rendering backmatter.
+/// -> bool
+#let in-backmatter() = {
+  RENDER_CONTEXT.get().in-backmatter
+}
+
+/// Returns the current paragraph nesting level.
+/// -> int
+#let get-par-level() = {
+  RENDER_CONTEXT.get().par-level
+}
+
+/// Sets the current paragraph nesting level.
+/// - level (int): Paragraph nesting level to set
+/// -> content
+#let set-par-level(level) = {
+  RENDER_CONTEXT.update(ctx => {
+    let new-ctx = ctx
+    new-ctx.par-level = level
+    new-ctx
+  })
+}
+
+/// Returns the current enum nesting level.
+/// -> int
+#let get-enum-level() = {
+  RENDER_CONTEXT.get().enum-level
+}
+
+/// Updates the enum nesting level.
+/// - level (int): New enum nesting level
+/// -> content
+#let set-enum-level(level) = {
+  RENDER_CONTEXT.update(ctx => {
+    let new-ctx = ctx
+    new-ctx.enum-level = level
+    new-ctx
+  })
+}
+
+// CASCADE #5: Old state objects removed - now using unified RENDER_CONTEXT
+// Previously: PAR_LEVEL_STATE, IN_BACKMATTER_STATE
 
 /// Sets the current paragraph level state.
-/// 
+///
 /// Internal function used by the paragraph numbering system to track
 /// the current nesting level for proper indentation and numbering.
-/// 
+///
 /// - level (int): Paragraph nesting level to set
 /// -> content
 #let SET_LEVEL(level) = {
   context {
-    PAR_LEVEL_STATE.update(level)
+    // CASCADE #5: Update unified context
+    RENDER_CONTEXT.update(ctx => {
+      let new-ctx = ctx
+      new-ctx.par-level = level
+      new-ctx
+    })
   }
 }
 
@@ -460,7 +516,8 @@
 /// - content (content): Paragraph content to format
 /// -> content
 #let memo-par(content) = context {
-  let level = PAR_LEVEL_STATE.get()
+  // CASCADE #5: Read from unified context
+  let level = RENDER_CONTEXT.get().par-level
   let paragraph-number = generate-paragraph-number(level, increment: true)
   // Reset child level counter
   counter(paragraph-config.counter-prefix + str(level + 1)).update(1)

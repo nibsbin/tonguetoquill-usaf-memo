@@ -19,8 +19,12 @@
 ) = {
   assert(signature_block != none, message: "signature_block is required")
 
-  // Set backmatter state to disable paragraph numbering
-  IN_BACKMATTER_STATE.update(true)
+  // CASCADE #5: Set backmatter state in unified context to disable paragraph numbering
+  RENDER_CONTEXT.update(ctx => {
+    let new-ctx = ctx
+    new-ctx.in-backmatter = true
+    new-ctx
+  })
 
   // Render backmatter sections without paragraph numbering
   render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)

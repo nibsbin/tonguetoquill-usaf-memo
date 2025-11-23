@@ -89,7 +89,12 @@
       }
     )
 
-    paragraph-config.block-indent-state.update(false)
+    // CASCADE #5: Update block-indent in unified context
+    RENDER_CONTEXT.update(ctx => {
+      let new-ctx = ctx
+      new-ctx.block-indent = false
+      new-ctx
+    })
 
     render-letterhead(letterhead_title, letterhead_caption, letterhead_seal, letterhead_font)
 

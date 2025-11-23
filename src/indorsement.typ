@@ -69,12 +69,20 @@
 
   blank-line()
 
-  // Enable paragraph numbering for indorsement body (same as mainmatter)
-  IN_BACKMATTER_STATE.update(false)
+  // CASCADE #5: Enable paragraph numbering for indorsement body (same as mainmatter)
+  RENDER_CONTEXT.update(ctx => {
+    let new-ctx = ctx
+    new-ctx.in-backmatter = false
+    new-ctx
+  })
   render-paragraph-body(content)
 
-  // Disable paragraph numbering for indorsement backmatter sections
-  IN_BACKMATTER_STATE.update(true)
+  // CASCADE #5: Disable paragraph numbering for indorsement backmatter sections
+  RENDER_CONTEXT.update(ctx => {
+    let new-ctx = ctx
+    new-ctx.in-backmatter = true
+    new-ctx
+  })
   render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)
 
   if not falsey(attachments) {

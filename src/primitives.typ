@@ -259,8 +259,8 @@
 
   // Render content with paragraph numbering
   {
-    // Track nesting level for enum/list items
-    let enum-level = state("enum-level", 1)
+    // CASCADE #5: enum-level now tracked in unified RENDER_CONTEXT
+    // No local state declaration needed
 
     // Suppress default enum/list rendering - we'll handle it via nested paragraphs
     show enum.item: _enum_item => {}
@@ -268,8 +268,13 @@
 
     // Intercept enum items to set nesting level
     show enum.item: _enum_item => context {
-      enum-level.update(l => l + 1)
-      SET_LEVEL(enum-level.get())
+      // CASCADE #5: Update enum-level in unified context
+      RENDER_CONTEXT.update(ctx => {
+        let new-ctx = ctx
+        new-ctx.enum-level = ctx.enum-level + 1
+        new-ctx
+      })
+      SET_LEVEL(RENDER_CONTEXT.get().enum-level)
 
       // Don't render the enum marker - render body content as nested paragraphs instead
       v(0em, weak: true)
@@ -277,13 +282,22 @@
 
       // Reset level after nested content
       SET_LEVEL(0)
-      enum-level.update(l => l - 1)
+      RENDER_CONTEXT.update(ctx => {
+        let new-ctx = ctx
+        new-ctx.enum-level = ctx.enum-level - 1
+        new-ctx
+      })
     }
 
     // Intercept list items to set nesting level
     show list.item: list_item => context {
-      enum-level.update(l => l + 1)
-      SET_LEVEL(enum-level.get())
+      // CASCADE #5: Update enum-level in unified context
+      RENDER_CONTEXT.update(ctx => {
+        let new-ctx = ctx
+        new-ctx.enum-level = ctx.enum-level + 1
+        new-ctx
+      })
+      SET_LEVEL(RENDER_CONTEXT.get().enum-level)
 
       // Don't render the list marker - render body content as nested paragraphs instead
       v(0em, weak: true)
@@ -291,13 +305,17 @@
 
       // Reset level after nested content
       SET_LEVEL(0)
-      enum-level.update(l => l - 1)
+      RENDER_CONTEXT.update(ctx => {
+        let new-ctx = ctx
+        new-ctx.enum-level = ctx.enum-level - 1
+        new-ctx
+      })
     }
 
     // Intercept paragraphs for numbering
     show par: it => context {
-      // Check if we're in backmatter - if so, don't number paragraphs
-      if IN_BACKMATTER_STATE.get() {
+      // CASCADE #5: Check backmatter status from unified context
+      if RENDER_CONTEXT.get().in-backmatter {
         it
       } else {
         blank-line()

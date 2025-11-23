@@ -36,8 +36,27 @@
   // AFH 33-337 §2: Hierarchical paragraph numbering format
   // Level 0: 1., 2., 3. | Level 1: a., b., c. | Level 2: (1), (2), (3) | Level 3: (a), (b), (c)
   numbering-formats: ("1.", "a.", "(1)", "(a)", n => underline(str(n)), n => underline(str(n))),
-  block-indent-state: state("BLOCK_INDENT", true),
+  // CASCADE #5: block-indent-state moved to unified RENDER_CONTEXT
 )
+
+// =============================================================================
+// RENDERING CONTEXT STATE
+// =============================================================================
+// Unified rendering context tracking all aspects of document structure position.
+// CASCADE #5: Replaces 4 independent state objects with single unified context.
+//
+// Fields:
+// - in-backmatter (bool): Whether currently rendering backmatter (disables paragraph numbering)
+// - par-level (int): Current paragraph nesting depth for hierarchical numbering
+// - block-indent (bool): Whether block indentation is enabled
+// - enum-level (int): Current enum/list nesting depth
+
+#let RENDER_CONTEXT = state("RENDER_CONTEXT", (
+  in-backmatter: false,
+  par-level: 0,
+  block-indent: true,
+  enum-level: 1,
+))
 
 // =============================================================================
 // COUNTERS
