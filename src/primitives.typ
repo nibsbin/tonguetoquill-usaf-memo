@@ -241,12 +241,15 @@
   let content-str = repr(content)
 
   // Look for patterns that indicate paragraph breaks:
-  // - Double newlines in various forms
-  // - Multiple spaces/newlines that suggest paragraph separation
-  let has-double-newline = content-str.contains("\n\n") or content-str.contains("\\n\\n")
+  // - Two newlines followed by non-whitespace (more robust than just "\n\n")
+  // - parbreak() function calls
+  let has-paragraph-break = (
+    content-str.matches(regex("\\n\\n\\S")).len() > 0 or
+    content-str.matches(regex("\n\n\\S")).len() > 0
+  )
   let has-parbreak = content-str.contains("parbreak()")
 
-  return has-double-newline or has-parbreak
+  return has-paragraph-break or has-parbreak
 }
 
 #let render-paragraph-body(content) = {
