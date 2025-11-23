@@ -69,21 +69,29 @@ cd tonguetoquill-usaf-memo
 Import the core functions for creating memorandums:
 
 ```typst
-#import "@preview/tonguetoquill-usaf-memo:0.2.0": official-memorandum, indorsement
+#import "@preview/tonguetoquill-usaf-memo:1.0.0": frontmatter, mainmatter, backmatter, indorsement
 ```
 
 **Minimal Example:**
 ```typst
-#official-memorandum(
+#show: frontmatter.with(
   subject: "Your Subject Here",
-)[
+  memo_for: ("OFFICE/SYMBOL",),
+  memo_from: ("YOUR/SYMBOL",),
+)
+
+#show: mainmatter
+
 Your memorandum content goes here.
 
 - Use plus signs for numbered subparagraphs.
   - Indent with spaces for deeper nesting.
 
 Continue with regular paragraphs.
-]
+
+#backmatter(
+  signature_block: ("NAME, Rank, USAF", "Title"),
+)
 ```
 
 See the [API Reference](#api-reference) section below for complete parameter documentation.
@@ -130,62 +138,107 @@ The template automatically manages page breaks for closing sections according to
 
 ## API Reference
 
+The template uses a **composable show rules architecture** where you apply each section in order: frontmatter → mainmatter → backmatter → indorsements.
+
 ### Core Functions
 
-#### `official-memorandum(...)`
+#### `frontmatter(...)`
 
-Creates an official memorandum following AFH 33-337 "The Tongue and Quill" standards.
+Configures the memorandum header and establishes document-wide settings. Applied as a show rule.
 
 **Required Parameters:**
 - `subject`: Memorandum subject line (must be descriptive and in title case)
-- `body`: Main memorandum content (use enums for numbered paragraphs)
+- `memo_for`: Recipients (string or array of office symbols)
+- `memo_from`: Sender information (string or array with office symbol, organization, address)
 
 **Key Parameters:**
 ```typst
-official-memorandum(
-  letterhead-title: "DEPARTMENT OF THE AIR FORCE",           // Organization title
-  letterhead-caption: "[YOUR SQUADRON/UNIT NAME]",           // Sub-organization
-  letterhead-seal: none,                                     // Organization seal image
+#show: frontmatter.with(
+  letterhead_title: "DEPARTMENT OF THE AIR FORCE",           // Organization title
+  letterhead_caption: "[YOUR SQUADRON/UNIT NAME]",           // Sub-organization
+  letterhead_seal: none,                                     // Organization seal image
   date: none,                                                // Date (defaults to today)
-  memo-for: ("[OFFICE1]", "[OFFICE2]"),                     // Recipients array
-  memo-from: ("[YOUR/SYMBOL]", "[Organization]", "[Address]"), // Sender info array
+  memo_for: ("[OFFICE1]", "[OFFICE2]"),                     // Recipients array
+  memo_from: ("[YOUR/SYMBOL]", "[Organization]", "[Address]"), // Sender info array
   subject: "[Your Subject in Title Case - Required]",        // Subject line
   references: ("AFI 123-45", "AFMAN 67-89"),                // Optional references
-  signature-block: ("[NAME, Rank, USAF]", "[Title]"),       // Signature lines
-  attachments: ("Attachment 1", "Attachment 2"),             // Optional attachments
-  cc: ("[OFFICE/SYMBOL]",),                                 // Courtesy copies
-  distribution: ("[OFFICE]",),                              // Distribution list
-  indorsements: (indorsement(...),),                        // Optional indorsements
-  
+
   // Styling options
-  letterhead-font: ("Copperplate CC",),                     // Letterhead fonts
-  body-font: ("times new roman", "NimbusRomNo9L"),        // Body fonts
-  memo-for-cols: 3,                                         // Recipient columns
-  paragraph-block-indent: false,                            // Paragraph indentation
-  leading-backmatter-pagebreak: false,                      // Force page break
-  
-  // Document body content goes here
-)[Your memorandum content with enum lists for numbered paragraphs]
+  letterhead_font: ("Copperplate CC",),                     // Letterhead fonts
+  body_font: ("times new roman", "NimbusRomNo9L"),          // Body fonts
+  memo_for_cols: 3,                                         // Recipient columns
+)
 ```
+
+**Responsibilities:**
+- Sets page layout with 1-inch margins
+- Renders letterhead with optional seal
+- Renders date, MEMORANDUM FOR, FROM, SUBJECT, and references sections
+- Establishes typography and spacing rules
+- Stores configuration for downstream sections
+
+#### `mainmatter`
+
+Processes the memorandum body content with automatic paragraph numbering. Applied as a show rule with no parameters.
+
+```typst
+#show: mainmatter
+```
+
+**Responsibilities:**
+- Applies AFH 33-337 hierarchical paragraph numbering (1., a., (1), (a))
+- Handles proper indentation and spacing
+- Auto-detects single vs. multiple paragraphs
+- Inherits configuration from frontmatter
+
+#### `backmatter(...)`
+
+Renders the closing section including signature block and optional attachments/cc/distribution. Called as a function (not a show rule).
+
+**Key Parameters:**
+```typst
+#backmatter(
+  signature_block: ("[NAME, Rank, USAF]", "[Title]"),      // Signature lines (required)
+  signature_blank_lines: 4,                                // Blank lines above signature
+  attachments: ("Attachment 1", "Attachment 2"),            // Optional attachments
+  cc: ("[OFFICE/SYMBOL]",),                                // Courtesy copies
+  distribution: ("[OFFICE]",),                             // Distribution list
+  leading_pagebreak: false,                                // Force page break before backmatter
+)
+```
+
+**Responsibilities:**
+- Renders signature block with orphan prevention
+- Renders attachments section with smart page breaks
+- Renders cc section
+- Renders distribution list
 
 #### `indorsement(...)`
 
-Creates an indorsement for forwarding or commenting on a memorandum.
+Creates an indorsement for forwarding or commenting on a memorandum. Called as a function with content body.
 
 ```typst
-indorsement(
-  ind-from: "ORG/SYMBOL",                                   // Sending organization
-  ind-for: "RECIPIENT/SYMBOL",                              // Recipient organization
-  signature-block: ("[NAME, Rank, USAF]", "[Title]"),      // Signature lines
-  attachments: none,                                         // Optional attachments
+#indorsement(
+  from: "ORG/SYMBOL",                                       // Sending organization
+  to: "RECIPIENT/SYMBOL",                                   // Recipient organization
+  signature_block: ("[NAME, Rank, USAF]", "[Title]"),      // Signature lines
+  signature_blank_lines: 4,                                // Blank lines above signature
+  attachments: none,                                        // Optional attachments
   cc: none,                                                 // Courtesy copies
-  leading-pagebreak: false,                                 // Force page break
-  new-page: false,                                          // New page format
-  date: datetime.today(),                       // Indorsement date
-  
-  // Indorsement body content
-)[Your indorsement content]
+  leading_pagebreak: false,                                // Force page break before indorsement
+  new_page: false,                                         // New page format
+  date: datetime.today(),                                  // Indorsement date
+)[
+  Your indorsement content here.
+]
 ```
+
+**Responsibilities:**
+- Auto-numbers indorsements (1st Ind, 2d Ind, 3d Ind, etc.)
+- Renders indorsement header with from/to
+- Processes indorsement body content
+- Renders signature block and backmatter sections
+- References original memo metadata
 
 ## Development
 
@@ -196,14 +249,26 @@ Contributions are welcome! Please explore `src/` for core functions and `templat
 ### Project Structure
 
 ```
-├── src/
-│   ├── lib.typ          # Main template functions
-│   └── utils.typ        # Utility functions and helpers
-├── template/
-│   ├── *.typ           # Example template files
-│   └── assets/         # Fonts and images
-├── pdfs/               # Compiled example outputs
-└── README.md           # This documentation
+├── src/                     # Core implementation
+│   ├── lib.typ              # Public API exports
+│   ├── config.typ           # Configuration constants
+│   ├── frontmatter.typ      # Header section show rule
+│   ├── mainmatter.typ       # Body content show rule
+│   ├── backmatter.typ       # Closing section rendering
+│   ├── indorsement.typ      # Indorsement rendering
+│   ├── primitives.typ       # Reusable rendering functions
+│   └── utils.typ            # Utility functions and helpers
+├── template/                # Example templates
+│   ├── usaf-template.typ    # Standard Air Force memo
+│   ├── ussf-template.typ    # Space Force variant
+│   ├── starkindustries.typ  # Custom organization example
+│   └── assets/              # Fonts and images
+├── prose/                   # Design documentation
+│   ├── designs/             # Active design documents
+│   ├── plans/               # Implementation plans
+│   └── archive/             # Archived designs and analyses
+├── pdfs/                    # Compiled example outputs
+└── README.md                # This documentation
 ```
 
 ## License
