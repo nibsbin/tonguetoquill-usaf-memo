@@ -15,17 +15,8 @@
 // standard USAF memo formatting conventions
 
 #let render-letterhead(title, caption, letterhead-seal, font) = {
-  if type(font) != array {
-    if type(font) != str {
-      font = ()
-    } else {
-      font = (font,)
-    }
-  }
-
-  if type(caption) == array {
-    caption = caption.join("\n")
-  }
+  font = ensure-array(font)
+  caption = ensure-string(caption)
 
   place(
     dy: 0.625in - spacing.margin,
@@ -92,9 +83,7 @@
 // on the second line below the last line of the MEMORANDUM FOR element"
 #let render-from-section(from-info) = {
   blank-line()
-  if type(from-info) == array {
-    from-info = from-info.join("\n")
-  }
+  from-info = ensure-string(from-info)
 
   grid(
     columns: (auto, auto, 1fr),
@@ -168,14 +157,10 @@
     text()[#section-label]
     linebreak()
     if numbering-style != none {
-      let items = if type(content) == array { content } else { (content,) }
+      let items = ensure-array(content)
       enum(..items, numbering: numbering-style)
     } else {
-      if type(content) == array {
-        content.join("\n")
-      } else {
-        content
-      }
+      ensure-string(content)
     }
   }
 

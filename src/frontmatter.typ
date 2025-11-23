@@ -107,7 +107,7 @@
     metadata((
       subject: subject,
       original_date: actual_date,
-      original_from: if type(memo_from) == array { memo_from.at(0) } else { memo_from },
+      original_from: first-or-value(memo_from),
       body_font: body_font,
       font_size: font_size,
     ))

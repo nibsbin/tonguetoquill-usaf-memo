@@ -23,7 +23,7 @@
   assert(signature_block != none, message: "signature_block is required")
 
   let actual_date = if date == none { datetime.today() } else { date }
-  let ind_from = if type(from) == array { from.at(0) } else { from }
+  let ind_from = first-or-value(from)
   let ind_for = to
 
   context {
