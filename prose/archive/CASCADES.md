@@ -4,6 +4,15 @@
 **Codebase:** USAF Memorandum Template (`src/`)
 **Methodology:** Simplification Cascades — "Find one insight that eliminates multiple components"
 
+---
+
+**⚠️ ARCHIVED:** This analysis is complete. Cascades #1-4 have been implemented.
+- Remaining opportunities (Cascades #5-6 and smaller items) are documented inline in source code
+- See git history for implementation PRs
+- Archived: 2025-11-23
+
+---
+
 ## Executive Summary
 
 This analysis identifies **6 major simplification cascades** where recognizing "these are all the same thing" would eliminate significant complexity:
@@ -16,10 +25,11 @@ The core principle: When the same concept is implemented multiple ways, find the
 
 ---
 
-## CASCADE #1: Configuration Duplication
+## CASCADE #1: Configuration Duplication ✅ IMPLEMENTED
 
 **Impact:** Eliminate ~60 lines | Unify 4 constants → 1 source
 **Risk:** Zero | **Priority:** Highest
+**Status:** Completed (see prose/plans/completed/cascade-1-config-deduplication.md)
 
 ### The Pattern
 
@@ -62,10 +72,11 @@ Grep for usage of these constants in `utils.typ` — all references work identic
 
 ---
 
-## CASCADE #2: Backmatter Rendering Duplication
+## CASCADE #2: Backmatter Rendering Duplication ✅ IMPLEMENTED
 
 **Impact:** Eliminate ~40 lines | Unify 3 implementations → 1
 **Risk:** Low | **Priority:** High
+**Status:** Completed (see prose/plans/completed/cascade-2-backmatter-unification.md)
 
 ### The Pattern
 
@@ -112,10 +123,11 @@ The shared abstraction already exists in `primitives.typ:204-240` — it just ne
 
 ---
 
-## CASCADE #3: Import Chain Proliferation
+## CASCADE #3: Import Chain Proliferation ✅ IMPLEMENTED
 
 **Impact:** Reduce import statements from 15 to 5
 **Risk:** Low | **Priority:** Medium (do after CASCADE #1)
+**Status:** Completed (see prose/plans/completed/implement-import-chain-simplification.md)
 
 ### The Pattern
 
@@ -173,10 +185,11 @@ This matches common architectural patterns: consumers depend on the highest-leve
 
 ---
 
-## CASCADE #4: Type Normalization Boilerplate
+## CASCADE #4: Type Normalization Boilerplate ✅ IMPLEMENTED
 
 **Impact:** Replace ~30 lines with 2 reusable functions
 **Risk:** Very Low | **Priority:** Medium
+**Status:** Completed (see prose/plans/completed/cascade-4-type-normalization.md)
 
 ### The Pattern
 
@@ -260,10 +273,11 @@ Each occurrence is a candidate for replacement.
 
 ---
 
-## CASCADE #5: State Management Sprawl
+## CASCADE #5: State Management Sprawl ❌ NOT PURSUING
 
 **Impact:** Replace 4 state objects with 1 unified context
 **Risk:** Medium (most invasive) | **Priority:** Low (do last)
+**Status:** Not pursuing - overengineered solution, current approach is clearer
 
 ### The Pattern
 
@@ -321,10 +335,11 @@ This is the most invasive refactor. Changes touch many callsites. Do this LAST, 
 
 ---
 
-## CASCADE #6: Vertical Spacing Inconsistency
+## CASCADE #6: Vertical Spacing Inconsistency ✅ LARGELY COMPLETE
 
 **Impact:** Standardize ~15 spacing calls
 **Risk:** Very Low | **Priority:** Medium
+**Status:** Largely implemented - abstraction exists and is used consistently in most places
 
 ### The Pattern
 
@@ -380,7 +395,9 @@ Evaluate each occurrence: spacing (use abstraction) vs. semantic markup (keep as
 
 ## Smaller Opportunities (Honorable Mentions)
 
-### A. Date Handling Complexity
+**Note:** These opportunities have been documented as minimal inline comments in the source code for future consideration.
+
+### A. Date Handling Complexity ✅ DOCUMENTED
 
 **Location:** utils.typ:189-204 (`display-date()`)
 
@@ -391,10 +408,11 @@ Complex branching for string vs datetime, ISO detection, TOML parsing workaround
 This may be minimal given Typst's type system constraints. The TOML parsing trick is clever but fragile. Worth monitoring if Typst adds native ISO date parsing.
 
 **Action:** Monitor, not urgent.
+**Status:** Inline comment added at utils.typ:154 (see CASCADES.md §A)
 
 ---
 
-### B. Ordinal Suffix Logic
+### B. Ordinal Suffix Logic ✅ DOCUMENTED
 
 **Location:** utils.typ:525-540 (`get-ordinal-suffix()`)
 
@@ -416,10 +434,11 @@ let suffix-map = (11: "th", 12: "th", 13: "th", 1: "st", 2: "d", 3: "d", default
 ```
 
 **Action:** Nice-to-have, not urgent. Current implementation is correct and self-contained.
+**Status:** Inline comment added at utils.typ:492 (see CASCADES.md §B)
 
 ---
 
-### C. Paragraph Detection Heuristic
+### C. Paragraph Detection Heuristic ✅ DOCUMENTED
 
 **Location:** primitives.typ:253-264 (`detect-multiple-paragraphs()`)
 
@@ -438,6 +457,7 @@ Inherently fragile — depends on internal string representation of content. If 
 **Risk:** Medium. This is a heuristic that might fail on edge cases.
 
 **Action:** Explore if Typst provides structural content introspection (inspect content tree rather than string representation). If not, document the limitation and fragility.
+**Status:** Inline comment added at primitives.typ:238 (see CASCADES.md §C)
 
 ---
 

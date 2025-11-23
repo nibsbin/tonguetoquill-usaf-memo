@@ -235,6 +235,7 @@
 // - Indent sub-paragraphs to align with first character of parent paragraph text
 
 /// Attempt to detect multiple paragraphs by examining raw markup
+// NOTE: Fragile heuristic—depends on repr() format (see CASCADES.md §C). Consider structural introspection.
 #let detect-multiple-paragraphs(content) = {
   // Try to get string representation of content
   let content-str = repr(content)

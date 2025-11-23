@@ -151,6 +151,7 @@
 ///
 /// - date (str|datetime): Date to format for display
 /// -> str
+// NOTE: Consider simplification if Typst adds native ISO date parsing (see CASCADES.md §A)
 #let display-date(date) = {
   if type(date) == str {
     if is-iso-date-string(date) {
@@ -488,6 +489,7 @@
 ///
 /// - number (int): The indorsement number (1, 2, 3, etc.)
 /// -> str
+// NOTE: Could be table-driven vs algorithmic (see CASCADES.md §B) — current approach is correct
 #let get-ordinal-suffix(number) = {
   let last-digit = calc.rem(number, 10)
   let last-two-digits = calc.rem(number, 100)
