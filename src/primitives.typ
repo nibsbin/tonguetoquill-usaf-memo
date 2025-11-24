@@ -295,6 +295,11 @@
       enum-level.update(l => l - 1)
     }
 
+    // Intercept headings to render as bold paragraph headings
+    // Headings are rendered as the first sentence of a paragraph in bold,
+    // followed by a period and space
+    show heading: it => [*#it.body.* ]
+
     // Intercept paragraphs for numbering
     show par: it => context {
       // Check if we're in backmatter - if so, don't number paragraphs
