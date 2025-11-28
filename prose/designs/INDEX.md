@@ -17,4 +17,4 @@ All designs have been implemented and archived to `../archive/designs/`:
 | [Import Chain Simplification](../archive/designs/import-chain-simplification.md) | High-level imports primitives only |
 | [Type Normalization](../archive/designs/type-normalization.md) | ensure-array/ensure-string utilities |
 
-See [../archive/CASCADES.md](../archive/CASCADES.md) for the simplification cascades overview.
+See [CASCADES.md](../archive/CASCADES.md) for the simplification cascades overview.
