@@ -1,44 +1,41 @@
 # Archive
 
-This directory contains completed work that has been implemented and no longer requires active attention.
+Completed work that has been implemented. Historical reference only.
 
 ## Contents
 
 ### CASCADES.md
 
-The complete simplification cascades analysis from 2025-11-22.
+High-level summary of the simplification cascades analysis (2025-11-22).
 
-**Status:**
-- ✅ CASCADE #1: Configuration Duplication - Implemented
-- ✅ CASCADE #2: Backmatter Rendering Duplication - Implemented
-- ✅ CASCADE #3: Import Chain Proliferation - Implemented
-- ✅ CASCADE #4: Type Normalization Boilerplate - Implemented
-- ⏸️ CASCADE #5: State Management Sprawl - Deferred (most invasive, benefits not justified)
-- ⏸️ CASCADE #6: Vertical Spacing Inconsistency - Deferred (can be done incrementally)
+**Implemented:**
+- ✅ CASCADE #1: Configuration Single Source of Truth
+- ✅ CASCADE #2: Backmatter Rendering Unification
+- ✅ CASCADE #3: Import Chain Simplification
+- ✅ CASCADE #4: Type Normalization
 
-**Smaller Opportunities:**
-- All smaller optimization opportunities documented as inline comments in source code
-- See CASCADES.md sections A-C for details
+**Deferred:**
+- ⏸️ CASCADE #5: State Management Sprawl
+- ⏸️ CASCADE #6: Vertical Spacing Inconsistency
 
 ### designs/
 
-Completed design documents that have been implemented:
+Archived design documents:
 
-- `configuration-single-source.md` - Single source of truth for configuration
-- `backmatter-rendering-unification.md` - Unified backmatter rendering
-- `import-chain-simplification.md` - Simplified import dependencies
-- `type-normalization.md` - Canonical type normalization utilities
-
-See `../plans/completed/` for the implementation plans of these designs.
+| Design | Purpose |
+|--------|---------|
+| [composable-show-rules.md](designs/composable-show-rules.md) | Show rule architecture |
+| [paragraph-numbering.md](designs/paragraph-numbering.md) | AFH 33-337 numbering |
+| [configuration-single-source.md](designs/configuration-single-source.md) | Config centralization |
+| [backmatter-rendering-unification.md](designs/backmatter-rendering-unification.md) | Unified backmatter |
+| [import-chain-simplification.md](designs/import-chain-simplification.md) | Layered imports |
+| [type-normalization.md](designs/type-normalization.md) | Normalization utilities |
 
 ## Archive Policy
 
-Documents are archived when:
-1. The work is fully implemented and merged
-2. No further active development is planned
-3. The design/analysis is complete and serves as historical reference
+Documents archived when:
+1. Work is fully implemented and merged
+2. No further active development planned
+3. Design serves as historical reference
 
-Archived documents remain valuable for:
-- Understanding design decisions
-- Historical context for future refactoring
-- Examples of the simplification cascade methodology
+Archived documents remain valuable for understanding design decisions and historical context.
