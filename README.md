@@ -5,7 +5,11 @@
 [![typst-universe](https://img.shields.io/badge/Typst-Universe-aqua)](https://github.com/nibsbin/tonguetoquill-usaf-memo)
 [![nibs](https://img.shields.io/badge/author-Nibs-white?logo=github)](https://github.com/nibsbin)
 
-A comprehensive Typst template for creating official United States Air Force memorandums that comply with AFH 33-337 "The Tongue and Quill" formatting standards.
+> Less formatting. More lethality.
+
+A comprehensive Typst template for creating official United States Air Force memorandums that comply with AFH 33-337 "The Tongue and Quill" formatting standards. 
+
+Maintained by [tonguetoquill.com](https://www.tonguetoquill.com).
 
 ## Features
 
