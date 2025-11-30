@@ -11,7 +11,7 @@
   from: none,
   to: none,
   signature_block: none,
-  signature_blank_lines: 3,
+  signature_blank_lines: 4,
   attachments: none,
   cc: none,
   new_page: false,
