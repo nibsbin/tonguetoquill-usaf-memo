@@ -77,22 +77,22 @@ The example of this memorandum applies to many official memorandums that Airmen 
   ),
 )
 
-#show:indorsement.with(
+#indorsement(
   from: "ORG/SYMBOL [Office symbol for 1st Indorsement Official]",
   to: "ORG/SYMBOL [Office symbol for 2d Indorsement official]",
   signature_block: (
     "FIRST M LAST, Rank, USAF",
     "Duty Title"
   )
-)
-Number each indorsement in sequence (1st Ind, 2d Ind, 3d Ind, …). Begin the first indorsement on the second line below the last element of the official memorandum. Begin subsequent indorsements on the second line below the last element of the previous indorsement. Follow the indorsement number with your office symbol.
+)[
+  Number each indorsement in sequence (1st Ind, 2d Ind, 3d Ind, …). Begin the first indorsement on the second line below the last element of the official memorandum. Begin subsequent indorsements on the second line below the last element of the previous indorsement. Follow the indorsement number with your office symbol.
 
-When inserting a new indorsement element (either on the same page or as a new page), the numbering will need to be reset. This is accomplished by right-clicking the number on the list, then selecting "Restart at 1".
+  When inserting a new indorsement element (either on the same page or as a new page), the numbering will need to be reset. This is accomplished by right-clicking the number on the list, then selecting "Restart at 1".
 
-Use a new page indorsement when there isn't space remaining on the original memorandum or previous indorsement page. The new-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator's office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
+  Use a new page indorsement when there isn't space remaining on the original memorandum or previous indorsement page. The new-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator's office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
+]
 
-
-#show:indorsement.with(
+#indorsement(
   from: "[Indorser ORG/SYMBOL]",
   to: "ORG/SYMBOL [Originator]",
   signature_block: (
@@ -101,6 +101,6 @@ Use a new page indorsement when there isn't space remaining on the original memo
   ),
   new_page: true,
   date: "2001-01-01",
-)
-
+)[
 Use a new page indorsement when there isn't space remaining on the original memorandum or previous indorsement page. The new-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator's office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
+]
