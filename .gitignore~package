@@ -1,12 +1,11 @@
 dev_assets/
-**fonts/
-**.pdf
+.claude/
 .github/
 pdfs/
+**.pdf
 tests/
 build.sh
 .gitignore~*
 .orchestration.txt
-claude/
-github/
-# Keep README.md and LIMITATIONS.md for package distribution
+
+**fonts/
