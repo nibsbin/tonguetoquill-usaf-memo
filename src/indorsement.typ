@@ -35,15 +35,17 @@
   let ind_for = to
 
   if not informal {
+    // Step the counter BEFORE the context block to avoid read-then-update loop
+    counters.indorsement.step()
+    
     context {
     let config = query(metadata).last().value
     let original_subject = config.subject
     let original_date = config.original_date
     let original_from = config.original_from
 
-    // Increment counter and read value (starting from 1 for first indorsement)
-    let indorsement_number = counters.indorsement.get().at(0, default: 0) + 1
-    counters.indorsement.update(indorsement_number)
+    // Read the counter value (already stepped above)
+    let indorsement_number = counters.indorsement.get().at(0, default: 1)
     let indorsement_label = format-indorsement-number(indorsement_number)
 
     if new_page {
