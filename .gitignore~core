@@ -5,9 +5,10 @@ pdfs/
 **.pdf
 tests/
 build.sh
-template/
 .gitignore~*
-.orchestration.txt
+orchestration.txt
+prose/
 
+template/
 README.md
 LIMITATIONS.md

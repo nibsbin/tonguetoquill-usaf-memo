@@ -6,6 +6,8 @@ pdfs/
 tests/
 build.sh
 .gitignore~*
-.orchestration.txt
+orchestration.txt
+prose/
+
 
 **fonts/
