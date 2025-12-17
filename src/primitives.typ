@@ -28,8 +28,9 @@
         #place(
           center + top,
           align(center)[
-            #text(12pt, font: font, fill: LETTERHEAD_COLOR)[#title]\
-            #text(10.5pt, font: font, fill: LETTERHEAD_COLOR)[#caption]
+            #set text(12pt, font: font, fill: LETTERHEAD_COLOR)
+            #title\
+            #text(10.5pt)[#caption]
           ],
         )
       ],
