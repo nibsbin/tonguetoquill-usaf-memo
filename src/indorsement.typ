@@ -20,14 +20,14 @@
   attachments: none,
   cc: none,
   date: none,
-  // Format of indorsement: "standard" (same page), "informal" (no header), or "separate-page" (starts on new page)
+  // Format of indorsement: "standard" (same page), "informal" (no header), or "separate_page" (starts on new page)
   format: "standard",
   content,
 ) = {
   // Validate format parameter
   assert(
-    format in ("standard", "informal", "separate-page"),
-    message: "format must be \"standard\", \"informal\", or \"separate-page\"",
+    format in ("standard", "informal", "separate_page"),
+    message: "format must be \"standard\", \"informal\", or \"separate_page\"",
   )
 
   if format != "informal" {
@@ -54,7 +54,7 @@
       let indorsement_number = counters.indorsement.get().at(0, default: 1)
       let indorsement_label = format-indorsement-number(indorsement_number)
 
-      if format == "separate-page" {
+      if format == "separate_page" {
         pagebreak()
         [#indorsement_label to #original_from, #display-date(original_date), #original_subject]
 

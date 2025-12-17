@@ -243,7 +243,7 @@ Creates an indorsement for forwarding or commenting on a memorandum. Called as a
   attachments: none,                                        // Optional attachments
   cc: none,                                                 // Courtesy copies
   date: datetime.today(),                                  // Indorsement date
-  format: "standard",                                      // "standard", "informal", or "separate-page"
+  format: "standard",                                      // "standard", "informal", or "separate_page"
 )[
   Your indorsement content here.
 ]

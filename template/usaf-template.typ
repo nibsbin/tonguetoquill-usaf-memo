@@ -104,7 +104,7 @@ The example of this memorandum applies to many official memorandums that Airmen 
     "FIRST M LAST, Rank, USAF",
     "Duty Title",
   ),
-  format: "separate-page",
+  format: "separate_page",
   date: "2001-01-01",
 )[
   Use a new page indorsement when there isn't space remaining on the original memorandum or previous indorsement page. The new-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator's office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
