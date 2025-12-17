@@ -28,7 +28,7 @@
     assert(from != none, message: "from is required")
     assert(to != none, message: "to is required")
   }
-  assert(signature_block != none, message: "signature_block is required")
+
 
   let actual_date = if date == none { datetime.today() } else { date }
   let ind_from = first-or-value(from)
