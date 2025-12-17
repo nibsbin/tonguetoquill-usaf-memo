@@ -242,9 +242,8 @@ Creates an indorsement for forwarding or commenting on a memorandum. Called as a
   signature_blank_lines: 4,                                // Blank lines above signature
   attachments: none,                                        // Optional attachments
   cc: none,                                                 // Courtesy copies
-  leading_pagebreak: false,                                // Force page break before indorsement
-  new_page: false,                                         // New page format
   date: datetime.today(),                                  // Indorsement date
+  format: "standard",                                      // "standard", "informal", or "separate-page"
 )[
   Your indorsement content here.
 ]

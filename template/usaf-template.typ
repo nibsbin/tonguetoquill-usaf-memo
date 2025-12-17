@@ -1,4 +1,4 @@
-#import "@preview/tonguetoquill-usaf-memo:1.0.0": frontmatter, mainmatter, backmatter, indorsement
+#import "@preview/tonguetoquill-usaf-memo:1.0.0": backmatter, frontmatter, indorsement, mainmatter
 
 #show: frontmatter.with(
   letterhead_title: "DEPARTMENT OF THE AIR FORCE",
@@ -6,17 +6,22 @@
   letterhead_seal: image("assets/dow_seal.png"),
   subject: "Format for the Official Memorandum",
   memo_for: (
-    "123 ES/CC", "123 ES/DO", "123 ES/CSS", "456 ES/CC", "456 ES/DO", "456 ES/CSS"
+    "123 ES/CC",
+    "123 ES/DO",
+    "123 ES/CSS",
+    "456 ES/CC",
+    "456 ES/DO",
+    "456 ES/CSS",
   ),
   memo_from: (
     "ORG/SYMBOL",
     "Organization",
     "Street Address",
-    "City ST 12345-6789"
+    "City ST 12345-6789",
   ),
   references: (
     "AFM 33-326, 31 July 2019, Preparing Official Communications",
-    "DoDM 5110.04-M-V2, 16 June 2020, Manual for Written Material: Examples and Reference Material"
+    "DoDM 5110.04-M-V2, 16 June 2020, Manual for Written Material: Examples and Reference Material",
   ),
 )
 
@@ -24,7 +29,7 @@
 
 Use only approved organizational letterhead for all correspondence. This applies to all letterhead, both pre-printed and computer generated. Reference (a) details the format and style of official letterhead such as centering the first line of the header 5/8ths of an inch from the top of the page in 12 point Copperplate Gothic Bold font. The second header line is centered 3 points below the first line in 10.5 point Copperplate Gothic Bold font.
 
-  - *If you are on the Typst app, upload #text(color.blue)[#link("https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/CopperplateCC/CopperplateCC-Heavy.otf")[Copperplate CC]] to your project folder*
+- *If you are on the Typst app, upload #text(color.blue)[#link("https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/CopperplateCC/CopperplateCC-Heavy.otf")[Copperplate CC]] to your project folder*
 
 
 Note that this template provides proper formatting for various elements via Typst functions. The recipient line uses proper grid formatting, the body uses automatic paragraph numbering, the signature block uses precise positioning, and so on. The template handles all AFH 33-337 formatting requirements automatically.
@@ -63,11 +68,11 @@ The example of this memorandum applies to many official memorandums that Airmen 
 #backmatter(
   signature_block: (
     "FIRST M. LAST, Rank, USAF",
-    "Duty Title"
+    "Duty Title",
   ),
   attachments: (
     "Attachment description, date",
-    "Additional attachment description, date"
+    "Additional attachment description, date",
   ),
   cc: (
     "Rank and name, ORG/SYMBOL, or both"
@@ -82,8 +87,8 @@ The example of this memorandum applies to many official memorandums that Airmen 
   to: "ORG/SYMBOL [Office symbol for 2d Indorsement official]",
   signature_block: (
     "FIRST M LAST, Rank, USAF",
-    "Duty Title"
-  )
+    "Duty Title",
+  ),
 )[
   Number each indorsement in sequence (1st Ind, 2d Ind, 3d Ind, …). Begin the first indorsement on the second line below the last element of the official memorandum. Begin subsequent indorsements on the second line below the last element of the previous indorsement. Follow the indorsement number with your office symbol.
 
@@ -97,10 +102,10 @@ The example of this memorandum applies to many official memorandums that Airmen 
   to: "ORG/SYMBOL [Originator]",
   signature_block: (
     "FIRST M LAST, Rank, USAF",
-    "Duty Title"
+    "Duty Title",
   ),
-  new_page: true,
+  format: "separate-page",
   date: "2001-01-01",
 )[
-Use a new page indorsement when there isn't space remaining on the original memorandum or previous indorsement page. The new-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator's office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
+  Use a new page indorsement when there isn't space remaining on the original memorandum or previous indorsement page. The new-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator's office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
 ]
