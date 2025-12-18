@@ -17,7 +17,7 @@
 // =============================================================================
 // Import configuration constants from single source of truth
 
-#import "config.typ": spacing, paragraph-config, counters, CLASSIFICATION_COLORS
+#import "config.typ": CLASSIFICATION_COLORS, counters, paragraph-config, spacing
 
 // =============================================================================
 // UTILITY FUNCTIONS - CONFIGURATION
@@ -36,29 +36,29 @@
 /// - ctx (content): Content to apply configuration to
 /// -> content
 #let configure(body-font, font-size: 12pt, ctx) = {
-  context{
-    set par(leading: spacing.line, spacing:spacing.line, justify: false)
-    set block(above:spacing.line, below:0em,spacing: 0em)
+  context {
+    set par(leading: spacing.line, spacing: spacing.line, justify: false)
+    set block(above: spacing.line, below: 0em, spacing: 0em)
     set text(font: body-font, size: font-size, fallback: true)
     ctx
   }
 }
 
 /// Creates vertical spacing equivalent to multiple blank lines.
-/// 
+///
 /// Calculates proper vertical space based on line height and leading
 /// to maintain consistent spacing throughout the document.
-/// 
+///
 /// - count (int): Number of blank lines to create
 /// - weak (bool): Whether spacing can be compressed at page breaks
 /// -> content
-#let blank-lines(count,weak:true) = {
+#let blank-lines(count, weak: true) = {
   if count == 0 {
-    v(0em, weak:weak)
+    v(0em, weak: weak)
   } else {
     let lead = spacing.line
     let height = spacing.line-height
-    v(lead + (height + lead) * count,weak:weak)
+    v(lead + (height + lead) * count, weak: weak)
   }
 }
 
@@ -67,17 +67,17 @@
 ///
 /// - weak (bool): Whether spacing can be compressed at page breaks
 /// -> content
-#let blank-line(weak:true) = blank-lines(1,weak:weak)
+#let blank-line(weak: true) = blank-lines(1, weak: weak)
 
 // =============================================================================
 // GENERAL UTILITY FUNCTIONS
 // =============================================================================
 
 /// Checks if a value is "falsey" (none, false, empty array, or empty string).
-/// 
+///
 /// Provides a consistent way to test for empty or missing values across
 /// the template system. Used for conditional rendering of optional sections.
-/// 
+///
 /// - value (any): The value to check for "falsey" status
 /// -> bool
 #let falsey(value) = {
@@ -85,22 +85,22 @@
 }
 
 /// Scales content to fit within a specified box while maintaining aspect ratio.
-/// 
+///
 /// Automatically measures content and calculates uniform scaling to fit within
 /// the given dimensions. Commonly used for letterhead seals and other images
 /// that need to fit specific size constraints while preserving proportions.
-/// 
+///
 /// - width (length): Maximum width for the content (default: 2in)
 /// - height (length): Maximum height for the content (default: 1in)
 /// - alignment (alignment): Content alignment within the box (default: left+horizon)
 /// - body (content): Content to scale and fit
 /// -> content
-#let fit-box(width: 2in, height: 1in, alignment:left+horizon, body) = context {
+#let fit-box(width: 2in, height: 1in, alignment: left + horizon, body) = context {
   // 1) measure the unscaled content
   let s = measure(body)
 
   // 2) compute the uniform scale that fits inside the box
-  let f = calc.min(width / s.width, height / s.height) * 100%  // ratio
+  let f = calc.min(width / s.width, height / s.height) * 100% // ratio
 
   // 3) fixed-size box, center the scaled content, and reflow so layout respects it
   box(width: width, height: height, clip: true)[
@@ -119,10 +119,15 @@
 /// - date-str (str): String to check for ISO date pattern
 /// -> bool
 #let is-iso-date-string(date-str) = {
-  if date-str.len() >= 10 {
+  if date-str.len() == 10 {
     let char4 = date-str.at(4)
     let char7 = date-str.at(7)
     return char4 == "-" and char7 == "-"
+  } else if date-str.len() > 10 {
+    let char4 = date-str.at(4)
+    let char7 = date-str.at(7)
+    let char10 = date-str.at(10)
+    return char4 == "-" and char7 == "-" and char10 == "T"
   }
   return false
 }
@@ -163,14 +168,13 @@
     } else {
       date
     }
-  }
-  else {
+  } else {
     date.display("[day padding:none] [month repr:long] [year]")
   }
 }
 
 /// Gets the color associated with a classification level.
-/// 
+///
 /// - level (str): Classification level string
 /// -> color
 #let get-classification-level-color(level) = {
@@ -179,13 +183,13 @@
   }
   // Order matters - check most specific first
   let level-order = ("TOP SECRET", "SECRET", "CONFIDENTIAL", "UNCLASSIFIED")
-  
+
   for base-level in level-order {
     if base-level in level {
       return CLASSIFICATION_COLORS.at(base-level)
     }
   }
-  
+
   rgb(0, 0, 0) // Default
 }
 
@@ -194,24 +198,24 @@
 // =============================================================================
 
 /// Creates an automatic grid layout from string or array content.
-/// 
+///
 /// Converts 1D content into a multi-column grid layout with proper spacing.
 /// Used primarily for formatting recipient lists in the "MEMORANDUM FOR" section
 /// where multiple organizations need to be displayed in columns.
-/// 
+///
 /// Features:
 /// - Automatic column distribution and row filling
 /// - Configurable column spacing and count
 /// - Handles both single strings and arrays of strings
 /// - Adds padding cells to maintain consistent column alignment
-/// 
+///
 /// - content (str | array): Content to arrange in grid (strings only)
 /// - column-gutter (length): Space between columns (default: 0.5em)
 /// - cols (int): Number of columns for the grid (default: 3)
 /// -> grid
 #let create-auto-grid(content, column-gutter: .5em, cols: 3) = {
   let content_type = type(content)
-  
+
   assert(content_type == str or content_type == array, message: "Content must be a string or an array of strings.")
   if content_type == array {
     for item in content {
@@ -434,10 +438,10 @@
 #let IN_BACKMATTER_STATE = state("IN_BACKMATTER", false)
 
 /// Sets the current paragraph level state.
-/// 
+///
 /// Internal function used by the paragraph numbering system to track
 /// the current nesting level for proper indentation and numbering.
-/// 
+///
 /// - level (int): Paragraph nesting level to set
 /// -> content
 #let SET_LEVEL(level) = {
@@ -493,7 +497,7 @@
 #let get-ordinal-suffix(number) = {
   let last-digit = calc.rem(number, 10)
   let last-two-digits = calc.rem(number, 100)
-  
+
   if last-two-digits >= 11 and last-two-digits <= 13 {
     "th"
   } else if last-digit == 1 {
@@ -508,12 +512,12 @@
 }
 
 /// Formats indorsement number according to AFH 33-337 standards.
-/// 
+///
 /// Creates properly formatted indorsement labels with ordinal suffixes:
 /// - "1st Ind", "2d Ind", "3d Ind", "4th Ind", etc.
 /// - Uses military-specific ordinal format (2d/3d instead of 2nd/3rd)
 /// - Combines with "Ind" suffix for standard indorsement header format
-/// 
+///
 /// - number (int): Indorsement sequence number (1, 2, 3, etc.)
 /// -> str
 #let format-indorsement-number(number) = {
