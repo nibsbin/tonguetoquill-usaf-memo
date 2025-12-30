@@ -122,11 +122,12 @@
 #let render-signature-block(signature-lines, signature-blank-lines: 4) = {
   signature-lines = ensure-array(signature-lines)
   // AFH 33-337: "The signature block is never on a page by itself"
-  // Note: Perfect enforcement isn't feasible without over-engineering
-  // We use weak: false spacing and breakable: false to discourage orphaning
+  // We use sticky: true to make the signature block stick to preceding content,
+  // preventing it from appearing orphaned on a new page. The breakable: false
+  // ensures the signature block itself stays together as one atomic unit.
   // AFH 33-337: "fifth line below" = 4 blank lines between text and signature block
   blank-lines(signature-blank-lines, weak: false)
-  block(breakable: false)[
+  block(breakable: false, sticky: true)[
     #align(left)[
       // AFH 33-337: "4.5 inches from the left edge of the page"
       // We use (4.5in - margin) because Typst's pad() is relative to the text area, not page edge
