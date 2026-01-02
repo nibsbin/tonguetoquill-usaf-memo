@@ -93,6 +93,11 @@
 
   // Disable paragraph numbering for indorsement backmatter sections
   IN_BACKMATTER_STATE.update(true)
+
+  // AFH 33-337: "The signature block is never on a page by itself"
+  // Create a sticky anchor to make the signature block stick to preceding content
+  block(sticky: true, height: 0pt)[]
+
   render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)
 
   if not falsey(attachments) {
