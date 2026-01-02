@@ -113,34 +113,6 @@
 }
 
 // =============================================================================
-// ORPHAN PREVENTION UTILITIES
-// =============================================================================
-// Reusable abstraction for preventing content from appearing orphaned on a page
-// by ensuring minimum content precedes it.
-
-#let prevent-orphan(content, min-preceding-content: 2in) = {
-  context {
-    // Measure current position on page
-    let current-y = here().position().y
-    let page-top-margin = spacing.margin
-    let content-above = current-y - page-top-margin
-
-    // If there's insufficient content above, wrap in non-breakable block
-    // to ensure the content brings preceding material with it when breaking
-    if content-above < min-preceding-content {
-      // Use a non-breakable block that requires minimum height
-      // This forces Typst to either fit it with preceding content or break earlier
-      block(
-        breakable: false,
-        spacing: 0pt,
-      )[#content]
-    } else {
-      content
-    }
-  }
-}
-
-// =============================================================================
 // SIGNATURE BLOCK
 // =============================================================================
 // AFH 33-337 "Signature Block": "Start the signature block on the fifth line below
@@ -150,26 +122,23 @@
 #let render-signature-block(signature-lines, signature-blank-lines: 4) = {
   signature-lines = ensure-array(signature-lines)
   // AFH 33-337: "The signature block is never on a page by itself"
-  // Use context-based orphan prevention to ensure the signature block
-  // brings preceding content with it if pushed to a new page.
+  // The paragraph body is wrapped in block(sticky: true, breakable: true),
+  // which makes this signature block stick to the last paragraph automatically.
   // AFH 33-337: "fifth line below" = 4 blank lines between text and signature block
-
-  prevent-orphan({
-    blank-lines(signature-blank-lines, weak: false)
-    block(breakable: false)[
-      #align(left)[
-        // AFH 33-337: "4.5 inches from the left edge of the page"
-        // We use (4.5in - margin) because Typst's pad() is relative to the text area, not page edge
-        #pad(left: 4.5in - spacing.margin)[
-          #text(hyphenate: false)[
-            #for line in signature-lines {
-              par(hanging-indent: 4 * 0.5em, line)
-            }
-          ]
+  blank-lines(signature-blank-lines, weak: false)
+  block(breakable: false)[
+    #align(left)[
+      // AFH 33-337: "4.5 inches from the left edge of the page"
+      // We use (4.5in - margin) because Typst's pad() is relative to the text area, not page edge
+      #pad(left: 4.5in - spacing.margin)[
+        #text(hyphenate: false)[
+          #for line in signature-lines {
+            par(hanging-indent: 4 * 0.5em, line)
+          }
         ]
       ]
     ]
-  }, min-preceding-content: 1.5in)
+  ]
 }
 
 // =============================================================================
@@ -378,6 +347,11 @@
 
     // Reset to base level and render content
     SET_LEVEL(0)
-    content
+
+    // AFH 33-337: "The signature block is never on a page by itself"
+    // Wrap body in sticky breakable block so signature sticks to last paragraph
+    block(sticky: true, breakable: true)[
+      #content
+    ]
   }
 }
