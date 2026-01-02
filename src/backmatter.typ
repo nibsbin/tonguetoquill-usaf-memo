@@ -22,11 +22,6 @@
   // Set backmatter state to disable paragraph numbering
   IN_BACKMATTER_STATE.update(true)
 
-  // AFH 33-337: "The signature block is never on a page by itself"
-  // Create a sticky anchor to make the signature block stick to preceding content
-  // This ensures the signature doesn't appear orphaned on a new page
-  block(sticky: true, height: 0pt)[]
-
   // Render backmatter sections without paragraph numbering
   render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)
   render-backmatter-sections(
