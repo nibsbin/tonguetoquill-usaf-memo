@@ -166,31 +166,24 @@
   let first_pass = {
     show heading: h => context {
       IS_HEADING.update(true)
-      [#parbreak()#h.body]
+      [#parbreak()#h.body#parbreak()]
       IS_HEADING.update(false)
     }
 
     // Convert list/enum items to pars
     show enum.item: it => context {
-      [#parbreak()#it]
-    }
-    show list.item: it => context {
-      [#parbreak()#it]
-    }
-    // Track nesting level of list/enum
-    show list: l => context {
       NEST_LEVEL.update(l => l + 1)
-      l
+      [#parbreak()#it.body#parbreak()]
       NEST_LEVEL.update(l => l - 1)
     }
-    show enum: l => context {
+    show list.item: it => context {
       NEST_LEVEL.update(l => l + 1)
-      l
+      [#parbreak()#it.body#parbreak()]
       NEST_LEVEL.update(l => l - 1)
     }
 
     // Collect pars with nesting level
-    show par.where(): p => context {
+    show par: p => context {
       let nest_level = NEST_LEVEL.get()
       let is_heading = IS_HEADING.get()
       PAR_BUFFER.update(pars => {
@@ -199,7 +192,7 @@
       })
       p
     }
-    content
+    [#content]
   }
   // Use place() to prevent hidden content from affecting layout flow
   place(hide(first_pass))
@@ -225,14 +218,10 @@
       }
 
       let final_par = {
-        blank-line()
         if par_count > 1 {
           // Apply paragraph numbering per AFH 33-337 §2
           SET_PAR_LEVEL(nest_level)
           let paragraph = memo-par(par_content)
-          // AFH 33-337 "Continuation Pages" §11: "Type at least two lines of the text on each page.
-          // Avoid dividing a paragraph of less than four lines between two pages."
-          // We use Typst's orphan cost control to discourage single-line orphans
           paragraph
         } else {
           // AFH 33-337 §2: "A single paragraph is not numbered"
@@ -241,26 +230,27 @@
         }
       }
 
-      //If this is the final paragraph, make it sticky
+      //If this is the final paragraph, apply AFH 33-337 §11 rule:
+      // "Avoid dividing a paragraph of less than four lines between two pages"
+      blank-line()
       if i == par_count {
-        // Measure line height using a reference character
-        // We're already in a context block, so measure() works directly
-        let line_height = measure([Xg]).height * 1.15 // Include leading
-        let par_height = measure(final_par).height
+        let available_width = page.width - spacing.margin * 2
+
+        // Use configured spacing for line height calculation
+        let line_height = measure(line(length: spacing.line + spacing.line-height)).width
+        // Calculate last par's height
+        let par_height = measure(final_par, width: available_width).height
+
         let estimated_lines = calc.ceil(par_height / line_height)
 
-        if estimated_lines <= 2 {
-          // Short paragraph: make entire thing unbreakable and sticky
-          block(sticky: true, breakable: false)[#final_par]
+        // panic((par_height / line_height, line_height, par_height))
+
+        if estimated_lines < 4 {
+          // Short paragraph (< 4 lines): make sticky to keep with signature
+          block(sticky: true)[#final_par]
         } else {
-          // Longer paragraph: allow breaks but ensure last 2 lines stay with signature
-          // High widow cost (100%) strongly discourages page breaks that would leave
-          // fewer than 2 lines at the top of a page
-          // sticky: true keeps this block attached to the following signature block
-          block(sticky: true, breakable: true)[
-            #set text(costs: (widow: 100%))
-            #final_par
-          ]
+          // Longer paragraph (≥ 4 lines): use default breaking behavior
+          block(breakable: true)[#final_par]
         }
       } else {
         final_par
