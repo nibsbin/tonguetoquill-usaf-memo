@@ -135,10 +135,10 @@
   counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
   let indent-width = calculate-paragraph-indent(level)
 
-  set text(costs: (widow: 0%))
 
   // Number + two spaces + content, with left padding for nesting
-  pad(left: indent-width, paragraph-number + "  " + content)
+  //pad(left: indent-width, paragraph-number + "  " + content)
+  [#h(indent-width)#paragraph-number#"  "#content]
 }
 
 // =============================================================================
@@ -155,13 +155,21 @@
   PAR_BUFFER.update(())
   let NEST_LEVEL = state("ENUM_LEVEL")
   NEST_LEVEL.update(0)
+  let IS_HEADING = state("IS_HEADING")
+  IS_HEADING.update(false)
   // Initialize level counters to 1 (Typst counters default to 0)
   for i in range(0, 5) {
     counter(paragraph-config.counter-prefix + "0").update(1)
   }
 
-
+  // The first pass parses paragraphs, list items, etc. into standardized arrays
   let first_pass = {
+    show heading: h => context {
+      IS_HEADING.update(true)
+      [#parbreak()#h.body]
+      IS_HEADING.update(false)
+    }
+
     // Convert list/enum items to pars
     show enum.item: it => context {
       [#parbreak()#it]
@@ -183,10 +191,10 @@
 
     // Collect pars with nesting level
     show par.where(): p => context {
-      let nest-level = NEST_LEVEL.get()
-
+      let nest_level = NEST_LEVEL.get()
+      let is_heading = IS_HEADING.get()
       PAR_BUFFER.update(pars => {
-        pars.push((p.body, nest-level))
+        pars.push((p.body, nest_level, is_heading))
         pars
       })
       p
@@ -198,29 +206,67 @@
 
   //Second pass: consume par buffer
   context {
-    let should_number = PAR_BUFFER.get().len() > 1
+    let heading_buffer = none
+    let par_count = PAR_BUFFER.get().len()
+    let i = 0
     for item in PAR_BUFFER.get() {
-      blank-line()
+      i += 1
       let par_content = item.at(0)
       let nest_level = item.at(1)
+      let is_heading = item.at(2)
 
-      if should_number {
-        // Apply paragraph numbering per AFH 33-337 §2
-        SET_PAR_LEVEL(nest_level)
-        let paragraph = memo-par(par_content)
-        // AFH 33-337 "Continuation Pages" §11: "Type at least two lines of the text on each page.
-        // Avoid dividing a paragraph of less than four lines between two pages."
-        // We use Typst's orphan cost control to discourage single-line orphans
-        set text(costs: (orphan: 0%))
-        block(breakable: true)[#paragraph]
+      // Prepend heading as bolded sentence
+      if heading_buffer != none {
+        par_content = [#strong[#heading_buffer.] #par_content]
+      }
+      if is_heading {
+        heading_buffer = par_content
+        continue
+      }
+
+      let final_par = {
+        blank-line()
+        if par_count > 1 {
+          // Apply paragraph numbering per AFH 33-337 §2
+          SET_PAR_LEVEL(nest_level)
+          let paragraph = memo-par(par_content)
+          // AFH 33-337 "Continuation Pages" §11: "Type at least two lines of the text on each page.
+          // Avoid dividing a paragraph of less than four lines between two pages."
+          // We use Typst's orphan cost control to discourage single-line orphans
+          paragraph
+        } else {
+          // AFH 33-337 §2: "A single paragraph is not numbered"
+          // Return body content wrapped in block (like numbered case, but without numbering)
+          par_content
+        }
+      }
+
+      //If this is the final paragraph, make it sticky
+      if i == par_count {
+        // Measure line height using a reference character
+        // We're already in a context block, so measure() works directly
+        let line_height = measure([Xg]).height * 1.15 // Include leading
+        let par_height = measure(final_par).height
+        let estimated_lines = calc.ceil(par_height / line_height)
+
+        if estimated_lines <= 2 {
+          // Short paragraph: make entire thing unbreakable and sticky
+          block(sticky: true, breakable: false)[#final_par]
+        } else {
+          // Longer paragraph: allow breaks but ensure last 2 lines stay with signature
+          // High widow cost (100%) strongly discourages page breaks that would leave
+          // fewer than 2 lines at the top of a page
+          // sticky: true keeps this block attached to the following signature block
+          block(sticky: true, breakable: true)[
+            #set text(costs: (widow: 100%))
+            #final_par
+          ]
+        }
       } else {
-        // AFH 33-337 §2: "A single paragraph is not numbered"
-        // Return body content wrapped in block (like numbered case, but without numbering)
-        set text(costs: (orphan: 0%))
-        block(breakable: true)[#par_content]
+        final_par
       }
     }
   }
 }
-}
+
 
