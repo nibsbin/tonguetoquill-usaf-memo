@@ -166,29 +166,8 @@
 
   // The first pass parses paragraphs, list items, etc. into standardized arrays
   let first_pass = {
-    show heading: h => {
-      IS_HEADING.update(true)
-      [#parbreak()#h.body#parbreak()]
-      IS_HEADING.update(false)
-    }
-
-    // Convert list/enum items to pars
-    // Note: No context wrapper here - state updates don't need it and cause
-    // layout convergence issues with many list items
-    show enum.item: it => {
-      NEST_DOWN.step()
-      [#parbreak()#it.body#parbreak()]
-      NEST_UP.step()
-    }
-    show list.item: it => {
-      NEST_DOWN.step()
-      [#parbreak()#it.body#parbreak()]
-      NEST_UP.step()
-    }
-
-
     // Collect pars with nesting level
-    show par: p => {
+    show par: p => context {
       let nest_level = NEST_DOWN.get().at(0) - NEST_UP.get().at(0)
       let is_heading = IS_HEADING.get()
 
@@ -198,24 +177,45 @@
       })
       p
     }
-
     {
-      // Typst bug bandaid:
-      // `show par` will not collect wrappers unless there is content outside
-      // Add zero width space to always have content outside of wrapper
-      show strong: it => {
-        [#it#sym.zws]
+      show heading: h => {
+        IS_HEADING.update(true)
+        [#parbreak()#h.body#parbreak()]
+        IS_HEADING.update(false)
       }
-      show emph: it => {
-        [#it#sym.zws]
+
+      // Convert list/enum items to pars
+      // Note: No context wrapper here - state updates don't need it and cause
+      // layout convergence issues with many list items
+      show enum.item: it => {
+        NEST_DOWN.step()
+        [#parbreak()#it.body#parbreak()]
+        NEST_UP.step()
       }
-      show underline: it => {
-        [#it#sym.zws]
+      show list.item: it => {
+        NEST_DOWN.step()
+        [#parbreak()#it.body#parbreak()]
+        NEST_UP.step()
       }
-      show raw: it => {
-        [#it#sym.zws]
+
+      {
+        // Typst bug bandaid:
+        // `show par` will not collect wrappers unless there is content outside
+        // Add zero width space to always have content outside of wrapper
+        show strong: it => {
+          [#it#sym.zws]
+        }
+        show emph: it => {
+          [#it#sym.zws]
+        }
+        show underline: it => {
+          [#it#sym.zws]
+        }
+        show raw: it => {
+          [#it#sym.zws]
+        }
+        content
       }
-      content
     }
   }
   // Use place() to prevent hidden content from affecting layout flow
