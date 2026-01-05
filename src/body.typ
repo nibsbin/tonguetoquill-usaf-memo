@@ -182,20 +182,42 @@
       NEST_LEVEL.update(l => l - 1)
     }
 
+
     // Collect pars with nesting level
     show par: p => context {
       let nest_level = NEST_LEVEL.get()
       let is_heading = IS_HEADING.get()
+
       PAR_BUFFER.update(pars => {
-        pars.push((p.body, nest_level, is_heading))
+        pars.push((text([#p.body]), nest_level, is_heading))
         pars
       })
       p
     }
-    [#content]
+
+    {
+      // Typst bug bandaid:
+      // `show par` will not collect wrappers unless there is content outside
+      // Add zero width space to always have content outside of wrapper
+      show strong: it => {
+        [#it#sym.zws]
+      }
+      show emph: it => {
+        [#it#sym.zws]
+      }
+      show underline: it => {
+        [#it#sym.zws]
+      }
+      show raw: it => {
+        [#it#sym.zws]
+      }
+      content
+    }
   }
   // Use place() to prevent hidden content from affecting layout flow
   place(hide(first_pass))
+
+  // panic(content)
 
   //Second pass: consume par buffer
   context {
