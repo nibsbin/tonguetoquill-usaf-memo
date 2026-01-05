@@ -93,9 +93,8 @@
   // AFH 33-337 "Date": "Place the date 1 inch from the right edge, 1.75 inches from the top"
   // Since we have a 1-inch top margin, we need (1.75in - margin) vertical space
   v(1.75in - spacing.margin)
-  context {
-    render-date-section(actual_date)
-  }
+
+  render-date-section(actual_date)
   render-for-section(memo_for, memo_for_cols)
   render-from-section(memo_from)
   render-subject-section(subject)
