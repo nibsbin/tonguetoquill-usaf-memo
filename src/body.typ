@@ -153,8 +153,10 @@
 #let render-body(content) = {
   let PAR_BUFFER = state("PAR_BUFFER")
   PAR_BUFFER.update(())
-  let NEST_LEVEL = state("ENUM_LEVEL")
-  NEST_LEVEL.update(0)
+  let NEST_DOWN = counter("NEST_DOWN")
+  NEST_DOWN.update(0)
+  let NEST_UP = counter("NEST_UP")
+  NEST_UP.update(0)
   let IS_HEADING = state("IS_HEADING")
   IS_HEADING.update(false)
   // Initialize level counters to 1 (Typst counters default to 0)
@@ -164,28 +166,30 @@
 
   // The first pass parses paragraphs, list items, etc. into standardized arrays
   let first_pass = {
-    show heading: h => context {
+    show heading: h => {
       IS_HEADING.update(true)
       [#parbreak()#h.body#parbreak()]
       IS_HEADING.update(false)
     }
 
     // Convert list/enum items to pars
-    show enum.item: it => context {
-      NEST_LEVEL.update(l => l + 1)
+    // Note: No context wrapper here - state updates don't need it and cause
+    // layout convergence issues with many list items
+    show enum.item: it => {
+      NEST_DOWN.step()
       [#parbreak()#it.body#parbreak()]
-      NEST_LEVEL.update(l => l - 1)
+      NEST_UP.step()
     }
-    show list.item: it => context {
-      NEST_LEVEL.update(l => l + 1)
+    show list.item: it => {
+      NEST_DOWN.step()
       [#parbreak()#it.body#parbreak()]
-      NEST_LEVEL.update(l => l - 1)
+      NEST_UP.step()
     }
 
 
     // Collect pars with nesting level
-    show par: p => context {
-      let nest_level = NEST_LEVEL.get()
+    show par: p => {
+      let nest_level = NEST_DOWN.get().at(0) - NEST_UP.get().at(0)
       let is_heading = IS_HEADING.get()
 
       PAR_BUFFER.update(pars => {
