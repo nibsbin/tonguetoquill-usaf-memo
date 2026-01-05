@@ -214,14 +214,12 @@
         show raw: it => {
           [#it#sym.zws]
         }
-        content
+        [#content#parbreak()]
       }
     }
   }
   // Use place() to prevent hidden content from affecting layout flow
   place(hide(first_pass))
-
-  // panic(content)
 
   //Second pass: consume par buffer
   context {
@@ -268,8 +266,6 @@
         let par_height = measure(final_par, width: available_width).height
 
         let estimated_lines = calc.ceil(par_height / line_height)
-
-        // panic((par_height / line_height, line_height, par_height))
 
         if estimated_lines < 4 {
           // Short paragraph (< 4 lines): make sticky to keep with signature
