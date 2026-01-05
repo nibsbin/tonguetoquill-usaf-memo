@@ -12,37 +12,7 @@
 // - Date formatting and content scaling utilities
 // - Indorsement processing and ordinal number generation
 
-// =============================================================================
-// CONFIGURATION IMPORTS
-// =============================================================================
-// Import configuration constants from single source of truth
-
 #import "config.typ": CLASSIFICATION_COLORS, counters, paragraph-config, spacing
-
-// =============================================================================
-// UTILITY FUNCTIONS - CONFIGURATION
-// =============================================================================
-
-/// Configures document-wide typography and spacing settings.
-///
-/// Applies consistent formatting across the entire memorandum:
-/// - Sets paragraph leading and spacing for proper line height
-/// - Configures block spacing to eliminate unwanted gaps
-/// - Sets font and configurable size (AFH 33-337 standard is 12pt)
-/// - Enables text justification for professional appearance
-///
-/// - body-font (str | array): Font(s) to use for body text
-/// - font-size (length): Font size for body text (default: 12pt)
-/// - ctx (content): Content to apply configuration to
-/// -> content
-#let configure(body-font, font-size: 12pt, ctx) = {
-  context {
-    set par(leading: spacing.line, spacing: spacing.line, justify: false)
-    set block(above: spacing.line, below: 0em, spacing: 0em)
-    set text(font: body-font, size: font-size, fallback: true)
-    ctx
-  }
-}
 
 /// Creates vertical spacing equivalent to multiple blank lines.
 ///
