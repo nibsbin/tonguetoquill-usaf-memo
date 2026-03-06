@@ -62,6 +62,21 @@
   To add classification banner markings (including FOUO markings), click on the header or footer, and in the "Header & Footer Tools" tab, select the Header / Footer dropdown menus on the left side. Use the pre-generated headers and footers – note that the first page is different from the second page onward, and so the second page header and footer must be applied separately.
 
   The example of this memorandum applies to many official memorandums that Airmen may be tasked to prepare; however, there are additional elements for special uses of the official memorandum. Refer to the Tongue and Quill discussion on the official memorandum for more details, or consult published guidance applicable to your duties.
+
+  Tables may be embedded directly in the body of the memorandum as shown below. They are rendered with simple black cell borders and inherit the standard 12-point Times New Roman body font, consistent with the plain, formal style of official USAF correspondence.
+
+  #table(
+    columns: (1fr, 1fr, 1fr),
+    table.header(
+      [*Element*], [*Placement*], [*Reference*],
+    ),
+    [Date], [1.75 in from top, 1 in from right], [AFH 33-337 §Date],
+    [MEMORANDUM FOR], [2nd line below date], [AFH 33-337 §For],
+    [FROM], [2nd line below MEMORANDUM FOR], [AFH 33-337 §From],
+    [SUBJECT], [2nd line below FROM], [AFH 33-337 §Subject],
+    [Body Text], [2nd line below SUBJECT], [AFH 33-337 §1],
+    [Signature Block], [5th line below body text, 4.5 in from left], [AFH 33-337 §Sig],
+  )
 ]
 
 #backmatter(

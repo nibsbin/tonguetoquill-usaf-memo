@@ -142,6 +142,29 @@
 }
 
 // =============================================================================
+// TABLE RENDERING
+// =============================================================================
+// AFH 33-337 does not specify table formatting, so we follow the general
+// aesthetic principles of the standard: plain black borders, no decorative
+// fills, and the body font inherited throughout.
+
+/// Renders a table with USAF memorandum–consistent formatting.
+///
+/// Applies simple 0.5pt black cell borders and standard padding to any
+/// Typst `table` element, keeping the visual style clean and formal.
+/// Font and size are inherited from the surrounding body text.
+///
+/// - it (content): The table element to style and render
+/// -> content
+#let render-memo-table(it) = {
+  set table(
+    stroke: 0.5pt + black,
+    inset: (x: 0.5em, y: 0.4em),
+  )
+  it
+}
+
+// =============================================================================
 // BACKMATTER SECTIONS
 // =============================================================================
 // AFH 33-337 "Attachment or Attachments": "Place 'Attachment:' (for a single attachment)
