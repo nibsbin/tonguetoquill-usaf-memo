@@ -142,6 +142,24 @@
 }
 
 // =============================================================================
+// ACTION LINE RENDERING
+// =============================================================================
+// Renders the APPROVED / DISAPPROVED action line for indorsement memos.
+// The chosen action is bold; the unchosen action is struck through.
+// Order is always APPROVED first, DISAPPROVED second (matching standard forms).
+
+#let render-action-line(action) = {
+  assert(
+    action in ("approved", "disapproved"),
+    message: "action must be \"approved\" or \"disapproved\"",
+  )
+  blank-line()
+  let approved-text = if action == "approved" { strong[APPROVED] } else { strike[APPROVED] }
+  let disapproved-text = if action == "disapproved" { strong[DISAPPROVED] } else { strike[DISAPPROVED] }
+  [#approved-text / #disapproved-text]
+}
+
+// =============================================================================
 // TABLE RENDERING
 // =============================================================================
 // AFH 33-337 does not specify table formatting, so we follow the general

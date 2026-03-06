@@ -23,6 +23,9 @@
   date: none,
   // Format of indorsement: "standard" (same page), "informal" (no header), or "separate_page" (starts on new page)
   format: "standard",
+  // Optional approval action: "approved" or "disapproved". Renders APPROVED / DISAPPROVED
+  // with bold on the chosen option and strikethrough on the unchosen option.
+  action: none,
   content,
 ) = {
   // Validate format parameter
@@ -85,6 +88,10 @@
       }
     }
     blank-line()
+  }
+
+  if action != none {
+    render-action-line(action)
   }
 
   render-body(content)

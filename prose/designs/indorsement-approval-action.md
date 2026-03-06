@@ -1,6 +1,6 @@
 # Indorsement Approval/Disapproval Action
 
-**Status:** Draft
+**Status:** Implemented
 
 ## TL;DR
 
