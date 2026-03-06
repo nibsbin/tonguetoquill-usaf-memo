@@ -5,6 +5,7 @@
 
 #import "config.typ": *
 #import "utils.typ": *
+#import "primitives.typ": render-memo-table
 
 // =============================================================================
 // PARAGRAPH NUMBERING UTILITIES
@@ -172,10 +173,19 @@
       let is_heading = IS_HEADING.get()
 
       PAR_BUFFER.update(pars => {
-        pars.push((text([#p.body]), nest_level, is_heading))
+        // Item tuple: (content, nest_level, is_heading, is_table)
+        pars.push((text([#p.body]), nest_level, is_heading, false))
         pars
       })
       p
+    }
+    // Collect tables — captured as-is without paragraph numbering
+    show table: t => context {
+      PAR_BUFFER.update(pars => {
+        pars.push((t, -1, false, true))
+        pars
+      })
+      t
     }
     {
       show heading: h => {
@@ -222,12 +232,31 @@
   place(hide(first_pass))
 
   //Second pass: consume par buffer
+  //
+  // PAR_BUFFER item tuple layout:
+  //   item.at(0) — content     : the paragraph body or table element
+  //   item.at(1) — nest_level  : nesting depth (−1 for tables)
+  //   item.at(2) — is_heading  : bool, true if item is a heading paragraph
+  //   item.at(3) — is_table    : bool, true if item is a table element
+  let ITEM_IS_TABLE = 3
   context {
     let heading_buffer = none
-    let par_count = PAR_BUFFER.get().len()
+    // Tables do not count as paragraphs for AFH 33-337 §2 numbering purposes
+    let par_count = PAR_BUFFER.get().filter(item => not item.at(ITEM_IS_TABLE, default: false)).len()
+    let items = PAR_BUFFER.get()
+    let total_count = items.len()
     let i = 0
-    for item in PAR_BUFFER.get() {
+    for item in items {
       i += 1
+      let is_table = item.at(ITEM_IS_TABLE, default: false)
+
+      // Render tables inline without paragraph numbering
+      if is_table {
+        blank-line()
+        render-memo-table(item.at(0))
+        continue
+      }
+
       let par_content = item.at(0)
       let nest_level = item.at(1)
       let is_heading = item.at(2)
@@ -257,7 +286,7 @@
       //If this is the final paragraph, apply AFH 33-337 §11 rule:
       // "Avoid dividing a paragraph of less than four lines between two pages"
       blank-line()
-      if i == par_count {
+      if i == total_count {
         let available_width = page.width - spacing.margin * 2
 
         // Use configured spacing for line height calculation
