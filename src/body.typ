@@ -31,115 +31,67 @@
   paragraph-config.numbering-formats.at(level, default: "i.")
 }
 
-/// Generates paragraph number for a given level with proper formatting.
-///
-/// Creates properly formatted paragraph numbers for the hierarchical numbering
-/// system using Typst's native counter display capabilities.
-///
-/// - level (int): Paragraph nesting level (0-based)
-/// - counter-value (none | int): Optional explicit counter value to use (for measuring widths)
-/// - increment (bool): Whether to increment the counter after display
-/// -> content
-#let generate-paragraph-number(level, counter-value: none) = {
-  let paragraph-counter = counter(paragraph-config.counter-prefix + str(level))
-  let numbering-format = get-paragraph-numbering-format(level)
-
-  if counter-value != none {
-    // For measuring widths: create temporary counter at specific value
-    assert(counter-value >= 0, message: "Counter value of `" + str(counter-value) + "` cannot be less than 0")
-    let temp-counter = counter("temp-counter")
-    temp-counter.update(counter-value)
-    temp-counter.display(numbering-format)
-  } else {
-    // Standard case: display and increment
-    let result = paragraph-counter.display(numbering-format)
-    paragraph-counter.step()
-    result
-  }
-}
-
-/// Calculates proper indentation width for a paragraph level.
-///
-/// AFH 33-337 "The Text of the Official Memorandum" §4-5:
-/// - "The first paragraph is never indented; it is numbered and flush left"
-/// - "Indent the first line of sub-paragraphs to align the number or letter with
-///    the first character of its parent level paragraph"
+/// Calculates indentation width using explicit counter values.
 ///
 /// Computes the exact indentation needed for hierarchical paragraph alignment
 /// by measuring the cumulative width of all ancestor paragraph numbers and their
-/// spacing. Uses direct iteration instead of recursion for better performance.
-///
-/// Per AFH 33-337: Sub-paragraph text aligns with first character of parent text,
-/// which means indentation = sum of all ancestor number widths + spacing.
+/// spacing. Uses the provided counter values directly (no Typst counter reads).
 ///
 /// - level (int): Paragraph nesting level (0-based)
+/// - level-counts (dictionary): Maps level index strings to their current counter values
 /// -> length
-#let calculate-paragraph-indent(level) = {
-  assert(level >= 0)
+#let calculate-indent-from-counts(level, level-counts) = {
   if level == 0 {
     return 0pt
   }
-
-  // Accumulate widths of all ancestor numbers iteratively
   let total-indent = 0pt
   for ancestor-level in range(level) {
-    let ancestor-counter-value = counter(paragraph-config.counter-prefix + str(ancestor-level)).get().at(0)
-    let ancestor-number = generate-paragraph-number(ancestor-level, counter-value: ancestor-counter-value)
-    // Measure number + spacing buffer
+    let ancestor-value = level-counts.at(str(ancestor-level), default: 1)
+    let ancestor-format = get-paragraph-numbering-format(ancestor-level)
+    let ancestor-number = numbering(ancestor-format, ancestor-value)
     let width = measure([#ancestor-number#"  "]).width
     total-indent += width
   }
-
   total-indent
 }
 
-/// Global state for tracking current paragraph level.
-/// Used internally by the paragraph numbering system to maintain proper nesting.
-/// -> state
-#let PAR_LEVEL_STATE = state("PAR_LEVEL", 0)
-
-
-/// Sets the current paragraph level state.
+/// Formats a numbered paragraph with proper indentation.
 ///
-/// Internal function used by the paragraph numbering system to track
-/// the current nesting level for proper indentation and numbering.
+/// Generates a properly formatted paragraph with AFH 33-337 compliant numbering
+/// and indentation. Uses explicit level and counter values to avoid nested-context
+/// state propagation issues.
 ///
-/// - level (int): Paragraph nesting level to set
+/// - body (content): Paragraph content to format
+/// - level (int): Paragraph nesting level (0-based)
+/// - level-counts (dictionary): Current counter values per level
 /// -> content
-#let SET_PAR_LEVEL(level) = {
-  context {
-    PAR_LEVEL_STATE.update(level)
-    if level == 0 {
-      counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
-    }
-  }
+#let format-numbered-par(body, level, level-counts) = {
+  let current-value = level-counts.at(str(level), default: 1)
+  let format = get-paragraph-numbering-format(level)
+  let number-text = numbering(format, current-value)
+  let indent-width = calculate-indent-from-counts(level, level-counts)
+  [#h(indent-width)#number-text#"  "#body]
 }
 
-/// Creates a formatted paragraph with automatic numbering and indentation.
+/// Formats a continuation paragraph within a multi-block list item.
 ///
-/// Generates a properly formatted paragraph with AFH 33-337 compliant numbering,
-/// indentation, and spacing. Automatically manages counter incrementation and
-/// nested paragraph state. Used internally by the body rendering system.
+/// Renders a paragraph that belongs to the same list item as the preceding
+/// numbered paragraph. The text is indented to align with the first character
+/// of the preceding numbered paragraph's text (past the number and spacing),
+/// but no new number is generated.
 ///
-/// Features:
-/// - Automatic paragraph number generation and formatting
-/// - Proper indentation based on nesting level via direct width measurement
-/// - Counter management for hierarchical numbering
-/// - Widow/orphan prevention settings
-///
-/// - content (content): Paragraph content to format
+/// - body (content): Continuation paragraph content to format
+/// - level (int): Paragraph nesting level (0-based)
+/// - level-counts (dictionary): Current counter values per level
 /// -> content
-#let memo-par(content) = context {
-  let level = PAR_LEVEL_STATE.get()
-  let paragraph-number = generate-paragraph-number(level)
-  // Reset child level counter
-  counter(paragraph-config.counter-prefix + str(level + 1)).update(1)
-  let indent-width = calculate-paragraph-indent(level)
-
-
-  // Number + two spaces + content, with left padding for nesting
-  //pad(left: indent-width, paragraph-number + "  " + content)
-  [#h(indent-width)#paragraph-number#"  "#content]
+#let format-continuation-par(body, level, level-counts) = {
+  let indent-width = calculate-indent-from-counts(level, level-counts)
+  // Add the width of the current level's number + spacing to align with text
+  let current-value = level-counts.at(str(level), default: 1)
+  let format = get-paragraph-numbering-format(level)
+  let number-text = numbering(format, current-value)
+  let number-width = measure([#number-text#"  "]).width
+  [#h(indent-width + number-width)#body]
 }
 
 // =============================================================================
@@ -160,10 +112,11 @@
   NEST_UP.update(0)
   let IS_HEADING = state("IS_HEADING")
   IS_HEADING.update(false)
-  // Initialize level counters to 1 (Typst counters default to 0)
-  for i in range(0, 5) {
-    counter(paragraph-config.counter-prefix + "0").update(1)
-  }
+  // Tracks whether the next paragraph is the first block in a list item.
+  // When true, the next `show par` captures a numbered item; subsequent
+  // paragraphs within the same item are continuations (no new number).
+  let ITEM_FIRST_PAR = state("ITEM_FIRST_PAR")
+  ITEM_FIRST_PAR.update(false)
 
   // The first pass parses paragraphs, list items, etc. into standardized arrays
   let first_pass = {
@@ -171,18 +124,29 @@
     show par: p => context {
       let nest_level = NEST_DOWN.get().at(0) - NEST_UP.get().at(0)
       let is_heading = IS_HEADING.get()
+      let is_first_par = ITEM_FIRST_PAR.get()
+
+      // Determine if this is a continuation block within a multi-block list item.
+      // A continuation is a non-first paragraph inside a list item (nest_level > 0).
+      let is_continuation = nest_level > 0 and not is_first_par
 
       PAR_BUFFER.update(pars => {
-        // Item tuple: (content, nest_level, is_heading, is_table)
-        pars.push((text([#p.body]), nest_level, is_heading, false))
+        // Item tuple: (content, nest_level, is_heading, is_table, is_continuation)
+        pars.push((text([#p.body]), nest_level, is_heading, false, is_continuation))
         pars
       })
+
+      // After the first paragraph of a list item, mark subsequent ones as continuations
+      if nest_level > 0 and is_first_par {
+        ITEM_FIRST_PAR.update(false)
+      }
+
       p
     }
     // Collect tables — captured as-is without paragraph numbering
     show table: t => context {
       PAR_BUFFER.update(pars => {
-        pars.push((t, -1, false, true))
+        pars.push((t, -1, false, true, false))
         pars
       })
       t
@@ -199,11 +163,13 @@
       // layout convergence issues with many list items
       show enum.item: it => {
         NEST_DOWN.step()
+        ITEM_FIRST_PAR.update(true)
         [#parbreak()#it.body#parbreak()]
         NEST_UP.step()
       }
       show list.item: it => {
         NEST_DOWN.step()
+        ITEM_FIRST_PAR.update(true)
         [#parbreak()#it.body#parbreak()]
         NEST_UP.step()
       }
@@ -234,17 +200,30 @@
   //Second pass: consume par buffer
   //
   // PAR_BUFFER item tuple layout:
-  //   item.at(0) — content     : the paragraph body or table element
-  //   item.at(1) — nest_level  : nesting depth (−1 for tables)
-  //   item.at(2) — is_heading  : bool, true if item is a heading paragraph
-  //   item.at(3) — is_table    : bool, true if item is a table element
+  //   item.at(0) — content         : the paragraph body or table element
+  //   item.at(1) — nest_level      : nesting depth (−1 for tables)
+  //   item.at(2) — is_heading      : bool, true if item is a heading paragraph
+  //   item.at(3) — is_table        : bool, true if item is a table element
+  //   item.at(4) — is_continuation : bool, true if this is a continuation block
+  //                                  within a multi-block list item
   let ITEM_IS_TABLE = 3
+  let ITEM_IS_CONTINUATION = 4
   context {
     let heading_buffer = none
-    // Tables do not count as paragraphs for AFH 33-337 §2 numbering purposes
-    let par_count = PAR_BUFFER.get().filter(item => not item.at(ITEM_IS_TABLE, default: false)).len()
+    // Tables and continuation blocks do not count as distinct paragraphs
+    // for AFH 33-337 §2 numbering purposes
+    let par_count = PAR_BUFFER.get().filter(item =>
+      not item.at(ITEM_IS_TABLE, default: false)
+      and not item.at(ITEM_IS_CONTINUATION, default: false)
+    ).len()
     let items = PAR_BUFFER.get()
     let total_count = items.len()
+
+    // Track paragraph numbers per level manually to avoid nested-context
+    // counter propagation issues.  Dictionary maps level index (as string)
+    // to the current counter value at that level.
+    let level-counts = ("0": 1, "1": 1, "2": 1, "3": 1, "4": 1)
+
     let i = 0
     for item in items {
       i += 1
@@ -260,6 +239,7 @@
       let par_content = item.at(0)
       let nest_level = item.at(1)
       let is_heading = item.at(2)
+      let is_continuation = item.at(ITEM_IS_CONTINUATION, default: false)
 
       // Prepend heading as bolded sentence
       if heading_buffer != none {
@@ -271,23 +251,41 @@
       }
 
       let final_par = {
-        if auto-numbering {
+        if is_continuation {
+          // Continuation block within a multi-block list item:
+          // indent to align with preceding numbered paragraph's text, no new number.
+          // level-counts still holds the value of the preceding numbered paragraph.
+          if auto-numbering {
+            format-continuation-par(par_content, nest_level, level-counts)
+          } else if nest_level > 0 {
+            format-continuation-par(par_content, nest_level - 1, level-counts)
+          } else {
+            par_content
+          }
+        } else if auto-numbering {
           if par_count > 1 {
             // Apply paragraph numbering per AFH 33-337 §2
-            SET_PAR_LEVEL(nest_level)
-            let paragraph = memo-par(par_content)
-            paragraph
+            let par = format-numbered-par(par_content, nest_level, level-counts)
+            // Advance counter for this level and reset child levels
+            level-counts.insert(str(nest_level), level-counts.at(str(nest_level)) + 1)
+            for child in range(nest_level + 1, 5) {
+              level-counts.insert(str(child), 1)
+            }
+            par
           } else {
             // AFH 33-337 §2: "A single paragraph is not numbered"
-            // Return body content wrapped in block (like numbered case, but without numbering)
             par_content
           }
         } else {
           // Unnumbered mode: only explicitly nested items (enum/list) get numbered
           if nest_level > 0 {
-            SET_PAR_LEVEL(nest_level - 1)
-            let paragraph = memo-par(par_content)
-            paragraph
+            let effective_level = nest_level - 1
+            let par = format-numbered-par(par_content, effective_level, level-counts)
+            level-counts.insert(str(effective_level), level-counts.at(str(effective_level)) + 1)
+            for child in range(effective_level + 1, 5) {
+              level-counts.insert(str(child), 1)
+            }
+            par
           } else {
             // Base-level paragraphs are flush left with no numbering
             par_content
