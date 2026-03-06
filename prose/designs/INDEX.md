@@ -2,7 +2,9 @@
 
 ## Active Designs
 
-No designs currently under development.
+| Design | One-liner |
+|--------|-----------|
+| [Indorsement Approval Action](indorsement-approval-action.md) | APPROVED/DISAPPROVED rendering on indorsement memos |
 
 ## Archived Designs
 
