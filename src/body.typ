@@ -150,7 +150,7 @@
 // - "A single paragraph is not numbered" (§2)
 // - First paragraph flush left, never indented
 // - Indent sub-paragraphs to align with first character of parent paragraph text
-#let render-body(content, number-all-paragraphs: true) = {
+#let render-body(content, auto-numbering: true) = {
   let PAR_BUFFER = state("PAR_BUFFER")
   PAR_BUFFER.update(())
   let NEST_DOWN = counter("NEST_DOWN")
@@ -242,7 +242,7 @@
       }
 
       let final_par = {
-        if number-all-paragraphs {
+        if auto-numbering {
           if par_count > 1 {
             // Apply paragraph numbering per AFH 33-337 §2
             SET_PAR_LEVEL(nest_level)

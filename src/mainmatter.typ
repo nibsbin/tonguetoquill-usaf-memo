@@ -19,14 +19,14 @@
 /// of the memorandum. Automatically detects single vs. multiple paragraphs
 /// to comply with AFH 33-337 numbering requirements.
 ///
-/// When number_all_paragraphs is false (set in frontmatter), base-level
-/// paragraphs render flush left without numbering. Only explicitly numbered
-/// or bulleted items enter the numbering hierarchy.
+/// When auto_numbering is false (set in frontmatter), base-level paragraphs
+/// render flush left without numbering. Only explicitly numbered or bulleted
+/// items enter the numbering hierarchy.
 ///
 /// - content (content): The body content to render
 /// -> content
 #let mainmatter(it) = context {
   let config = query(metadata).last().value
-  let number-all = config.at("number_all_paragraphs", default: true)
-  render-body(it, number-all-paragraphs: number-all)
+  let auto-numbering = config.at("auto_numbering", default: true)
+  render-body(it, auto-numbering: auto-numbering)
 }
