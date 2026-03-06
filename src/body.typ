@@ -222,7 +222,11 @@
     // Track paragraph numbers per level manually to avoid nested-context
     // counter propagation issues.  Dictionary maps level index (as string)
     // to the current counter value at that level.
-    let level-counts = ("0": 1, "1": 1, "2": 1, "3": 1, "4": 1)
+    let max-levels = paragraph-config.numbering-formats.len()
+    let level-counts = (:)
+    for lvl in range(max-levels) {
+      level-counts.insert(str(lvl), 1)
+    }
 
     let i = 0
     for item in items {
@@ -268,7 +272,7 @@
             let par = format-numbered-par(par_content, nest_level, level-counts)
             // Advance counter for this level and reset child levels
             level-counts.insert(str(nest_level), level-counts.at(str(nest_level)) + 1)
-            for child in range(nest_level + 1, 5) {
+            for child in range(nest_level + 1, max-levels) {
               level-counts.insert(str(child), 1)
             }
             par
@@ -282,7 +286,7 @@
             let effective_level = nest_level - 1
             let par = format-numbered-par(par_content, effective_level, level-counts)
             level-counts.insert(str(effective_level), level-counts.at(str(effective_level)) + 1)
-            for child in range(effective_level + 1, 5) {
+            for child in range(effective_level + 1, max-levels) {
               level-counts.insert(str(child), 1)
             }
             par
