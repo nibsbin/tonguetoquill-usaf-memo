@@ -150,7 +150,7 @@
 // - "A single paragraph is not numbered" (§2)
 // - First paragraph flush left, never indented
 // - Indent sub-paragraphs to align with first character of parent paragraph text
-#let render-body(content) = {
+#let render-body(content, number-all-paragraphs: true) = {
   let PAR_BUFFER = state("PAR_BUFFER")
   PAR_BUFFER.update(())
   let NEST_DOWN = counter("NEST_DOWN")
@@ -242,16 +242,27 @@
       }
 
       let final_par = {
-        if nest_level > 0 {
-          // Apply paragraph numbering per AFH 33-337 §2 only for
-          // explicitly numbered or bulleted paragraphs (enum/list items).
-          // Offset level by -1 so top-level items start at format "1."
-          SET_PAR_LEVEL(nest_level - 1)
-          let paragraph = memo-par(par_content)
-          paragraph
+        if number-all-paragraphs {
+          if par_count > 1 {
+            // Apply paragraph numbering per AFH 33-337 §2
+            SET_PAR_LEVEL(nest_level)
+            let paragraph = memo-par(par_content)
+            paragraph
+          } else {
+            // AFH 33-337 §2: "A single paragraph is not numbered"
+            // Return body content wrapped in block (like numbered case, but without numbering)
+            par_content
+          }
         } else {
-          // Base-level paragraphs are flush left with no numbering
-          par_content
+          // Unnumbered mode: only explicitly nested items (enum/list) get numbered
+          if nest_level > 0 {
+            SET_PAR_LEVEL(nest_level - 1)
+            let paragraph = memo-par(par_content)
+            paragraph
+          } else {
+            // Base-level paragraphs are flush left with no numbering
+            par_content
+          }
         }
       }
 
