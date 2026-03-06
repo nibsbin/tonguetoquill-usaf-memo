@@ -242,14 +242,15 @@
       }
 
       let final_par = {
-        if par_count > 1 {
-          // Apply paragraph numbering per AFH 33-337 §2
-          SET_PAR_LEVEL(nest_level)
+        if nest_level > 0 {
+          // Apply paragraph numbering per AFH 33-337 §2 only for
+          // explicitly numbered or bulleted paragraphs (enum/list items).
+          // Offset level by -1 so top-level items start at format "1."
+          SET_PAR_LEVEL(nest_level - 1)
           let paragraph = memo-par(par_content)
           paragraph
         } else {
-          // AFH 33-337 §2: "A single paragraph is not numbered"
-          // Return body content wrapped in block (like numbered case, but without numbering)
+          // Base-level paragraphs are flush left with no numbering
           par_content
         }
       }
