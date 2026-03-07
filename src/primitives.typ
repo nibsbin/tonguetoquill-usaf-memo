@@ -142,6 +142,25 @@
 }
 
 // =============================================================================
+// ACTION LINE RENDERING
+// =============================================================================
+// Renders the APPROVED / DISAPPROVED action line for indorsement memos.
+// action: none = both plain (no decision yet), "approved" = bold APPROVED /
+// strike DISAPPROVED, "disapproved" = strike APPROVED / bold DISAPPROVED.
+// Visibility is controlled by the caller (show_action / action != none).
+
+#let render-action-line(action) = {
+  assert(
+    action in (none, "approved", "disapproved"),
+    message: "action must be none, \"approved\", or \"disapproved\"",
+  )
+  blank-line()
+  let approved-text = if action == "approved" { strong[APPROVED] } else if action == "disapproved" { strike[APPROVED] } else { [APPROVED] }
+  let disapproved-text = if action == "disapproved" { strong[DISAPPROVED] } else if action == "approved" { strike[DISAPPROVED] } else { [DISAPPROVED] }
+  [#approved-text / #disapproved-text]
+}
+
+// =============================================================================
 // TABLE RENDERING
 // =============================================================================
 // AFH 33-337 does not specify table formatting, so we follow the general

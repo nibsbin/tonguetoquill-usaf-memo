@@ -23,6 +23,10 @@
   date: none,
   // Format of indorsement: "standard" (same page), "informal" (no header), or "separate_page" (starts on new page)
   format: "standard",
+  // Show the APPROVED / DISAPPROVED action line. Default: false.
+  show_action: false,
+  // Approval decision: none (no decision), "approved", or "disapproved".
+  action: none,
   content,
 ) = {
   // Validate format parameter
@@ -85,6 +89,11 @@
       }
     }
     blank-line()
+  }
+
+  // Show action line if explicitly requested or if an action decision is set
+  if show_action or action != none {
+    render-action-line(action)
   }
 
   render-body(content)
