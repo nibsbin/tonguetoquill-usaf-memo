@@ -156,13 +156,14 @@
   )
   blank-line()
   // Circle the selected option using a box with rounded corners
+  // Use baseline parameter to maintain vertical text alignment
   let approve-text = if action == "approve" { 
-    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt)[APPROVE] 
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[APPROVE] 
   } else { 
     [APPROVE] 
   }
   let disapprove-text = if action == "disapprove" { 
-    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt)[DISAPPROVE] 
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[DISAPPROVE] 
   } else { 
     [DISAPPROVE] 
   }
