@@ -4,7 +4,7 @@
 
 | Design | One-liner |
 |--------|-----------|
-| [Indorsement Approval Action](indorsement-approval-action.md) | APPROVED/DISAPPROVED rendering on indorsement memos |
+| [Indorsement Approval Action](indorsement-approval-action.md) | Approve/Disapprove rendering on indorsement memos |
 
 ## Archived Designs
 

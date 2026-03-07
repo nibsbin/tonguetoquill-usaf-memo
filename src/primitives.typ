@@ -144,9 +144,9 @@
 // =============================================================================
 // ACTION LINE RENDERING
 // =============================================================================
-// Renders the APPROVE / DISAPPROVE action line for indorsement memos.
-// action: "none" = no action line displayed (hidden), "approve" = APPROVE circled,
-// "disapprove" = DISAPPROVE circled. The action line is only rendered when
+// Renders the Approve / Disapprove action line for indorsement memos.
+// action: "none" = no action line displayed (hidden), "approve" = Approve circled,
+// "disapprove" = Disapprove circled. The action line is only rendered when
 // action is "approve" or "disapprove".
 
 #let render-action-line(action) = {
@@ -158,14 +158,14 @@
   // Circle the selected option using a box with rounded corners
   // Use baseline parameter to maintain vertical text alignment
   let approve-text = if action == "approve" { 
-    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[APPROVE] 
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[Approve] 
   } else { 
-    [APPROVE] 
+    [Approve] 
   }
   let disapprove-text = if action == "disapprove" { 
-    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[DISAPPROVE] 
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[Disapprove] 
   } else { 
-    [DISAPPROVE] 
+    [Disapprove] 
   }
   [#approve-text / #disapprove-text]
 }

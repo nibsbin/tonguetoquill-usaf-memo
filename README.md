@@ -252,8 +252,8 @@ Creates an indorsement for forwarding or commenting on a memorandum. Called as a
 
 **The `action` parameter:**
 - `"none"` (default): No action line displayed
-- `"approve"`: Displays "APPROVE / DISAPPROVE" with APPROVE boxed
-- `"disapprove"`: Displays "APPROVE / DISAPPROVE" with DISAPPROVE boxed
+- `"approve"`: Displays "Approve / Disapprove" with Approve boxed
+- `"disapprove"`: Displays "Approve / Disapprove" with Disapprove boxed
 
 **Responsibilities:**
 - Auto-numbers indorsements (1st Ind, 2d Ind, 3d Ind, etc.)

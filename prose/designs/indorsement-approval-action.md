@@ -4,13 +4,13 @@
 
 ## TL;DR
 
-Add an `action` parameter to `indorsement()` that renders "APPROVE / DISAPPROVE" in the indorsement body, with the chosen option boxed (circled), matching the paper convention where the chosen option is circled.
+Add an `action` parameter to `indorsement()` that renders "Approve / Disapprove" in the indorsement body, with the chosen option boxed (circled), matching the paper convention where the chosen option is circled.
 
 ## Problem
 
 Indorsement memos frequently carry an approval decision. The standard paper workflow is:
 
-1. The memo presents two options: **APPROVE** and **DISAPPROVE**
+1. The memo presents two options: **Approve** and **Disapprove**
 2. The reviewer circles one
 3. This prevents after-the-fact forgery by making the choice unambiguous
 
@@ -36,8 +36,8 @@ A single optional parameter controls both visibility and selection:
 | `action` | Rendered Output |
 |----------|----------------|
 | `"none"` (default) | No action line rendered |
-| `"approve"` | [APPROVE] / DISAPPROVE (APPROVE boxed) |
-| `"disapprove"` | APPROVE / [DISAPPROVE] (DISAPPROVE boxed) |
+| `"approve"` | [Approve] / Disapprove (Approve boxed) |
+| `"disapprove"` | Approve / [Disapprove] (Disapprove boxed) |
 
 The action line is **only displayed** when `action` is set to `"approve"` or `"disapprove"`. When `action` is `"none"` (the default), no action line appears at all.
 
@@ -50,7 +50,7 @@ The action line is rendered as a single line between the MEMORANDUM FOR header a
 
 MEMORANDUM FOR  ORG/SYMBOL
 
-[APPROVE] / DISAPPROVE
+[Approve] / Disapprove
 
 1.  Optional remarks or conditions...
 
@@ -63,9 +63,9 @@ MEMORANDUM FOR  ORG/SYMBOL
 - The **chosen** action is rendered with a box (rounded rectangle) around it
 - The **unchosen** action is rendered plain
 - A forward slash ` / ` separates the two options
-- The order is always APPROVE first, DISAPPROVE second (matching standard forms)
+- The order is always Approve first, Disapprove second (matching standard forms)
 - The line is flush left, consistent with body text placement
-- Present tense wording ("APPROVE" / "DISAPPROVE") is used
+- Present tense wording ("Approve" / "Disapprove") is used
 
 ### Why Box (Not Bold + Strikethrough)
 
@@ -96,14 +96,14 @@ In `primitives.typ`, the `render-action-line` function:
   )
   blank-line()
   let approve-text = if action == "approve" { 
-    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt)[APPROVE] 
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt)[Approve] 
   } else { 
-    [APPROVE] 
+    [Approve] 
   }
   let disapprove-text = if action == "disapprove" { 
-    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt)[DISAPPROVE] 
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt)[Disapprove] 
   } else { 
-    [DISAPPROVE] 
+    [Disapprove] 
   }
   [#approve-text / #disapprove-text]
 }
@@ -112,7 +112,7 @@ In `primitives.typ`, the `render-action-line` function:
 ### What This Does NOT Cover
 
 - **Digital signing workflow** -- the `action` parameter captures the decision in the document. A future digital signing layer would consume this value plus gather metadata (signer identity, timestamp, certificate, IP, browser, etc.). That is a separate concern and a separate design.
-- **Custom action labels** -- "CONCUR / NONCONCUR", "APPROVE WITH CONDITIONS", etc. could be added later by accepting a tuple or enum. The initial implementation covers the most common case.
+- **Custom action labels** -- "Concur / Nonconcur", "Approve with conditions", etc. could be added later by accepting a tuple or enum. The initial implementation covers the most common case.
 - **Routing/workflow state** -- this is a typesetting template, not a workflow engine. It renders the result of a decision; it does not manage the decision process.
 
 ## API Examples
@@ -167,6 +167,6 @@ This is out of scope for the typesetting template but the `action` parameter pro
 | Principle | Application |
 |-----------|-------------|
 | Minimal API surface | Single parameter controls both visibility and selection |
-| Convention over configuration | APPROVE/DISAPPROVE order is fixed, matching standard forms |
+| Convention over configuration | Approve/Disapprove order is fixed, matching standard forms |
 | Template renders decisions, doesn't manage them | No workflow state, routing, or signing logic |
 | Anti-forgery by formatting | Box mirrors the paper circle convention |
