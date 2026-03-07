@@ -23,7 +23,8 @@
   date: none,
   // Format of indorsement: "standard" (same page), "informal" (no header), or "separate_page" (starts on new page)
   format: "standard",
-  // Approval action: none (default, no action line displayed), "approve", or "disapprove".
+  // Approval action: none (default, no action line displayed), "undecided", "approve", or "disapprove".
+  // When set to "undecided", the action line is displayed with neither option circled.
   // When set to "approve" or "disapprove", the action line is displayed with the selected option circled.
   action: none,
   content,
@@ -91,7 +92,7 @@
   }
 
   // Show action line only when an action decision is set (not `none`)
-  if action == none {
+  if action != none {
     render-action-line(action)
   }
 

@@ -244,7 +244,7 @@ Creates an indorsement for forwarding or commenting on a memorandum. Called as a
   cc: none,                                                 // Courtesy copies
   date: datetime.today(),                                  // Indorsement date
   format: "standard",                                      // "standard", "informal", or "separate_page"
-  action: "none",                                          // "none", "approve", or "disapprove"
+  action: "none",                                          // "none", "undecided", "approve", or "disapprove"
 )[
   Your indorsement content here.
 ]
@@ -252,6 +252,7 @@ Creates an indorsement for forwarding or commenting on a memorandum. Called as a
 
 **The `action` parameter:**
 - `"none"` (default): No action line displayed
+- `"undecided"`: Displays "Approve / Disapprove" with neither option boxed
 - `"approve"`: Displays "Approve / Disapprove" with Approve boxed
 - `"disapprove"`: Displays "Approve / Disapprove" with Disapprove boxed
 
