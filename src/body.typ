@@ -292,6 +292,10 @@
             par
           } else {
             // Base-level paragraphs are flush left with no numbering
+            // Reset all child level counters so subsequent list items restart at 1
+            for child in range(max-levels) {
+              level-counts.insert(str(child), 1)
+            }
             par_content
           }
         }
