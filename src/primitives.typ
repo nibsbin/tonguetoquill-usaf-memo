@@ -144,20 +144,30 @@
 // =============================================================================
 // ACTION LINE RENDERING
 // =============================================================================
-// Renders the APPROVED / DISAPPROVED action line for indorsement memos.
-// action: none = both plain (no decision yet), "approved" = bold APPROVED /
-// strike DISAPPROVED, "disapproved" = strike APPROVED / bold DISAPPROVED.
-// Visibility is controlled by the caller (show_action / action != none).
+// Renders the APPROVE / DISAPPROVE action line for indorsement memos.
+// action: "none" = no action line displayed (hidden), "approve" = APPROVE circled,
+// "disapprove" = DISAPPROVE circled. The action line is only rendered when
+// action is "approve" or "disapprove".
 
 #let render-action-line(action) = {
   assert(
-    action in (none, "approved", "disapproved"),
-    message: "action must be none, \"approved\", or \"disapproved\"",
+    action in ("none", "approve", "disapprove"),
+    message: "action must be \"none\", \"approve\", or \"disapprove\"",
   )
   blank-line()
-  let approved-text = if action == "approved" { strong[APPROVED] } else if action == "disapproved" { strike[APPROVED] } else { [APPROVED] }
-  let disapproved-text = if action == "disapproved" { strong[DISAPPROVED] } else if action == "approved" { strike[DISAPPROVED] } else { [DISAPPROVED] }
-  [#approved-text / #disapproved-text]
+  // Circle the selected option using a box with rounded corners
+  // Use baseline parameter to maintain vertical text alignment
+  let approve-text = if action == "approve" { 
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[APPROVE] 
+  } else { 
+    [APPROVE] 
+  }
+  let disapprove-text = if action == "disapprove" { 
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[DISAPPROVE] 
+  } else { 
+    [DISAPPROVE] 
+  }
+  [#approve-text / #disapprove-text]
 }
 
 // =============================================================================
