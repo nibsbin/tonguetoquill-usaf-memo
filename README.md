@@ -244,10 +244,16 @@ Creates an indorsement for forwarding or commenting on a memorandum. Called as a
   cc: none,                                                 // Courtesy copies
   date: datetime.today(),                                  // Indorsement date
   format: "standard",                                      // "standard", "informal", or "separate_page"
+  action: "none",                                          // "none", "approve", or "disapprove"
 )[
   Your indorsement content here.
 ]
 ```
+
+**The `action` parameter:**
+- `"none"` (default): No action line displayed
+- `"approve"`: Displays "APPROVE / DISAPPROVE" with APPROVE boxed
+- `"disapprove"`: Displays "APPROVE / DISAPPROVE" with DISAPPROVE boxed
 
 **Responsibilities:**
 - Auto-numbers indorsements (1st Ind, 2d Ind, 3d Ind, etc.)

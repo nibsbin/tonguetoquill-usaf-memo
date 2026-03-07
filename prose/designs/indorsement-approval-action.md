@@ -4,46 +4,42 @@
 
 ## TL;DR
 
-Add an `action` parameter to `indorsement()` that renders "APPROVED / ~~DISAPPROVED~~" (or vice versa) in the indorsement body, matching the paper convention where the chosen option is circled and the unchosen option is struck through.
+Add an `action` parameter to `indorsement()` that renders "APPROVE / DISAPPROVE" in the indorsement body, with the chosen option boxed (circled), matching the paper convention where the chosen option is circled.
 
 ## Problem
 
 Indorsement memos frequently carry an approval decision. The standard paper workflow is:
 
-1. The memo presents two options: **APPROVED** and **DISAPPROVED**
-2. The reviewer circles one and strikes through the other
+1. The memo presents two options: **APPROVE** and **DISAPPROVE**
+2. The reviewer circles one
 3. This prevents after-the-fact forgery by making the choice unambiguous
 
-Our `indorsement()` function currently has no way to express this. Users must manually format the approval line, which is error-prone and inconsistent.
+Our `indorsement()` function supports this via the `action` parameter.
 
 ## Design
 
-### New Parameters: `show_action` and `action`
+### The `action` Parameter
 
-Add two optional parameters to the `indorsement()` function:
+A single optional parameter controls both visibility and selection:
 
 ```typst
 #indorsement(
   from: "ORG/SYMBOL",
   to: "ORG/SYMBOL",
-  show_action: true,             // <-- new: render the action line
-  action: "approved",            // <-- new: the decision
+  action: "approve",            // <-- "none", "approve", or "disapprove"
   signature_block: (...),
 )[Optional remarks here.]
 ```
 
-**`show_action`** (bool, default `false`): Whether to render the APPROVED / DISAPPROVED line.
+**`action`** (default `"none"`): The approval decision.
 
-**`action`** (default `none`): The approval decision.
+| `action` | Rendered Output |
+|----------|----------------|
+| `"none"` (default) | No action line rendered |
+| `"approve"` | [APPROVE] / DISAPPROVE (APPROVE boxed) |
+| `"disapprove"` | APPROVE / [DISAPPROVE] (DISAPPROVE boxed) |
 
-| `show_action` | `action` | Rendered Output |
-|---------------|----------|----------------|
-| `false` (default) | `none` (default) | No action line rendered |
-| `true` | `none` | APPROVED / DISAPPROVED (both plain, no decision yet) |
-| (implied `true`) | `"approved"` | **APPROVED** / ~~DISAPPROVED~~ |
-| (implied `true`) | `"disapproved"` | ~~APPROVED~~ / **DISAPPROVED** |
-
-Setting `action` to `"approved"` or `"disapproved"` implicitly shows the action line, so `show_action: true` is only needed when displaying the line without a decision.
+The action line is **only displayed** when `action` is set to `"approve"` or `"disapprove"`. When `action` is `"none"` (the default), no action line appears at all.
 
 ### Rendering Rules
 
@@ -54,7 +50,7 @@ The action line is rendered as a single line between the MEMORANDUM FOR header a
 
 MEMORANDUM FOR  ORG/SYMBOL
 
-APPROVED / D̶I̶S̶A̶P̶P̶R̶O̶V̶E̶D̶
+[APPROVE] / DISAPPROVE
 
 1.  Optional remarks or conditions...
 
@@ -64,35 +60,54 @@ APPROVED / D̶I̶S̶A̶P̶P̶R̶O̶V̶E̶D̶
 
 **Formatting details:**
 
-- The **chosen** action is rendered in bold, uppercase
-- The **unchosen** action is rendered with strikethrough, uppercase
+- The **chosen** action is rendered with a box (rounded rectangle) around it
+- The **unchosen** action is rendered plain
 - A forward slash ` / ` separates the two options
-- The order is always APPROVED first, DISAPPROVED second (matching standard forms)
+- The order is always APPROVE first, DISAPPROVE second (matching standard forms)
 - The line is flush left, consistent with body text placement
+- Present tense wording ("APPROVE" / "DISAPPROVE") is used
 
-### Why Bold + Strikethrough (Not Circle)
+### Why Box (Not Bold + Strikethrough)
 
 Real paper memos use a circle around the chosen option. In a typeset document:
 
-- Circles around text look awkward and don't translate well to PDF
-- Bold vs. strikethrough creates the same unambiguous visual distinction
-- This matches how electronic forms handle the same pattern
-- A future digital signing layer can lock the choice with cryptographic proof, making the visual anti-forgery convention less critical
+- A box with rounded corners approximates the hand-drawn circle
+- This creates an unambiguous visual distinction matching the paper convention
+- A future digital signing layer can lock the choice with cryptographic proof
 
-### Implementation Sketch
+### Implementation
 
 In `indorsement.typ`, after the MEMORANDUM FOR grid and before `render-body(content)`:
 
 ```typst
-// Show action line if explicitly requested or if an action decision is set
-if show_action or action != none {
+// Show action line only when an action decision is set (not "none")
+if action != "none" {
   render-action-line(action)
 }
 ```
 
-This goes inside the `if format != "informal"` block, after the header grid but before the body. The body content (remarks, conditions, etc.) follows below as normal.
+In `primitives.typ`, the `render-action-line` function:
 
-For `format: "informal"`, the action line renders at the top of the indorsement since there is no header.
+```typst
+#let render-action-line(action) = {
+  assert(
+    action in ("none", "approve", "disapprove"),
+    message: "action must be \"none\", \"approve\", or \"disapprove\"",
+  )
+  blank-line()
+  let approve-text = if action == "approve" { 
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt)[APPROVE] 
+  } else { 
+    [APPROVE] 
+  }
+  let disapprove-text = if action == "disapprove" { 
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt)[DISAPPROVE] 
+  } else { 
+    [DISAPPROVE] 
+  }
+  [#approve-text / #disapprove-text]
+}
+```
 
 ### What This Does NOT Cover
 
@@ -107,7 +122,7 @@ For `format: "informal"`, the action line renders at the top of the indorsement 
 #indorsement(
   from: "374 AW/CC",
   to: "374 MSG/CC",
-  action: "approved",
+  action: "approve",
   signature_block: ("JOHN A. DOE, Col, USAF", "Commander"),
 )[Approved with the following condition: funding must be identified from within existing squadron budget NLT 1 Oct.]
 ```
@@ -117,22 +132,12 @@ For `format: "informal"`, the action line renders at the top of the indorsement 
 #indorsement(
   from: "374 AW/CC",
   to: "374 MSG/CC",
-  action: "disapproved",
+  action: "disapprove",
   signature_block: ("JOHN A. DOE, Col, USAF", "Commander"),
 )[Request is disapproved due to insufficient justification. Resubmit with updated cost analysis.]
 ```
 
-**No decision yet (action line shown, both plain):**
-```typst
-#indorsement(
-  from: "ORG/SYMBOL",
-  to: "ORG/SYMBOL",
-  show_action: true,
-  signature_block: ("NAME, Rank, USAF", "Title"),
-)[Forwarded for your action.]
-```
-
-**Hidden (default, no action line rendered):**
+**No action (default, no action line rendered):**
 ```typst
 #indorsement(
   from: "ORG/SYMBOL",
@@ -161,7 +166,7 @@ This is out of scope for the typesetting template but the `action` parameter pro
 
 | Principle | Application |
 |-----------|-------------|
-| Minimal API surface | Two new parameters with clear separation of concerns |
-| Convention over configuration | APPROVED/DISAPPROVED order is fixed, matching standard forms |
+| Minimal API surface | Single parameter controls both visibility and selection |
+| Convention over configuration | APPROVE/DISAPPROVE order is fixed, matching standard forms |
 | Template renders decisions, doesn't manage them | No workflow state, routing, or signing logic |
-| Anti-forgery by formatting | Bold + strikethrough mirrors the paper circle + strikethrough convention |
+| Anti-forgery by formatting | Box mirrors the paper circle convention |

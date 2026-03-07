@@ -99,7 +99,7 @@
 #indorsement(
   from: "ORG/SYMBOL [Office symbol for 1st Indorsement Official]",
   to: "ORG/SYMBOL [Office symbol for 2d Indorsement official]",
-  action: "approved",
+  action: "approve",
   signature_block: (
     "FIRST M LAST, Rank, USAF",
     "Duty Title",
