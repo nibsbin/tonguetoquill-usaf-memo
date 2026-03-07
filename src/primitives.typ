@@ -145,17 +145,17 @@
 // ACTION LINE RENDERING
 // =============================================================================
 // Renders the APPROVED / DISAPPROVED action line for indorsement memos.
-// The chosen action is bold; the unchosen action is struck through.
-// Order is always APPROVED first, DISAPPROVED second (matching standard forms).
+// action: none = both plain (no decision), "approved" or "disapproved" = bold
+// chosen, strikethrough unchosen. Hidden (auto) is handled by the caller.
 
 #let render-action-line(action) = {
   assert(
-    action in ("approved", "disapproved"),
-    message: "action must be \"approved\" or \"disapproved\"",
+    action in (none, "approved", "disapproved"),
+    message: "action must be none, \"approved\", or \"disapproved\"",
   )
   blank-line()
-  let approved-text = if action == "approved" { strong[APPROVED] } else { strike[APPROVED] }
-  let disapproved-text = if action == "disapproved" { strong[DISAPPROVED] } else { strike[DISAPPROVED] }
+  let approved-text = if action == "approved" { strong[APPROVED] } else if action == "disapproved" { strike[APPROVED] } else { [APPROVED] }
+  let disapproved-text = if action == "disapproved" { strong[DISAPPROVED] } else if action == "approved" { strike[DISAPPROVED] } else { [DISAPPROVED] }
   [#approved-text / #disapproved-text]
 }
 

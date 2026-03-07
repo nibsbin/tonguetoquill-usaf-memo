@@ -35,7 +35,8 @@ Add an optional `action` parameter to the `indorsement()` function:
 
 | Value | Rendered Output |
 |-------|----------------|
-| `none` (default) | No action line rendered (current behavior) |
+| `auto` (default) | No action line rendered (hidden) |
+| `none` | APPROVED / DISAPPROVED (both plain, no decision yet) |
 | `"approved"` | **APPROVED** / ~~DISAPPROVED~~ |
 | `"disapproved"` | ~~APPROVED~~ / **DISAPPROVED** |
 
@@ -78,16 +79,9 @@ Real paper memos use a circle around the chosen option. In a typeset document:
 In `indorsement.typ`, after the MEMORANDUM FOR grid and before `render-body(content)`:
 
 ```typst
-// Render approval action line if specified
-if action != none {
-  assert(
-    action in ("approved", "disapproved"),
-    message: "action must be \"approved\" or \"disapproved\"",
-  )
-  blank-line()
-  let approved-text = if action == "approved" { strong[APPROVED] } else { strike[APPROVED] }
-  let disapproved-text = if action == "disapproved" { strong[DISAPPROVED] } else { strike[DISAPPROVED] }
-  [#approved-text / #disapproved-text]
+// Render approval action line if not hidden
+if action != auto {
+  render-action-line(action)
 }
 ```
 
@@ -123,13 +117,23 @@ For `format: "informal"`, the action line renders at the top of the indorsement 
 )[Request is disapproved due to insufficient justification. Resubmit with updated cost analysis.]
 ```
 
-**No action (existing behavior, unchanged):**
+**No decision yet (action line shown, both plain):**
+```typst
+#indorsement(
+  from: "ORG/SYMBOL",
+  to: "ORG/SYMBOL",
+  action: none,
+  signature_block: ("NAME, Rank, USAF", "Title"),
+)[Forwarded for your action.]
+```
+
+**Hidden (default, no action line rendered):**
 ```typst
 #indorsement(
   from: "ORG/SYMBOL",
   to: "ORG/SYMBOL",
   signature_block: ("NAME, Rank, USAF", "Title"),
-)[Forwarded for your action.]
+)[Forwarded for your information.]
 ```
 
 ## Extension Points

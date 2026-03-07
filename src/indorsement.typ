@@ -23,9 +23,10 @@
   date: none,
   // Format of indorsement: "standard" (same page), "informal" (no header), or "separate_page" (starts on new page)
   format: "standard",
-  // Optional approval action: "approved" or "disapproved". Renders APPROVED / DISAPPROVED
-  // with bold on the chosen option and strikethrough on the unchosen option.
-  action: none,
+  // Optional approval action line. auto = hidden (default), none = both plain,
+  // "approved" = bold APPROVED / strike DISAPPROVED,
+  // "disapproved" = strike APPROVED / bold DISAPPROVED.
+  action: auto,
   content,
 ) = {
   // Validate format parameter
@@ -90,7 +91,7 @@
     blank-line()
   }
 
-  if action != none {
+  if action != auto {
     render-action-line(action)
   }
 
