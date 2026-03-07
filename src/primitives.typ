@@ -145,14 +145,15 @@
 // ACTION LINE RENDERING
 // =============================================================================
 // Renders the Approve / Disapprove action line for indorsement memos.
-// action: "none" = no action line displayed (hidden), "approve" = Approve circled,
-// "disapprove" = Disapprove circled. The action line is only rendered when
-// action is "approve" or "disapprove".
+// action: "none" = no action line displayed (hidden), "undecided" = both options
+// rendered plain (no circle), "approve" = Approve circled,
+// "disapprove" = Disapprove circled. The action line is rendered when
+// action is "undecided", "approve", or "disapprove".
 
 #let render-action-line(action) = {
   assert(
-    action in ("none", "approve", "disapprove"),
-    message: "action must be \"none\", \"approve\", or \"disapprove\"",
+    action in ("none", "undecided", "approve", "disapprove"),
+    message: "action must be \"none\", \"undecided\", \"approve\", or \"disapprove\"",
   )
   blank-line()
   // Circle the selected option using a box with rounded corners

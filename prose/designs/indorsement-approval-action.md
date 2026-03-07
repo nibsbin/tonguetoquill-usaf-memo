@@ -36,6 +36,7 @@ A single optional parameter controls both visibility and selection:
 | `action` | Rendered Output |
 |----------|----------------|
 | `"none"` (default) | No action line rendered |
+| `"undecided"` | Approve / Disapprove (neither boxed) |
 | `"approve"` | [Approve] / Disapprove (Approve boxed) |
 | `"disapprove"` | Approve / [Disapprove] (Disapprove boxed) |
 
@@ -135,6 +136,16 @@ In `primitives.typ`, the `render-action-line` function:
   action: "disapprove",
   signature_block: ("JOHN A. DOE, Col, USAF", "Commander"),
 )[Request is disapproved due to insufficient justification. Resubmit with updated cost analysis.]
+```
+
+**Undecided (action line rendered, neither option boxed):**
+```typst
+#indorsement(
+  from: "374 AW/CC",
+  to: "374 MSG/CC",
+  action: "undecided",
+  signature_block: ("JOHN A. DOE, Col, USAF", "Commander"),
+)[Forwarding for your decision.]
 ```
 
 **No action (default, no action line rendered):**
