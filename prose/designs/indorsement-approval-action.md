@@ -36,9 +36,9 @@ A single optional parameter controls both visibility and selection:
 | `action` | Rendered Output |
 |----------|----------------|
 | `"none"` (default) | No action line rendered |
-| `"undecided"` | Approve / Disapprove (neither boxed) |
-| `"approve"` | [Approve] / Disapprove (Approve boxed) |
-| `"disapprove"` | Approve / [Disapprove] (Disapprove boxed) |
+| `"undecided"` | Approve / Disapprove (neither boxed or struck through) |
+| `"approve"` | [Approve] / ~~Disapprove~~ (Approve boxed, Disapprove struck through) |
+| `"disapprove"` | ~~Approve~~ / [Disapprove] (Disapprove boxed, Approve struck through) |
 
 The action line is **only displayed** when `action` is set to `"undecided"`, `"approve"`, or `"disapprove"`. When `action` is `"none"` (the default), no action line appears at all.
 
@@ -62,7 +62,7 @@ MEMORANDUM FOR  ORG/SYMBOL
 **Formatting details:**
 
 - The **chosen** action is rendered with a box (rounded rectangle) around it
-- The **unchosen** action is rendered plain
+- The **unchosen** action is rendered with a strikethrough
 - A forward slash ` / ` separates the two options
 - The order is always Approve first, Disapprove second (matching standard forms)
 - The line is flush left, consistent with body text placement
@@ -97,12 +97,16 @@ In `primitives.typ`, the `render-action-line` function:
   )
   blank-line()
   let approve-text = if action == "approve" { 
-    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt)[Approve] 
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[Approve] 
+  } else if action == "disapprove" {
+    strike[Approve]
   } else { 
     [Approve] 
   }
   let disapprove-text = if action == "disapprove" { 
-    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt)[Disapprove] 
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[Disapprove] 
+  } else if action == "approve" {
+    strike[Disapprove]
   } else { 
     [Disapprove] 
   }

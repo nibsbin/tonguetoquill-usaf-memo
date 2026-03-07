@@ -86,7 +86,7 @@ cd tonguetoquill-usaf-memo
 Import the core functions for creating memorandums:
 
 ```typst
-#import "@preview/tonguetoquill-usaf-memo:1.0.0": frontmatter, mainmatter, backmatter, indorsement
+#import "@preview/tonguetoquill-usaf-memo:1.1.0": frontmatter, mainmatter, backmatter, indorsement
 ```
 
 **Minimal Example:**
@@ -252,9 +252,9 @@ Creates an indorsement for forwarding or commenting on a memorandum. Called as a
 
 **The `action` parameter:**
 - `"none"` (default): No action line displayed
-- `"undecided"`: Displays "Approve / Disapprove" with neither option boxed
-- `"approve"`: Displays "Approve / Disapprove" with Approve boxed
-- `"disapprove"`: Displays "Approve / Disapprove" with Disapprove boxed
+- `"undecided"`: Displays "Approve / Disapprove" with neither option boxed or struck through
+- `"approve"`: Displays "Approve / Disapprove" with Approve boxed and Disapprove struck through
+- `"disapprove"`: Displays "Approve / Disapprove" with Disapprove boxed and Approve struck through
 
 **Responsibilities:**
 - Auto-numbers indorsements (1st Ind, 2d Ind, 3d Ind, etc.)
