@@ -18,27 +18,32 @@ Our `indorsement()` function currently has no way to express this. Users must ma
 
 ## Design
 
-### New Parameter: `action`
+### New Parameters: `show_action` and `action`
 
-Add an optional `action` parameter to the `indorsement()` function:
+Add two optional parameters to the `indorsement()` function:
 
 ```typst
 #indorsement(
   from: "ORG/SYMBOL",
   to: "ORG/SYMBOL",
-  action: "approved",          // <-- new
+  show_action: true,             // <-- new: render the action line
+  action: "approved",            // <-- new: the decision
   signature_block: (...),
 )[Optional remarks here.]
 ```
 
-**Accepted values:**
+**`show_action`** (bool, default `false`): Whether to render the APPROVED / DISAPPROVED line.
 
-| Value | Rendered Output |
-|-------|----------------|
-| `auto` (default) | No action line rendered (hidden) |
-| `none` | APPROVED / DISAPPROVED (both plain, no decision yet) |
-| `"approved"` | **APPROVED** / ~~DISAPPROVED~~ |
-| `"disapproved"` | ~~APPROVED~~ / **DISAPPROVED** |
+**`action`** (default `none`): The approval decision.
+
+| `show_action` | `action` | Rendered Output |
+|---------------|----------|----------------|
+| `false` (default) | `none` (default) | No action line rendered |
+| `true` | `none` | APPROVED / DISAPPROVED (both plain, no decision yet) |
+| (implied `true`) | `"approved"` | **APPROVED** / ~~DISAPPROVED~~ |
+| (implied `true`) | `"disapproved"` | ~~APPROVED~~ / **DISAPPROVED** |
+
+Setting `action` to `"approved"` or `"disapproved"` implicitly shows the action line, so `show_action: true` is only needed when displaying the line without a decision.
 
 ### Rendering Rules
 
@@ -79,8 +84,8 @@ Real paper memos use a circle around the chosen option. In a typeset document:
 In `indorsement.typ`, after the MEMORANDUM FOR grid and before `render-body(content)`:
 
 ```typst
-// Render approval action line if not hidden
-if action != auto {
+// Show action line if explicitly requested or if an action decision is set
+if show_action or action != none {
   render-action-line(action)
 }
 ```
@@ -122,7 +127,7 @@ For `format: "informal"`, the action line renders at the top of the indorsement 
 #indorsement(
   from: "ORG/SYMBOL",
   to: "ORG/SYMBOL",
-  action: none,
+  show_action: true,
   signature_block: ("NAME, Rank, USAF", "Title"),
 )[Forwarded for your action.]
 ```
@@ -156,7 +161,7 @@ This is out of scope for the typesetting template but the `action` parameter pro
 
 | Principle | Application |
 |-----------|-------------|
-| Minimal API surface | One new parameter, two valid values |
+| Minimal API surface | Two new parameters with clear separation of concerns |
 | Convention over configuration | APPROVED/DISAPPROVED order is fixed, matching standard forms |
 | Template renders decisions, doesn't manage them | No workflow state, routing, or signing logic |
 | Anti-forgery by formatting | Bold + strikethrough mirrors the paper circle + strikethrough convention |
