@@ -40,7 +40,7 @@ A single optional parameter controls both visibility and selection:
 | `"approve"` | [Approve] / Disapprove (Approve boxed) |
 | `"disapprove"` | Approve / [Disapprove] (Disapprove boxed) |
 
-The action line is **only displayed** when `action` is set to `"approve"` or `"disapprove"`. When `action` is `"none"` (the default), no action line appears at all.
+The action line is **only displayed** when `action` is set to `"undecided"`, `"approve"`, or `"disapprove"`. When `action` is `"none"` (the default), no action line appears at all.
 
 ### Rendering Rules
 
