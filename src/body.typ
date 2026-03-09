@@ -131,8 +131,11 @@
       let is_continuation = nest_level > 0 and not is_first_par
 
       PAR_BUFFER.update(pars => {
-        // Item tuple: (content, nest_level, is_heading, is_table, is_continuation)
-        pars.push((text([#p.body]), nest_level, is_heading, false, is_continuation))
+        pars.push((
+          content: text([#p.body]),
+          nest_level: nest_level,
+          kind: if is_heading { "heading" } else if is_continuation { "continuation" } else { "par" },
+        ))
         pars
       })
 
@@ -146,7 +149,11 @@
     // Collect tables — captured as-is without paragraph numbering
     show table: t => context {
       PAR_BUFFER.update(pars => {
-        pars.push((t, -1, false, true, false))
+        pars.push((
+          content: t,
+          nest_level: -1,
+          kind: "table",
+        ))
         pars
       })
       t
@@ -197,25 +204,16 @@
   // Use place() to prevent hidden content from affecting layout flow
   place(hide(first_pass))
 
-  //Second pass: consume par buffer
+  // Second pass: consume par buffer
   //
-  // PAR_BUFFER item tuple layout:
-  //   item.at(0) — content         : the paragraph body or table element
-  //   item.at(1) — nest_level      : nesting depth (−1 for tables)
-  //   item.at(2) — is_heading      : bool, true if item is a heading paragraph
-  //   item.at(3) — is_table        : bool, true if item is a table element
-  //   item.at(4) — is_continuation : bool, true if this is a continuation block
-  //                                  within a multi-block list item
-  let ITEM_IS_TABLE = 3
-  let ITEM_IS_CONTINUATION = 4
+  // PAR_BUFFER item dictionary layout:
+  //   item.content    — the paragraph body or table element
+  //   item.nest_level — nesting depth (−1 for tables)
+  //   item.kind       — "par", "heading", "table", or "continuation"
   context {
     let heading_buffer = none
-    // Tables and continuation blocks do not count as distinct paragraphs
-    // for AFH 33-337 §2 numbering purposes
-    let par_count = PAR_BUFFER.get().filter(item =>
-      not item.at(ITEM_IS_TABLE, default: false)
-      and not item.at(ITEM_IS_CONTINUATION, default: false)
-    ).len()
+    // Only top-level paragraphs count for AFH 33-337 §2 numbering purposes
+    let par_count = PAR_BUFFER.get().filter(item => item.kind == "par").len()
     let items = PAR_BUFFER.get()
     let total_count = items.len()
 
@@ -231,45 +229,49 @@
     let i = 0
     for item in items {
       i += 1
-      let is_table = item.at(ITEM_IS_TABLE, default: false)
+      let kind = item.kind
+      let item_content = item.content
 
-      // Render tables inline without paragraph numbering
-      if is_table {
-        blank-line()
-        render-memo-table(item.at(0))
+      // Buffer headings for prepend to the next rendered element
+      if kind == "heading" {
+        heading_buffer = item_content
         continue
       }
 
-      let par_content = item.at(0)
-      let nest_level = item.at(1)
-      let is_heading = item.at(2)
-      let is_continuation = item.at(ITEM_IS_CONTINUATION, default: false)
-
-      // Prepend heading as bolded sentence
+      // Prepend buffered heading to the next non-heading element
       if heading_buffer != none {
-        par_content = [#strong[#heading_buffer.] #par_content]
-      }
-      if is_heading {
-        heading_buffer = par_content
-        continue
+        if kind == "table" {
+          // Tables cannot have inline text prepended; emit heading as
+          // a standalone bold line above the table
+          blank-line()
+          strong[#heading_buffer.]
+          heading_buffer = none
+        } else {
+          item_content = [#strong[#heading_buffer.] #item_content]
+          heading_buffer = none
+        }
       }
 
+      // Format based on element kind
+      let nest_level = item.nest_level
       let final_par = {
-        if is_continuation {
+        if kind == "table" {
+          render-memo-table(item_content)
+        } else if kind == "continuation" {
           // Continuation block within a multi-block list item:
           // indent to align with preceding numbered paragraph's text, no new number.
           // level-counts still holds the value of the preceding numbered paragraph.
           if auto-numbering {
-            format-continuation-par(par_content, nest_level, level-counts)
+            format-continuation-par(item_content, nest_level, level-counts)
           } else if nest_level > 0 {
-            format-continuation-par(par_content, nest_level - 1, level-counts)
+            format-continuation-par(item_content, nest_level - 1, level-counts)
           } else {
-            par_content
+            item_content
           }
         } else if auto-numbering {
           if par_count > 1 {
             // Apply paragraph numbering per AFH 33-337 §2
-            let par = format-numbered-par(par_content, nest_level, level-counts)
+            let par = format-numbered-par(item_content, nest_level, level-counts)
             // Advance counter for this level and reset child levels
             level-counts.insert(str(nest_level), level-counts.at(str(nest_level)) + 1)
             for child in range(nest_level + 1, max-levels) {
@@ -278,13 +280,13 @@
             par
           } else {
             // AFH 33-337 §2: "A single paragraph is not numbered"
-            par_content
+            item_content
           }
         } else {
           // Unnumbered mode: only explicitly nested items (enum/list) get numbered
           if nest_level > 0 {
             let effective_level = nest_level - 1
-            let par = format-numbered-par(par_content, effective_level, level-counts)
+            let par = format-numbered-par(item_content, effective_level, level-counts)
             level-counts.insert(str(effective_level), level-counts.at(str(effective_level)) + 1)
             for child in range(effective_level + 1, max-levels) {
               level-counts.insert(str(child), 1)
@@ -296,12 +298,12 @@
             for child in range(max-levels) {
               level-counts.insert(str(child), 1)
             }
-            par_content
+            item_content
           }
         }
       }
 
-      //If this is the final paragraph, apply AFH 33-337 §11 rule:
+      // If this is the final item, apply AFH 33-337 §11 rule:
       // "Avoid dividing a paragraph of less than four lines between two pages"
       blank-line()
       if i == total_count {
@@ -309,16 +311,16 @@
 
         // Use configured spacing for line height calculation
         let line_height = measure(line(length: spacing.line + spacing.line-height)).width
-        // Calculate last par's height
+        // Calculate last item's height
         let par_height = measure(final_par, width: available_width).height
 
         let estimated_lines = calc.ceil(par_height / line_height)
 
         if estimated_lines < 4 {
-          // Short paragraph (< 4 lines): make sticky to keep with signature
+          // Short content (< 4 lines): make sticky to keep with signature
           block(sticky: true)[#final_par]
         } else {
-          // Longer paragraph (≥ 4 lines): use default breaking behavior
+          // Longer content (≥ 4 lines): use default breaking behavior
           block(breakable: true)[#final_par]
         }
       } else {
