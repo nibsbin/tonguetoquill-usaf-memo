@@ -67,7 +67,7 @@
 
   #table(
     columns: (1fr, 1fr, 1fr),
-    table.header([*Element*], [*Placement*], [*Reference*]),
+    table.header([Element], [Placement], [Reference]),
     [Date], [1.75 in from top, 1 in from right], [AFH 33-337 §Date],
     [MEMORANDUM FOR], [2nd line below date], [AFH 33-337 §For],
     [FROM], [2nd line below MEMORANDUM FOR], [AFH 33-337 §From],

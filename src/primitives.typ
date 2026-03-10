@@ -158,19 +158,19 @@
   blank-line()
   // Circle the selected option using a box with rounded corners
   // Use baseline parameter to maintain vertical text alignment
-  let approve-text = if action == "approve" { 
-    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[Approve] 
+  let approve-text = if action == "approve" {
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[Approve]
   } else if action == "disapprove" {
     strike[Approve]
-  } else { 
-    [Approve] 
+  } else {
+    [Approve]
   }
-  let disapprove-text = if action == "disapprove" { 
-    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[Disapprove] 
+  let disapprove-text = if action == "disapprove" {
+    box(stroke: 0.5pt + black, radius: 2pt, inset: 2pt, baseline: 2pt)[Disapprove]
   } else if action == "approve" {
     strike[Disapprove]
-  } else { 
-    [Disapprove] 
+  } else {
+    [Disapprove]
   }
   [#approve-text / #disapprove-text]
 }
@@ -191,6 +191,9 @@
 /// - it (content): The table element to style and render
 /// -> content
 #let render-memo-table(it) = {
+  // AFH 33-337 does not specify table formatting, so we follow the general
+  // aesthetic principles of the standard: bold headers for clarity.
+  show table.cell.where(y: 0): set text(weight: "bold")
   set table(
     stroke: 0.5pt + black,
     inset: (x: 0.5em, y: 0.4em),
