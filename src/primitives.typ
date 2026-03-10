@@ -172,7 +172,10 @@
   } else {
     [Disapprove]
   }
-  [#approve-text / #disapprove-text]
+  // Keep the action line with the following content (body or signature block)
+  // using the same sticky-block pattern that body.typ applies to the last
+  // paragraph, per AFH 33-337 §11 orphan-prevention rules.
+  block(sticky: true)[#approve-text / #disapprove-text]
 }
 
 // =============================================================================
