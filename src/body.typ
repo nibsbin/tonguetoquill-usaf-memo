@@ -212,8 +212,9 @@
   //   item.kind       — "par", "heading", "table", or "continuation"
   context {
     let heading_buffer = none
-    // Only top-level paragraphs count for AFH 33-337 §2 numbering purposes
-    let par_count = PAR_BUFFER.get().filter(item => item.kind == "par").len()
+    // Only top-level paragraphs count for AFH 33-337 §2 numbering purposes.
+    // Sub-paragraphs (nest_level > 0) are always numbered regardless of this count.
+    let top_level_par_count = PAR_BUFFER.get().filter(item => item.kind == "par" and item.nest_level == 0).len()
     let items = PAR_BUFFER.get()
     let total_count = items.len()
 
@@ -269,7 +270,14 @@
             item_content
           }
         } else if auto-numbering {
-          if par_count > 1 {
+          if nest_level == 0 and top_level_par_count <= 1 {
+            // AFH 33-337 §2: "A single paragraph is not numbered"
+            // Reset child levels so sub-items start fresh
+            for child in range(nest_level + 1, max-levels) {
+              level-counts.insert(str(child), 1)
+            }
+            item_content
+          } else {
             // Apply paragraph numbering per AFH 33-337 §2
             let par = format-numbered-par(item_content, nest_level, level-counts)
             // Advance counter for this level and reset child levels
@@ -278,9 +286,6 @@
               level-counts.insert(str(child), 1)
             }
             par
-          } else {
-            // AFH 33-337 §2: "A single paragraph is not numbered"
-            item_content
           }
         } else {
           // Unnumbered mode: only explicitly nested items (enum/list) get numbered
