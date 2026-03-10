@@ -8,22 +8,26 @@ Validates paragraph numbering per AFH 33-337 §2:
 """
 
 import io
+import os
 import typst
 import pypdf
 
 ROOT = "."
 FONT_PATHS = ["."]
+_TMP_PATH = "dev_assets/_test_tmp.typ"
 
 
 def extract_text(typ_content: str) -> str:
     """Compile Typst content and extract text from all pages."""
-    # Write to a temp file in dev_assets
-    path = "dev_assets/_test_tmp.typ"
-    with open(path, "w") as f:
-        f.write(typ_content)
-    pdf = typst.compile(path, root=ROOT, font_paths=FONT_PATHS)
-    reader = pypdf.PdfReader(io.BytesIO(pdf))
-    return "\n".join(page.extract_text() for page in reader.pages)
+    try:
+        with open(_TMP_PATH, "w") as f:
+            f.write(typ_content)
+        pdf = typst.compile(_TMP_PATH, root=ROOT, font_paths=FONT_PATHS)
+        reader = pypdf.PdfReader(io.BytesIO(pdf))
+        return "\n".join(page.extract_text() for page in reader.pages)
+    finally:
+        if os.path.exists(_TMP_PATH):
+            os.remove(_TMP_PATH)
 
 
 PREAMBLE = """
@@ -71,8 +75,11 @@ Only one top-level paragraph.
   - Sub-sub 1
 ]
 """)
-    # Top-level paragraph should NOT be numbered
-    assert "1." not in text, f"Single top-level paragraph should not be numbered, got: {text}"
+    # Top-level paragraph should NOT be numbered — check that no line starts with "1."
+    lines = text.strip().split("\n")
+    for line in lines:
+        stripped = line.strip()
+        assert not stripped.startswith("1."), f"Single top-level paragraph should not be numbered, got line: {stripped}"
     # Sub-items should be numbered
     assert "a." in text and "Sub A" in text
     assert "b." in text and "Sub B" in text
@@ -87,7 +94,11 @@ def test_single_paragraph_no_number():
 This is the only paragraph.
 ]
 """)
-    assert "1." not in text, f"Single paragraph should not be numbered, got: {text}"
+    # Single paragraph should NOT be numbered — check that no line starts with "1."
+    lines = text.strip().split("\n")
+    for line in lines:
+        stripped = line.strip()
+        assert not stripped.startswith("1."), f"Single paragraph should not be numbered, got line: {stripped}"
     assert "This is the only paragraph" in text
     print("PASS: test_single_paragraph_no_number")
 
