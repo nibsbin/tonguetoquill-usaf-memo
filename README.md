@@ -22,6 +22,9 @@ Maintained by [TTQ](https://www.tonguetoquill.com).
 - **Page numbering** starting from page 2 per AFH 33-337 standards
 - **Highly Configurable** with numerous parameters for customization
 - **Comprehensive Indorsements** with full support for action lines, multiple indorsement types, and long indorsement chains
+- **Classification markings** with color-coded header/footer banners (UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET)
+- **Custom footer taglines** for service-specific branding (e.g., "semper supra" for Space Force)
+- **Inline tables** with clean, formal formatting consistent with USAF correspondence standards
 
 ## Quick Start
 
@@ -42,7 +45,7 @@ You can either clone the repository to pull all fonts or download just the files
 3. Start with one of the template files:
    - `template/usaf-template.typ` for a standard Air Force memo
    - `template/ussf-template.typ` for Space Force
-   - `template/stark-industries.typ` for a custom organization example
+   - `template/starkindustries.typ` for a custom organization example
 
 ### Local Installation
 
@@ -50,7 +53,7 @@ You can either clone the repository to pull all fonts or download just the files
 
 2. Initialize template from Typst Universe:
 ```bash
-typst init @preview/tonguetoquill-usaf-memo:0.2.0 my-memo
+typst init @preview/tonguetoquill-usaf-memo:2.0.0 my-memo
 cd my-memo
 ```
 
@@ -86,7 +89,7 @@ cd tonguetoquill-usaf-memo
 Import the core functions for creating memorandums:
 
 ```typst
-#import "@preview/tonguetoquill-usaf-memo:1.1.0": frontmatter, mainmatter, backmatter, indorsement
+#import "@preview/tonguetoquill-usaf-memo:2.0.0": frontmatter, mainmatter, backmatter, indorsement
 ```
 
 **Minimal Example:**
@@ -153,6 +156,34 @@ The template automatically manages page breaks for closing sections according to
 - **Distribution**: "Do not divide distribution lists between two pages"
 - **CC sections**: Consistent handling with other sections
 
+### Inline tables
+
+Tables can be placed directly in the memo body using standard Typst `#table(...)` syntax. The template automatically applies clean, formal formatting — 0.5pt black cell borders, standard padding, and bold column headers — consistent with the plain style of official USAF correspondence.
+
+```typst
+#table(
+  columns: (1fr, 1fr, 1fr),
+  table.header([Element], [Placement], [Reference]),
+  [Date], [1.75 in from top, 1 in from right], [AFH 33-337 §Date],
+  [Signature Block], [5th line below body text], [AFH 33-337 §Sig],
+)
+```
+
+Tables do not count toward paragraph numbering and are rendered between numbered paragraphs as needed.
+
+### Classification markings
+
+Set `classification_level` in `frontmatter` to display color-coded banners in the page header and footer:
+
+```typst
+#show: frontmatter.with(
+  // ...
+  classification_level: "SECRET",
+)
+```
+
+Supported levels and their colors: `"UNCLASSIFIED"` (green), `"CONFIDENTIAL"` (blue), `"SECRET"` (red), `"TOP SECRET"` (orange). The banner text is rendered in bold at the top and bottom center of every page.
+
 ## API Reference
 
 The template uses a **composable show rules architecture** where you apply each section in order: frontmatter → mainmatter → backmatter → indorsements.
@@ -174,7 +205,7 @@ Configures the memorandum header and establishes document-wide settings. Applied
   letterhead_title: "DEPARTMENT OF THE AIR FORCE",           // Organization title
   letterhead_caption: "[YOUR SQUADRON/UNIT NAME]",           // Sub-organization
   letterhead_seal: none,                                     // Organization seal image
-  date: none,                                                // Date (defaults to today)
+  date: none,                                                // Date (defaults to today; also accepts ISO string "YYYY-MM-DD")
   memo_for: ("[OFFICE1]", "[OFFICE2]"),                     // Recipients array
   memo_from: ("[YOUR/SYMBOL]", "[Organization]", "[Address]"), // Sender info array
   subject: "[Your Subject in Title Case - Required]",        // Subject line
@@ -183,7 +214,15 @@ Configures the memorandum header and establishes document-wide settings. Applied
   // Styling options
   letterhead_font: ("Copperplate CC",),                     // Letterhead fonts
   body_font: ("times new roman", "NimbusRomNo9L"),          // Body fonts
+  font_size: 12pt,                                          // Font size (default 12pt; 10pt minimum per AFH 33-337 §5)
   memo_for_cols: 3,                                         // Recipient columns
+
+  // Classification and branding
+  classification_level: none,                               // "UNCLASSIFIED", "CONFIDENTIAL", "SECRET", or "TOP SECRET"
+  footer_tag_line: none,                                    // Custom footer tagline (e.g., "semper supra")
+
+  // Paragraph numbering
+  auto_numbering: true,                                     // Automatic AFH 33-337 paragraph numbering (default true)
 )
 ```
 
@@ -192,6 +231,8 @@ Configures the memorandum header and establishes document-wide settings. Applied
 - Renders letterhead with optional seal
 - Renders date, MEMORANDUM FOR, FROM, SUBJECT, and references sections
 - Establishes typography and spacing rules
+- Renders color-coded classification banners in header and footer when `classification_level` is set
+- Renders custom footer tagline when `footer_tag_line` is set
 - Stores configuration for downstream sections
 
 #### `mainmatter`
@@ -206,6 +247,8 @@ Processes the memorandum body content with automatic paragraph numbering. Applie
 - Applies AFH 33-337 hierarchical paragraph numbering (1., a., (1), (a))
 - Handles proper indentation and spacing
 - Auto-detects single vs. multiple paragraphs
+- When `auto_numbering: false` is set in `frontmatter`, base-level paragraphs render flush left without numbering; only explicitly bulleted or numbered items (list/enum) receive numbering
+- Supports inline tables with formal black-border formatting
 - Inherits configuration from frontmatter
 
 #### `backmatter(...)`
@@ -242,16 +285,16 @@ Creates an indorsement for forwarding or commenting on a memorandum. Called as a
   signature_blank_lines: 4,                                // Blank lines above signature
   attachments: none,                                        // Optional attachments
   cc: none,                                                 // Courtesy copies
-  date: datetime.today(),                                  // Indorsement date
+  date: datetime.today(),                                  // Indorsement date (also accepts ISO string "YYYY-MM-DD")
   format: "standard",                                      // "standard", "informal", or "separate_page"
-  action: "none",                                          // "none", "undecided", "approve", or "disapprove"
+  action: none,                                            // none (default), "undecided", "approve", or "disapprove"
 )[
   Your indorsement content here.
 ]
 ```
 
 **The `action` parameter:**
-- `"none"` (default): No action line displayed
+- `none` (default): No action line displayed
 - `"undecided"`: Displays "Approve / Disapprove" with neither option boxed or struck through
 - `"approve"`: Displays "Approve / Disapprove" with Approve boxed and Disapprove struck through
 - `"disapprove"`: Displays "Approve / Disapprove" with Disapprove boxed and Approve struck through
