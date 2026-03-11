@@ -26,9 +26,8 @@
   if count == 0 {
     v(0em, weak: weak)
   } else {
-    let lead = spacing.line
-    let height = spacing.line-height
-    v(lead + (height + lead) * count, weak: weak)
+    // vertical uses the centralized vertical spacing from config
+    v(spacing.vertical * count, weak: weak)
   }
 }
 
