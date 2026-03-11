@@ -16,8 +16,8 @@
 
 /// Creates vertical spacing equivalent to multiple blank lines.
 ///
-/// Calculates proper vertical space based on line height and leading
-/// to maintain consistent spacing throughout the document.
+/// Calculates proper vertical space using the centralized `spacing.vertical`
+/// configuration to maintain consistent gap spacing throughout the document.
 ///
 /// - count (int): Number of blank lines to create
 /// - weak (bool): Whether spacing can be compressed at page breaks
@@ -26,9 +26,8 @@
   if count == 0 {
     v(0em, weak: weak)
   } else {
-    let lead = spacing.line
-    let height = spacing.line-height
-    v(lead + (height + lead) * count, weak: weak)
+    // vertical uses the centralized vertical spacing from config
+    v(spacing.vertical * count, weak: weak)
   }
 }
 
@@ -126,7 +125,6 @@
 ///
 /// - date (str|datetime): Date to format for display
 /// -> str
-// NOTE: Consider simplification if Typst adds native ISO date parsing (see CASCADES.md §A)
 #let display-date(date) = {
   if type(date) == str {
     if is-iso-date-string(date) {
@@ -326,7 +324,6 @@
 ///
 /// - number (int): The indorsement number (1, 2, 3, etc.)
 /// -> str
-// NOTE: Could be table-driven vs algorithmic (see CASCADES.md §B) — current approach is correct
 #let get-ordinal-suffix(number) = {
   let last-digit = calc.rem(number, 10)
   let last-two-digits = calc.rem(number, 100)

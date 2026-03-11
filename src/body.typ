@@ -309,7 +309,7 @@
       if i == total_count {
         let available_width = page.width - spacing.margin * 2
 
-        // Use configured spacing for line height calculation
+        // Use configured paragraph metrics for line height estimation
         let line_height = measure(line(length: spacing.line + spacing.line-height)).width
         // Calculate last item's height
         let par_height = measure(final_par, width: available_width).height
