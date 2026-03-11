@@ -9,7 +9,7 @@
 
 A comprehensive Typst template for creating official United States Air Force memorandums that comply with AFH 33-337 "The Tongue and Quill" formatting standards. 
 
-Maintained by [tonguetoquill.com](https://www.tonguetoquill.com).
+Maintained by [TTQ](https://www.tonguetoquill.com).
 
 ## Features
 
@@ -21,7 +21,7 @@ Maintained by [tonguetoquill.com](https://www.tonguetoquill.com).
 - **Comprehensive backmatter** (Attachments, CC, Distribution) with smart formatting
 - **Page numbering** starting from page 2 per AFH 33-337 standards
 - **Highly Configurable** with numerous parameters for customization
-- **Standard and New Page Indorsements** with full support for long indorsement chains
+- **Comprehensive Indorsements** with full support for action lines, multiple indorsement types, and long indorsement chains
 
 ## Quick Start
 
