@@ -3,7 +3,7 @@
 #show: frontmatter.with(
   letterhead_title: "DEPARTMENT OF THE SPACE FORCE",
   letterhead_caption: "1ST SPACE OPERATIONS SQUADRON",
-  letterhead_seal: image("assets/dow_seal.jpg"),
+  letterhead_seal: image("assets/dow_seal.png"),
   subject: "Space Force Memorandum Template Format",
   memo_for: "SPACECOM/CC",
   memo_from: (

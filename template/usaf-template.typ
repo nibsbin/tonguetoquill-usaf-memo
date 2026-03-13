@@ -3,7 +3,7 @@
 #show: frontmatter.with(
   letterhead_title: "DEPARTMENT OF THE AIR FORCE",
   letterhead_caption: "123RD EXAMPLE SQUADRON",
-  letterhead_seal: image("assets/dow_seal.jpg"),
+  letterhead_seal: image("assets/dow_seal.png"),
   subject: "Format for the Official Memorandum",
   memo_for: (
     "123 ES/CC",
