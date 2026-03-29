@@ -317,7 +317,7 @@ Contributions are welcome! Please explore `src/` for core functions and `templat
 ```
 ├── src/                     # Core implementation
 │   ├── lib.typ              # Public API exports
-│   ├── config.typ           # Configuration constants
+│   ├── config.typ           # Configuration constants (single source of truth)
 │   ├── frontmatter.typ      # Header section show rule
 │   ├── mainmatter.typ       # Body content show rule
 │   ├── backmatter.typ       # Closing section rendering
