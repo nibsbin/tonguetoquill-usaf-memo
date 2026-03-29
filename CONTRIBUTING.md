@@ -47,6 +47,27 @@ Thank you for your interest in contributing! This project is a [Typst](https://t
 3. Update `CHANGELOG.md` with a brief description of your change under an `[Unreleased]` heading.
 4. Make sure `./build.sh` completes without errors before submitting.
 
+## Configuration Architecture
+
+All configuration constants live in a single source of truth: **`src/config.typ`**.
+
+| Category | Examples | Defined in |
+|---|---|---|
+| Spacing constants | margins, line height, tab stops | `src/config.typ` |
+| Typography defaults | fonts, letterhead color | `src/config.typ` |
+| Paragraph numbering | counter prefix, numbering formats | `src/config.typ` |
+| Document counters | indorsement counter | `src/config.typ` |
+| Classification colors | UNCLASSIFIED, SECRET, etc. | `src/config.typ` |
+
+**Rules for contributors:**
+
+- **Add new constants to `src/config.typ`** — never define configuration values in other modules.
+- **Import what you need** — use `#import "config.typ": spacing, paragraph-config` in consuming modules.
+- **Config flows one direction** — `config.typ` has zero dependencies on other modules; other modules import from it.
+- **Never duplicate** — if a module needs a config value, import it; don't copy or redefine it.
+
+See [Configuration Single Source design doc](prose/archive/designs/configuration-single-source.md) for the full rationale.
+
 ## Style Notes
 
 - The project uses [Typst](https://typst.app/docs) (`.typ` files), not LaTeX.
