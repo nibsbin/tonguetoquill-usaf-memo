@@ -22,7 +22,7 @@ Maintained by [TTQ](https://www.tonguetoquill.com).
 - **Page numbering** starting from page 2 per AFH 33-337 standards
 - **Highly Configurable** with numerous parameters for customization
 - **Comprehensive Indorsements** with full support for action lines, multiple indorsement types, and long indorsement chains
-- **Classification markings** with color-coded header/footer banners (UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET)
+- **Classification markings** with color-coded header/footer banners (CUI, UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET)
 - **Custom footer taglines** for service-specific branding (e.g., "semper supra" for Space Force)
 - **Inline tables** with clean, formal formatting consistent with USAF correspondence standards
 
@@ -182,7 +182,7 @@ Set `classification_level` in `frontmatter` to display color-coded banners in th
 )
 ```
 
-Supported levels and their colors: `"UNCLASSIFIED"` (green), `"CONFIDENTIAL"` (blue), `"SECRET"` (red), `"TOP SECRET"` (orange). The banner text is rendered in bold at the top and bottom center of every page.
+Supported levels and their colors: `"CUI"` (purple), `"UNCLASSIFIED"` (green), `"CONFIDENTIAL"` (blue), `"SECRET"` (red), `"TOP SECRET"` (orange). The banner text is rendered in bold at the top and bottom center of every page.
 
 ## API Reference
 
@@ -218,7 +218,7 @@ Configures the memorandum header and establishes document-wide settings. Applied
   memo_for_cols: 3,                                         // Recipient columns
 
   // Classification and branding
-  classification_level: none,                               // "UNCLASSIFIED", "CONFIDENTIAL", "SECRET", or "TOP SECRET"
+  classification_level: none,                               // "CUI", "UNCLASSIFIED", "CONFIDENTIAL", "SECRET", or "TOP SECRET"
   footer_tag_line: none,                                    // Custom footer tagline (e.g., "semper supra")
 
   // Paragraph numbering
