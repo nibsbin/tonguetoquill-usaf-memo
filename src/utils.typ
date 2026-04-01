@@ -150,7 +150,7 @@
     return rgb(0, 0, 0) // Default to black if no classification
   }
   // Order matters - check most specific first
-  let level-order = ("TOP SECRET", "SECRET", "CONFIDENTIAL", "CUI", "UNCLASSIFIED")
+  let level-order = ("TOP SECRET", "SECRET", "CONFIDENTIAL", "UNCLASSIFIED")
 
   for base-level in level-order {
     if base-level in level {

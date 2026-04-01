@@ -57,7 +57,6 @@
 // Source: https://security.stackexchange.com/questions/161829
 
 #let CLASSIFICATION_COLORS = (
-  "CUI": rgb("#502b85"), // Purple (#502B85)
   "UNCLASSIFIED": rgb(0, 122, 51), // Forest green (#007A33)
   "CONFIDENTIAL": rgb(0, 51, 160), // Deep blue (#0033A0)
   "SECRET": rgb(200, 16, 46), // Crimson red (#C8102E)
