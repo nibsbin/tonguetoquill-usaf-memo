@@ -30,7 +30,7 @@
 
   - #strong[If you are on the Typst app, upload #text(color.blue)[#link("https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/CopperplateCC/CopperplateCC-Heavy.otf")[Copperplate CC]] to your project folder]
 
-  Note that this template provides proper formatting for various elements via Typst functions. The recipient line uses proper grid formatting, the body uses automatic paragraph numbering, the signature block uses precise positioning, and so on. The template handles all AFH 33-337 formatting requirements automatically.
+  Note that this template provides proper formatting for various elements via Typst functions. The recipient line uses proper grid formatting, the body uses list/enum for hierarchical subparagraph numbering, the signature block uses precise positioning, and so on. The template handles all AFH 33-337 formatting requirements automatically.
 
   Place "MEMORANDUM FOR" on the second line below the date. Leave two spaces between "MEMORANDUM FOR" and the recipient's office symbol. If there are multiple recipients, two or three office symbols may be placed on each line aligned under the entries on the first line. If there are numerous recipients, type "DISTRIBUTION" after "MEMORANDUM FOR" and use a "DISTRIBUTION" element below the signature block.
 

@@ -24,7 +24,6 @@
   memo_for_cols: 3,
   classification_level: none,
   footer_tag_line: none,
-  auto_numbering: true,
   it,
 ) = {
   assert(subject != none, message: "subject is required")
@@ -107,7 +106,6 @@
     original_from: first-or-value(memo_from),
     body_font: body_font,
     font_size: font_size,
-    auto_numbering: auto_numbering,
   ))
 
   it

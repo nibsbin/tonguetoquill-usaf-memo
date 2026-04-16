@@ -220,9 +220,6 @@ Configures the memorandum header and establishes document-wide settings. Applied
   // Classification and branding
   classification_level: none,                               // "UNCLASSIFIED", "CONFIDENTIAL", "SECRET", or "TOP SECRET"
   footer_tag_line: none,                                    // Custom footer tagline (e.g., "semper supra")
-
-  // Paragraph numbering
-  auto_numbering: true,                                     // Automatic AFH 33-337 paragraph numbering (default true)
 )
 ```
 
@@ -237,17 +234,16 @@ Configures the memorandum header and establishes document-wide settings. Applied
 
 #### `mainmatter`
 
-Processes the memorandum body content with automatic paragraph numbering. Applied as a show rule with no parameters.
+Processes the memorandum body content. Base-level paragraphs are unnumbered; use list/enum for hierarchical subparagraph numbering. Applied as a show rule with no parameters.
 
 ```typst
 #show: mainmatter
 ```
 
 **Responsibilities:**
-- Applies AFH 33-337 hierarchical paragraph numbering (1., a., (1), (a))
+- Applies AFH 33-337 hierarchical numbering (1., a., (1), (a)) to explicit list/enum items
+- Renders base-level paragraphs flush left without numbers
 - Handles proper indentation and spacing
-- Auto-detects single vs. multiple paragraphs
-- When `auto_numbering: false` is set in `frontmatter`, base-level paragraphs render flush left without numbering; only explicitly bulleted or numbered items (list/enum) receive numbering
 - Supports inline tables with formal black-border formatting
 - Inherits configuration from frontmatter
 
