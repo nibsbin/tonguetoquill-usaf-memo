@@ -33,7 +33,7 @@
 // #show: mainmatter
 //
 // Your memo body content here.
-// (Use list/enum for AFH-style subparagraph numbering; base paragraphs stay unnumbered.)
+// (Paragraphs are automatically numbered per AFH 33-337)
 //
 // #backmatter(
 //   signature_block: ("NAME, Rank, USAF", "Title"),

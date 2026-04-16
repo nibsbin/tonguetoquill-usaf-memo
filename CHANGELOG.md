@@ -4,14 +4,6 @@ All notable changes to `tonguetoquill-usaf-memo` are documented here.
 
 ---
 
-## Unreleased
-
-### Removed
-
-- **`auto_numbering` frontmatter parameter.** Base-level paragraphs are never numbered automatically. Hierarchical AFH-style numbering applies only to explicit `#list` / `#enum` items (same as the former `auto_numbering: false` behavior). Remove `auto_numbering: ...` from `frontmatter.with(...)` calls.
-
----
-
 ## [2.0.0] — 2026-03-11
 
 ### Added
