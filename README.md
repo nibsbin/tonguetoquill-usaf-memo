@@ -32,11 +32,10 @@ Maintained by [TTQ](https://www.tonguetoquill.com).
 
 1. Go to [the package page](https://typst.app/universe/package/tonguetoquill-usaf-memo) and click "Create project in app".
 
-2. Download the project fonts and upload them to your project folder. The template uses multiple open-source fonts — not just Copperplate. Recommended fonts from the `fonts/` directory are:
+2. Download the project fonts and upload them to your project folder. Recommended fonts from the `fonts/` directory are:
 
-- `CopperplateCC-Heavy.otf` — letterhead / heading style (open-source Copperplate clone)
-- `NimbusRomNo9L-Reg.otf`, `NimbusRomNo9L-RegIta.otf`, `NimbusRomNo9L-Med.otf`, `NimbusRomNo9L-MedIta.otf` — body / serif text (open-source Times clone)
-- `Cinzel-Regular.ttf` — optional monospace font
+- `NimbusRomNo9L-Reg.otf`, `NimbusRomNo9L-RegIta.otf`, `NimbusRomNo9L-Med.otf`, `NimbusRomNo9L-MedIta.otf` — letterhead and body text (open-source Times New Roman–compatible serif)
+- `Cinzel-Regular.ttf` — optional decorative font for footer taglines
 
 You can either clone the repository to pull all fonts or download just the files you need. All font files are available from the `fonts/` directory in the repo: https://github.com/nibsbin/tonguetoquill-usaf-memo/tree/main/fonts
 
@@ -60,7 +59,6 @@ cd my-memo
 3. Download the required fonts:
 ```bash
 # Download the fonts used by the templates (example). Copy these into your project root or `fonts/` directory.
-curl -L -o CopperplateCC-Heavy.otf https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/CopperplateCC/CopperplateCC-Heavy.otf
 curl -L -o Cinzel-Regular.ttf https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/Cinzel/Cinzel-Regular.ttf
 curl -L -o NimbusRomNo9L-Reg.otf https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/NimbusRomanNo9L/NimbusRomNo9L-Reg.otf
 curl -L -o NimbusRomNo9L-RegIta.otf https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/NimbusRomanNo9L/NimbusRomNo9L-RegIta.otf
@@ -213,7 +211,7 @@ Configures the memorandum header and establishes document-wide settings. Applied
   references: ("AFI 123-45", "AFMAN 67-89"),                // Optional references
 
   // Styling options
-  letterhead_font: ("Copperplate CC",),                     // Letterhead fonts
+  letterhead_font: ("times new roman", "NimbusRomNo9L"),   // Letterhead fonts (defaults match body)
   body_font: ("times new roman", "NimbusRomNo9L"),          // Body fonts
   font_size: 12pt,                                          // Font size (default 12pt; 10pt minimum per AFH 33-337 §5)
   memo_for_cols: 3,                                         // Recipient columns
@@ -346,5 +344,4 @@ External assets used in this project:
 
 - `dow_seal.png` is [public domain](https://www.e-publishing.af.mil/Portals/1/Documents/Official%20Memorandum%20Template_10Nov2020.dotx?ver=M7cny_cp1_QDajkyg0xWBw%3D%3D)
 - `starkindustries_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Stark_Industries.png).
-- `Copperplate CC` is under [SIL Open Font License](./fonts/CopperplateCC/LICENSE.md) pulled from [here](https://github.com/CowboyCollective/CopperplateCC)
 - `NimbusRomNo9L` is under [GPL](./fonts/NimbusRomanNo9L/GNU%20General%20Public%20License.txt) pulled from URW++ foundry
