@@ -94,6 +94,56 @@
   [#h(indent-width + number-width)#body]
 }
 
+/// Calculates fixed indentation for DAF paragraph levels.
+///
+/// DAF style uses fixed 0.5in indentation steps per nesting level.
+/// - Level 1: 0.5in
+/// - Level 2: 1.0in
+/// - Level N: N * 0.5in
+///
+/// - level (int): Paragraph nesting level (0-based)
+/// -> length
+#let calculate-daf-indent(level) = {
+  if level <= 0 {
+    return 0pt
+  }
+  level * 0.5in
+}
+
+/// Formats a DAF nested paragraph with fixed indentation and numbering.
+///
+/// DAF nested items begin at level 1 ("a.") and indent by fixed 0.5in per level.
+///
+/// - body (content): Paragraph content to format
+/// - level (int): Paragraph nesting level (0-based)
+/// - level-counts (dictionary): Current counter values per level
+/// -> content
+#let format-daf-par(body, level, level-counts) = {
+  let current-value = level-counts.at(str(level), default: 1)
+  let format = get-paragraph-numbering-format(level)
+  let number-text = numbering(format, current-value)
+  let indent-width = calculate-daf-indent(level)
+  [#h(indent-width)#number-text#"  "#body]
+}
+
+/// Formats a DAF continuation paragraph with fixed indentation.
+///
+/// Continuation lines align with the first text character after the numbered
+/// label for the current nested level.
+///
+/// - body (content): Continuation paragraph content to format
+/// - level (int): Paragraph nesting level (0-based)
+/// - level-counts (dictionary): Current counter values per level
+/// -> content
+#let format-daf-continuation-par(body, level, level-counts) = {
+  let indent-width = calculate-daf-indent(level)
+  let current-value = level-counts.at(str(level), default: 1)
+  let format = get-paragraph-numbering-format(level)
+  let number-text = numbering(format, current-value)
+  let number-width = measure([#number-text#"  "]).width
+  [#h(indent-width + number-width)#body]
+}
+
 // =============================================================================
 // PARAGRAPH BODY RENDERING
 // =============================================================================
@@ -103,7 +153,7 @@
 // - "A single paragraph is not numbered" (§2)
 // - First paragraph flush left, never indented
 // - Indent sub-paragraphs to align with first character of parent paragraph text
-#let render-body(content, auto-numbering: true) = {
+#let render-body(content, auto-numbering: true, memo-style: "usaf") = {
   let PAR_BUFFER = state("PAR_BUFFER")
   PAR_BUFFER.update(())
   let NEST_DOWN = counter("NEST_DOWN")
@@ -261,12 +311,34 @@
           // Continuation block within a multi-block list item:
           // indent to align with preceding numbered paragraph's text, no new number.
           // level-counts still holds the value of the preceding numbered paragraph.
-          if auto-numbering {
+          if memo-style == "daf" {
+            if nest_level > 0 {
+              format-daf-continuation-par(item_content, nest_level, level-counts)
+            } else {
+              item_content
+            }
+          } else if auto-numbering {
             format-continuation-par(item_content, nest_level, level-counts)
           } else if nest_level > 0 {
             format-continuation-par(item_content, nest_level - 1, level-counts)
           } else {
             item_content
+          }
+        } else if memo-style == "daf" {
+          if nest_level > 0 {
+            let par = format-daf-par(item_content, nest_level, level-counts)
+            level-counts.insert(str(nest_level), level-counts.at(str(nest_level), default: 1) + 1)
+            for child in range(nest_level + 1, max-levels) {
+              level-counts.insert(str(child), 1)
+            }
+            par
+          } else {
+            // DAF top-level paragraphs are unnumbered and first-line indented.
+            // Reset nested counters so each new top-level paragraph restarts children.
+            for child in range(max-levels) {
+              level-counts.insert(str(child), 1)
+            }
+            [#h(0.5in)#item_content]
           }
         } else if auto-numbering {
           if par_count > 1 {

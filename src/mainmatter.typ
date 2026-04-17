@@ -27,5 +27,6 @@
 #let mainmatter(it) = context {
   let config = query(metadata).last().value
   let auto-numbering = config.at("auto_numbering", default: true)
-  render-body(it, auto-numbering: auto-numbering)
+  let memo-style = config.at("memo_style", default: "usaf")
+  render-body(it, auto-numbering: auto-numbering, memo-style: memo-style)
 }

@@ -44,6 +44,14 @@
   let actual_date = if date == none { datetime.today() } else { date }
   let ind_from = first-or-value(from)
   let ind_for = to
+  let memo-style = context {
+    let metadata-items = query(metadata)
+    if metadata-items.len() > 0 {
+      metadata-items.last().value.at("memo_style", default: "usaf")
+    } else {
+      "usaf"
+    }
+  }
 
   if format != "informal" {
     // Step the counter BEFORE the context block to avoid read-then-update loop
@@ -96,7 +104,7 @@
     render-action-line(action)
   }
 
-  render-body(content)
+  render-body(content, memo-style: memo-style)
 
   render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)
 

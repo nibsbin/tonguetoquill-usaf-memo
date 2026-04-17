@@ -25,11 +25,16 @@
   classification_level: none,
   footer_tag_line: none,
   auto_numbering: true,
+  memo_style: "usaf",
   it,
 ) = {
   assert(subject != none, message: "subject is required")
   assert(memo_for != none, message: "memo_for is required")
   assert(memo_from != none, message: "memo_from is required")
+  assert(
+    memo_style in ("usaf", "daf"),
+    message: "memo_style must be \"usaf\" or \"daf\"",
+  )
 
   let actual_date = if date == none { datetime.today() } else { date }
   let classification_color = get-classification-level-color(classification_level)
@@ -108,6 +113,7 @@
     body_font: body_font,
     font_size: font_size,
     auto_numbering: auto_numbering,
+    memo_style: memo_style,
   ))
 
   it
