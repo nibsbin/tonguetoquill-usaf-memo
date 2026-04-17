@@ -234,10 +234,12 @@
   context {
     let available-space = page.height - here().position().y - 1in
     if measure(formatted-content).height > available-space {
+      // Attachments pass continuation-label ("… (listed on next page):" per AFH 33-337).
+      // cc: and DISTRIBUTION: use a neutral default — "listed" applies to attachment lists only.
       let continuation-text = if continuation-label != none {
         text()[#continuation-label]
       } else {
-        text()[#section-label + " (listed on next page):"]
+        text()[#(section-label + " (continued on next page)")]
       }
       continuation-text
       pagebreak()

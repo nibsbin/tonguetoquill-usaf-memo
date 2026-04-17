@@ -3,35 +3,37 @@
 
 #show: frontmatter.with(
   letterhead_title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead_caption: "123RD OPERATIONS SQUADRON",
+  letterhead_caption: "OFFICE OF THE CHIEF INFORMATION OFFICER",
   letterhead_seal: image("assets/dow_seal.png"),
-  subject: "DAF Memorandum Paragraph Style Example",
-  memo_for: "123 OG/CC",
+  date: "Month DD, Year",
+  subject: "Format for the Official Memorandum",
+  memo_for: "XXXX",
   memo_from: (
-    "123 OS/CC",
-    "123rd Operations Squadron",
-    "Any Base AFB ST 12345",
+    "SAF/CN",
+    "1800 Air Force Pentagon",
+    "Washington, D.C., 20330-1665",
   ),
+  references: ("HOI 33-3, Correspondence Preparation, Control, and Tracking",),
   memo_style: "daf",
 )
 
 #mainmatter[
-  This top-level paragraph demonstrates DAF memo style behavior. It is not automatically numbered, and the first line is indented by one-half inch from the left margin.
+  As an action officer, you will prepare official memorandums for the signature of your senior leader using the Headquarters of the Department of the Air Force official memorandum format. This format is unique to the executive part of the Department of the Air Force and differs from other types of correspondence described in the Tongue and Quill.
 
-  This second top-level paragraph is also unnumbered with the same first-line indentation. Nested content below starts at the alpha level.
+  Type paragraphs in an indented style 0.5" from the left margin, single-spaced, with double spaces between them. Keep brief, preferably no longer than one page.
 
-  + First nested paragraph at DAF level 2 style. It renders with an alpha marker (`a.`, `b.`, `c.`) and an additional half-inch nested indent.
+  + A subdivided paragraph must have at least two subdivisions.
 
-  + Second nested paragraph at the same level. This body intentionally wraps onto additional lines to show alignment behavior after the numbered marker at this nesting depth.
+  + If there is a subparagraph "a," there must be a subparagraph "b." Indent the subparagraph an additional 0.5 inch.
 
-    + Deeper nested paragraph example. This level increases indentation by another half inch and advances to the next numbering format.
-
-    + Another deep nested paragraph at the same depth to demonstrate progression and spacing consistency.
+  If appropriate, include a statement of reference to email and telephone concerning the subject matter.
 ]
 
 #backmatter(
   signature_block: (
-    "JANE Q. EXAMPLE, Lt Col, USAF",
-    "Commander",
+    "VENICE M. GOODWINE, SES, DAF",
+    "Chief Information Officer",
   ),
+  attachments: ("Listed here",),
+  cc: ("ORG/SYM",),
 )
