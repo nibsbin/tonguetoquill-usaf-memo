@@ -21,8 +21,8 @@
 // =============================================================================
 // AFH 33-337 §5: "Use 12 point Times New Roman font for text"
 
-#let DEFAULT_LETTERHEAD_FONTS = ("Copperplate CC",)
-#let DEFAULT_BODY_FONTS = ("times new roman", "NimbusRomNo9L")  // AFH 33-337 §5: Times New Roman required
+#let DEFAULT_LETTERHEAD_FONTS = ("NimbusRomNo9L", "times new roman")
+#let DEFAULT_BODY_FONTS = ("NimbusRomNo9L", "times new roman")  // AFH 33-337 §5: Times New Roman required
 #let LETTERHEAD_COLOR = rgb("#204093")  // Faded USAF blue for letterhead
 
 // =============================================================================
@@ -37,6 +37,14 @@
   // AFH 33-337 §2: Hierarchical paragraph numbering format
   // Level 0: 1., 2., 3. | Level 1: a., b., c. | Level 2: (1), (2), (3) | Level 3: (a), (b), (c)
   numbering-formats: ("1.", "a.", "(1)", "(a)", n => underline(str(n)), n => underline(str(n))),
+)
+
+// DAF (Headquarters) memo body: first-line indent for unnumbered paragraphs; nested
+// items start at 1in, then +0.5in per additional nesting depth.
+#let daf-paragraph = (
+  top-first-line-indent: 0.5in,
+  nested-first-level-indent: 1in,
+  nested-step: 0.5in,
 )
 
 // =============================================================================
@@ -58,7 +66,6 @@
 
 #let CLASSIFICATION_COLORS = (
   "UNCLASSIFIED": rgb(0, 122, 51), // Forest green (#007A33)
-  "CONFIDENTIAL": rgb(0, 51, 160), // Deep blue (#0033A0)
   "SECRET": rgb(200, 16, 46), // Crimson red (#C8102E)
   "TOP SECRET": rgb(255, 103, 31), // Burnt orange (#FF671F)
 )

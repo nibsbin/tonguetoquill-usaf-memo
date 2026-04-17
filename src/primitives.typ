@@ -14,9 +14,18 @@
 // Letterhead placement is not explicitly specified in AFH 33-337, but follows
 // standard USAF memo formatting conventions
 
-#let render-letterhead(title, caption, letterhead-seal, font) = {
+#let render-letterhead(
+  title,
+  caption,
+  font,
+  letterhead-seal: none,
+  letterhead-seal-subtitle: none,
+) = {
   font = ensure-array(font)
+  title = ensure-string(title)
   caption = ensure-string(caption)
+  title = upper(title)
+  caption = upper(caption)
 
   place(
     dy: 0.625in - spacing.margin,
@@ -28,7 +37,7 @@
         #place(
           center + top,
           align(center)[
-            #set text(12pt, font: font, fill: LETTERHEAD_COLOR)
+            #set text(12pt, font: font, fill: LETTERHEAD_COLOR, weight: "bold")
             #title\
             #text(10.5pt)[#caption]
           ],
@@ -38,13 +47,27 @@
   )
 
   if letterhead-seal != none {
+    let seal-body = if falsey(letterhead-seal-subtitle) {
+      block[
+        #fit-box(width: 2in, height: 1in)[#letterhead-seal]
+      ]
+    } else {
+      block(width: 2in)[
+        #align(left)[
+          #stack(spacing: 0.15em)[
+            #fit-box(width: 2in, height: 1in)[#letterhead-seal]
+            #text(9pt, font: font, fill: LETTERHEAD_COLOR, weight: "bold")[
+              #upper(ensure-string(letterhead-seal-subtitle))
+            ]
+          ]
+        ]
+      ]
+    }
     place(
       left + top,
       dx: -0.5in,
       dy: -.5in,
-      block[
-        #fit-box(width: 2in, height: 1in)[#letterhead-seal]
-      ],
+      seal-body,
     )
   }
 }
@@ -59,8 +82,8 @@
 // - SUBJECT: Second line below FROM
 
 // AFH 33-337 "Date": "Place the date 1 inch from the right edge, 1.75 inches from the top"
-#let render-date-section(date) = {
-  align(right)[#display-date(date)]
+#let render-date-section(date, memo-style: "usaf") = {
+  align(right)[#display-date(date, memo-style: memo-style)]
 }
 
 // AFH 33-337 "MEMORANDUM FOR": "Place 'MEMORANDUM FOR' on the second line below the date"
@@ -107,7 +130,7 @@
     blank-line()
     grid(
       columns: (auto, auto, 1fr),
-      "References:", "  ", enum(..references, numbering: "(a)"),
+      "References:", "  ", enum(..references, numbering: "(a) ", body-indent: 0pt),
     )
   }
 }
@@ -234,10 +257,12 @@
   context {
     let available-space = page.height - here().position().y - 1in
     if measure(formatted-content).height > available-space {
+      // Attachments pass continuation-label ("… (listed on next page):" per AFH 33-337).
+      // cc: and DISTRIBUTION: use a neutral default — "listed" applies to attachment lists only.
       let continuation-text = if continuation-label != none {
         text()[#continuation-label]
       } else {
-        text()[#section-label + " (listed on next page):"]
+        text()[#(section-label + " (continued on next page)")]
       }
       continuation-text
       pagebreak()

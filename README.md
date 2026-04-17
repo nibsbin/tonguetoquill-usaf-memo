@@ -22,7 +22,7 @@ Maintained by [TTQ](https://www.tonguetoquill.com).
 - **Page numbering** starting from page 2 per AFH 33-337 standards
 - **Highly Configurable** with numerous parameters for customization
 - **Comprehensive Indorsements** with full support for action lines, multiple indorsement types, and long indorsement chains
-- **Classification markings** with color-coded header/footer banners (UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET)
+- **Classification markings** with color-coded header/footer banners for UNCLASSIFIED, SECRET, and TOP SECRET (other banner text uses the default color)
 - **Custom footer taglines** for service-specific branding (e.g., "semper supra" for Space Force)
 - **Inline tables** with clean, formal formatting consistent with USAF correspondence standards
 
@@ -32,11 +32,10 @@ Maintained by [TTQ](https://www.tonguetoquill.com).
 
 1. Go to [the package page](https://typst.app/universe/package/tonguetoquill-usaf-memo) and click "Create project in app".
 
-2. Download the project fonts and upload them to your project folder. The template uses multiple open-source fonts — not just Copperplate. Recommended fonts from the `fonts/` directory are:
+2. Download the project fonts and upload them to your project folder. Recommended fonts from the `fonts/` directory are:
 
-- `CopperplateCC-Heavy.otf` — letterhead / heading style (open-source Copperplate clone)
-- `NimbusRomNo9L-Reg.otf`, `NimbusRomNo9L-RegIta.otf`, `NimbusRomNo9L-Med.otf`, `NimbusRomNo9L-MedIta.otf` — body / serif text (open-source Times clone)
-- `Cinzel-Regular.ttf` — optional monospace font
+- `NimbusRomNo9L-Reg.otf`, `NimbusRomNo9L-RegIta.otf`, `NimbusRomNo9L-Med.otf`, `NimbusRomNo9L-MedIta.otf` — letterhead and body text (open-source Times New Roman–compatible serif)
+- `Cinzel-Regular.ttf` — optional decorative font for footer taglines
 
 You can either clone the repository to pull all fonts or download just the files you need. All font files are available from the `fonts/` directory in the repo: https://github.com/nibsbin/tonguetoquill-usaf-memo/tree/main/fonts
 
@@ -60,7 +59,6 @@ cd my-memo
 3. Download the required fonts:
 ```bash
 # Download the fonts used by the templates (example). Copy these into your project root or `fonts/` directory.
-curl -L -o CopperplateCC-Heavy.otf https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/CopperplateCC/CopperplateCC-Heavy.otf
 curl -L -o Cinzel-Regular.ttf https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/Cinzel/Cinzel-Regular.ttf
 curl -L -o NimbusRomNo9L-Reg.otf https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/NimbusRomanNo9L/NimbusRomNo9L-Reg.otf
 curl -L -o NimbusRomNo9L-RegIta.otf https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/NimbusRomanNo9L/NimbusRomNo9L-RegIta.otf
@@ -182,7 +180,7 @@ Set `classification_level` in `frontmatter` to display color-coded banners in th
 )
 ```
 
-Supported levels and their colors: `"UNCLASSIFIED"` (green), `"CONFIDENTIAL"` (blue), `"SECRET"` (red), `"TOP SECRET"` (orange). The banner text is rendered in bold at the top and bottom center of every page.
+Banner color applies when the marking string (after trimming) begins with `"UNCLASSIFIED"` (green), `"SECRET"` (red), or `"TOP SECRET"` (orange). Any other text still appears in bold in the header and footer but uses the default text color (black). Placement is top and bottom center of every page.
 
 ## API Reference
 
@@ -205,6 +203,7 @@ Configures the memorandum header and establishes document-wide settings. Applied
   letterhead_title: "DEPARTMENT OF THE AIR FORCE",           // Organization title
   letterhead_caption: "[YOUR SQUADRON/UNIT NAME]",           // Sub-organization
   letterhead_seal: none,                                     // Organization seal image
+  letterhead_seal_subtitle: none,                            // Optional line under seal (9pt bold caps)
   date: none,                                                // Date (defaults to today; also accepts ISO string "YYYY-MM-DD")
   memo_for: ("[OFFICE1]", "[OFFICE2]"),                     // Recipients array
   memo_from: ("[YOUR/SYMBOL]", "[Organization]", "[Address]"), // Sender info array
@@ -212,13 +211,13 @@ Configures the memorandum header and establishes document-wide settings. Applied
   references: ("AFI 123-45", "AFMAN 67-89"),                // Optional references
 
   // Styling options
-  letterhead_font: ("Copperplate CC",),                     // Letterhead fonts
+  letterhead_font: ("times new roman", "NimbusRomNo9L"),   // Letterhead fonts (defaults match body)
   body_font: ("times new roman", "NimbusRomNo9L"),          // Body fonts
   font_size: 12pt,                                          // Font size (default 12pt; 10pt minimum per AFH 33-337 §5)
   memo_for_cols: 3,                                         // Recipient columns
 
   // Classification and branding
-  classification_level: none,                               // "UNCLASSIFIED", "CONFIDENTIAL", "SECRET", or "TOP SECRET"
+  classification_level: none,                               // e.g. "UNCLASSIFIED", "SECRET", or "TOP SECRET" for standard colors
   footer_tag_line: none,                                    // Custom footer tagline (e.g., "semper supra")
 
   // Paragraph numbering
@@ -228,7 +227,7 @@ Configures the memorandum header and establishes document-wide settings. Applied
 
 **Responsibilities:**
 - Sets page layout with 1-inch margins
-- Renders letterhead with optional seal
+- Renders letterhead with optional seal and optional `letterhead_seal_subtitle` under the seal
 - Renders date, MEMORANDUM FOR, FROM, SUBJECT, and references sections
 - Establishes typography and spacing rules
 - Renders color-coded classification banners in header and footer when `classification_level` is set
@@ -345,5 +344,4 @@ External assets used in this project:
 
 - `dow_seal.png` is [public domain](https://www.e-publishing.af.mil/Portals/1/Documents/Official%20Memorandum%20Template_10Nov2020.dotx?ver=M7cny_cp1_QDajkyg0xWBw%3D%3D)
 - `starkindustries_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Stark_Industries.png).
-- `Copperplate CC` is under [SIL Open Font License](./fonts/CopperplateCC/LICENSE.md) pulled from [here](https://github.com/CowboyCollective/CopperplateCC)
 - `NimbusRomNo9L` is under [GPL](./fonts/NimbusRomanNo9L/GNU%20General%20Public%20License.txt) pulled from URW++ foundry

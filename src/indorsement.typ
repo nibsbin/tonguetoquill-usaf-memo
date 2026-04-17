@@ -51,6 +51,7 @@
 
     context {
       let config = query(metadata).last().value
+      let memo-style = config.at("memo_style", default: "usaf")
       let original_subject = config.subject
       let original_date = config.original_date
       let original_from = config.original_from
@@ -61,12 +62,12 @@
 
       if format == "separate_page" {
         pagebreak()
-        [#indorsement_label to #original_from, #display-date(original_date), #original_subject]
+        [#indorsement_label to #original_from, #display-date(original_date, memo-style: memo-style), #original_subject]
 
         blank-line()
         grid(
           columns: (auto, 1fr),
-          ind_from, align(right)[#display-date(actual_date)],
+          ind_from, align(right)[#display-date(actual_date, memo-style: memo-style)],
         )
 
         blank-line()
@@ -78,7 +79,7 @@
         blank-line()
         grid(
           columns: (auto, 1fr),
-          [#indorsement_label, #ind_from], align(right)[#display-date(actual_date)],
+          [#indorsement_label, #ind_from], align(right)[#display-date(actual_date, memo-style: memo-style)],
         )
 
         blank-line()
@@ -96,23 +97,15 @@
     render-action-line(action)
   }
 
-  render-body(content)
+  context {
+    let memo-style = {
+      let items = query(metadata)
+      if items.len() > 0 { items.last().value.at("memo_style", default: "usaf") } else { "usaf" }
+    }
+    render-body(content, memo-style: memo-style)
+  }
 
   render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)
 
-  if not falsey(attachments) {
-    calculate-backmatter-spacing(true)
-    let attachment-count = attachments.len()
-    let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
-    let continuation-label = (
-      (if attachment-count == 1 { "Attachment" } else { str(attachment-count) + " Attachments" })
-        + " (listed on next page):"
-    )
-    render-backmatter-section(attachments, section-label, numbering-style: "1.", continuation-label: continuation-label)
-  }
-
-  if not falsey(cc) {
-    calculate-backmatter-spacing(falsey(attachments))
-    render-backmatter-section(cc, "cc:")
-  }
+  render-backmatter-sections(attachments: attachments, cc: cc)
 }

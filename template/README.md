@@ -1,3 +1,1 @@
-If you are using the Typst web app, download the letterhead font and upload it to your project folder:
-
-[CopperplateCC-Heavy.otf](https://github.com/nibsbin/tonguetoquill-usaf-memo/raw/main/fonts/CopperplateCC/CopperplateCC-Heavy.otf)
+If you are using the Typst web app, download the [NimbusRomNo9L](https://github.com/nibsbin/tonguetoquill-usaf-memo/tree/main/fonts/NimbusRomanNo9L) font files and upload them to your project folder so letterhead and body text match Times New Roman. Optionally add [Cinzel](https://github.com/nibsbin/tonguetoquill-usaf-memo/tree/main/fonts/Cinzel) if you use a footer tagline.

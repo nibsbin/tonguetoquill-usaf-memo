@@ -4,6 +4,7 @@
 
 | Design | One-liner |
 |--------|-----------|
+| [DAF Memo Style](daf-memo-style.md) | Add `memo_style` enum with DAF paragraph rules |
 | [Indorsement Approval Action](indorsement-approval-action.md) | Approve/Disapprove rendering on indorsement memos |
 
 ## Archived Designs

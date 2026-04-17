@@ -3,7 +3,6 @@
 // This module implements the mainmatter (body text) of a USAF memorandum per
 // AFH 33-337 Chapter 14 "The Text of the Official Memorandum" (§1-12).
 
-#import "primitives.typ": *
 #import "body.typ": *
 
 /// Mainmatter show rule for USAF memorandum body content.
@@ -19,7 +18,7 @@
 /// of the memorandum. Automatically detects single vs. multiple paragraphs
 /// to comply with AFH 33-337 numbering requirements.
 ///
-/// When auto_numbering is false (set in frontmatter), base-level paragraphs
+/// When `auto_numbering` is false (set in frontmatter), base-level paragraphs
 /// render flush left without numbering. Only explicitly numbered or bulleted
 /// items enter the numbering hierarchy.
 ///
@@ -28,5 +27,6 @@
 #let mainmatter(it) = context {
   let config = query(metadata).last().value
   let auto-numbering = config.at("auto_numbering", default: true)
-  render-body(it, auto-numbering: auto-numbering)
+  let memo-style = config.at("memo_style", default: "usaf")
+  render-body(it, auto-numbering: auto-numbering, memo-style: memo-style)
 }

@@ -18,6 +18,7 @@
   letterhead_title: "DEPARTMENT OF THE AIR FORCE",
   letterhead_caption: "[YOUR SQUADRON/UNIT NAME]",
   letterhead_seal: none,
+  letterhead_seal_subtitle: none, // optional line under seal (9pt bold caps); ignored if no seal
   letterhead_font: DEFAULT_LETTERHEAD_FONTS,
   body_font: DEFAULT_BODY_FONTS,
   font_size: 12pt,
@@ -25,11 +26,16 @@
   classification_level: none,
   footer_tag_line: none,
   auto_numbering: true,
+  memo_style: "usaf",
   it,
 ) = {
   assert(subject != none, message: "subject is required")
   assert(memo_for != none, message: "memo_for is required")
   assert(memo_from != none, message: "memo_from is required")
+  assert(
+    memo_style in ("usaf", "daf"),
+    message: "memo_style must be \"usaf\" or \"daf\"",
+  )
 
   let actual_date = if date == none { datetime.today() } else { date }
   let classification_color = get-classification-level-color(classification_level)
@@ -89,13 +95,19 @@
     },
   )
 
-  render-letterhead(letterhead_title, letterhead_caption, letterhead_seal, letterhead_font)
+  render-letterhead(
+    letterhead_title,
+    letterhead_caption,
+    letterhead_font,
+    letterhead-seal: letterhead_seal,
+    letterhead-seal-subtitle: letterhead_seal_subtitle,
+  )
 
   // AFH 33-337 "Date": "Place the date 1 inch from the right edge, 1.75 inches from the top"
   // Since we have a 1-inch top margin, we need (1.75in - margin) vertical space
   v(1.75in - spacing.margin)
 
-  render-date-section(actual_date)
+  render-date-section(actual_date, memo-style: memo_style)
   render-for-section(memo_for, memo_for_cols)
   render-from-section(memo_from)
   render-subject-section(subject)
@@ -108,6 +120,7 @@
     body_font: body_font,
     font_size: font_size,
     auto_numbering: auto_numbering,
+    memo_style: memo_style,
   ))
 
   it
