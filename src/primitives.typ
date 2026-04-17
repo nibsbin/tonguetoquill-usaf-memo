@@ -45,8 +45,15 @@
       left + top,
       dx: -0.5in,
       dy: -.5in,
-      block[
-        #fit-box(width: 2in, height: 1in)[#letterhead-seal]
+      block(width: 2in)[
+        #align(left)[
+          #stack(spacing: 0.15em)[
+            #fit-box(width: 2in, height: 1in)[#letterhead-seal]
+            #text(9pt, font: font, fill: LETTERHEAD_COLOR, weight: "bold")[
+              OFFICE OF THE SECRETARY
+            ]
+          ]
+        ]
       ],
     )
   }
