@@ -104,24 +104,26 @@
   }
 }
 
-/// Gets the color associated with a classification level.
+/// Gets the banner color for a classification marking.
 ///
-/// - level (str): Classification level string
+/// Matches when `level` (trimmed) starts with a known prefix: TOP SECRET, SECRET, or UNCLASSIFIED.
+/// Otherwise returns black.
+///
+/// - level (str): Marking string shown in header/footer
 /// -> color
 #let get-classification-level-color(level) = {
-  if level == none {
-    return rgb(0, 0, 0) // Default to black if no classification
+  if level == none or type(level) != str {
+    return rgb(0, 0, 0)
   }
-  // Order matters - check most specific first
-  let level-order = ("TOP SECRET", "SECRET", "CONFIDENTIAL", "UNCLASSIFIED")
-
+  let s = level.trim()
+  // "TOP SECRET" before "SECRET" so the full phrase matches first.
+  let level-order = ("TOP SECRET", "SECRET", "UNCLASSIFIED")
   for base-level in level-order {
-    if base-level in level {
+    if s.starts-with(base-level) {
       return CLASSIFICATION_COLORS.at(base-level)
     }
   }
-
-  rgb(0, 0, 0) // Default
+  rgb(0, 0, 0)
 }
 
 // =============================================================================

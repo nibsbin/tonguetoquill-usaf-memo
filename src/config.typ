@@ -66,7 +66,6 @@
 
 #let CLASSIFICATION_COLORS = (
   "UNCLASSIFIED": rgb(0, 122, 51), // Forest green (#007A33)
-  "CONFIDENTIAL": rgb(0, 51, 160), // Deep blue (#0033A0)
   "SECRET": rgb(200, 16, 46), // Crimson red (#C8102E)
   "TOP SECRET": rgb(255, 103, 31), // Burnt orange (#FF671F)
 )
