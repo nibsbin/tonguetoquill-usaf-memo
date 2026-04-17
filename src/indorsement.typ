@@ -59,6 +59,7 @@
 
     context {
       let config = query(metadata).last().value
+      let memo-style = config.at("memo_style", default: "usaf")
       let original_subject = config.subject
       let original_date = config.original_date
       let original_from = config.original_from
@@ -69,12 +70,12 @@
 
       if format == "separate_page" {
         pagebreak()
-        [#indorsement_label to #original_from, #display-date(original_date), #original_subject]
+        [#indorsement_label to #original_from, #display-date(original_date, memo-style: memo-style), #original_subject]
 
         blank-line()
         grid(
           columns: (auto, 1fr),
-          ind_from, align(right)[#display-date(actual_date)],
+          ind_from, align(right)[#display-date(actual_date, memo-style: memo-style)],
         )
 
         blank-line()
@@ -86,7 +87,7 @@
         blank-line()
         grid(
           columns: (auto, 1fr),
-          [#indorsement_label, #ind_from], align(right)[#display-date(actual_date)],
+          [#indorsement_label, #ind_from], align(right)[#display-date(actual_date, memo-style: memo-style)],
         )
 
         blank-line()

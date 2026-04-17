@@ -59,8 +59,8 @@
 // - SUBJECT: Second line below FROM
 
 // AFH 33-337 "Date": "Place the date 1 inch from the right edge, 1.75 inches from the top"
-#let render-date-section(date) = {
-  align(right)[#display-date(date)]
+#let render-date-section(date, memo-style: "usaf") = {
+  align(right)[#display-date(date, memo-style: memo-style)]
 }
 
 // AFH 33-337 "MEMORANDUM FOR": "Place 'MEMORANDUM FOR' on the second line below the date"

@@ -96,10 +96,8 @@
 
 /// Calculates fixed indentation for DAF paragraph levels.
 ///
-/// DAF style uses fixed 0.5in indentation steps per nesting level.
-/// - Level 1: 0.5in
-/// - Level 2: 1.0in
-/// - Level N: N * 0.5in
+/// Top-level body uses `daf-paragraph.top-first-line-indent` (0.5in). First nested
+/// level uses `nested-first-level-indent` (1in); deeper levels add `nested-step`.
 ///
 /// - level (int): Paragraph nesting level (0-based)
 /// -> length
@@ -107,12 +105,12 @@
   if level <= 0 {
     return 0pt
   }
-  level * 0.5in
+  daf-paragraph.nested-first-level-indent + (level - 1) * daf-paragraph.nested-step
 }
 
 /// Formats a DAF nested paragraph with fixed indentation and numbering.
 ///
-/// DAF nested items begin at level 1 ("a.") and indent by fixed 0.5in per level.
+/// DAF nested items begin at level 1 ("a.") at 1in, then 0.5in more per level.
 ///
 /// - body (content): Paragraph content to format
 /// - level (int): Paragraph nesting level (0-based)
@@ -338,7 +336,7 @@
             for child in range(max-levels) {
               level-counts.insert(str(child), 1)
             }
-            [#h(0.5in)#item_content]
+            [#h(daf-paragraph.top-first-line-indent)#item_content]
           }
         } else if auto-numbering {
           if par_count > 1 {

@@ -39,6 +39,14 @@
   numbering-formats: ("1.", "a.", "(1)", "(a)", n => underline(str(n)), n => underline(str(n))),
 )
 
+// DAF (Headquarters) memo body: first-line indent for unnumbered paragraphs; nested
+// items start at 1in, then +0.5in per additional nesting depth.
+#let daf-paragraph = (
+  top-first-line-indent: 0.5in,
+  nested-first-level-indent: 1in,
+  nested-step: 0.5in,
+)
+
 // =============================================================================
 // COUNTERS
 // =============================================================================

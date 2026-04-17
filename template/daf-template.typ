@@ -5,7 +5,7 @@
   letterhead_title: "DEPARTMENT OF THE AIR FORCE",
   letterhead_caption: "OFFICE OF THE CHIEF INFORMATION OFFICER",
   letterhead_seal: image("assets/dow_seal.png"),
-  date: "Month DD, Year",
+  date: datetime(month:1,day:1,year:2024),
   subject: "Format for the Official Memorandum",
   memo_for: "XXXX",
   memo_from: (

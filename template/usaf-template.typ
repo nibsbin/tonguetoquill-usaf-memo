@@ -114,7 +114,7 @@
     "Duty Title",
   ),
   format: "separate_page",
-  date: "2001-01-01",
+  date: datetime(year: 2001, month: 1, day: 1),
 )[
   Use a new page indorsement when there isn't space remaining on the original memorandum or previous indorsement page. The new-page indorsement is basically the same as the one for the same page, except the top line always cites the indorsement number with the originator's office, date, and subject of the original communication; the second line reflects the functional address symbol of the indorsing office with the date.
 ]
