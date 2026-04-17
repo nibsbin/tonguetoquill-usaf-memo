@@ -44,14 +44,6 @@
   let actual_date = if date == none { datetime.today() } else { date }
   let ind_from = first-or-value(from)
   let ind_for = to
-  let memo-style = context {
-    let metadata-items = query(metadata)
-    if metadata-items.len() > 0 {
-      metadata-items.last().value.at("memo_style", default: "usaf")
-    } else {
-      "usaf"
-    }
-  }
 
   if format != "informal" {
     // Step the counter BEFORE the context block to avoid read-then-update loop
@@ -105,23 +97,15 @@
     render-action-line(action)
   }
 
-  render-body(content, memo-style: memo-style)
+  context {
+    let memo-style = {
+      let items = query(metadata)
+      if items.len() > 0 { items.last().value.at("memo_style", default: "usaf") } else { "usaf" }
+    }
+    render-body(content, memo-style: memo-style)
+  }
 
   render-signature-block(signature_block, signature-blank-lines: signature_blank_lines)
 
-  if not falsey(attachments) {
-    calculate-backmatter-spacing(true)
-    let attachment-count = attachments.len()
-    let section-label = if attachment-count == 1 { "Attachment:" } else { str(attachment-count) + " Attachments:" }
-    let continuation-label = (
-      (if attachment-count == 1 { "Attachment" } else { str(attachment-count) + " Attachments" })
-        + " (listed on next page):"
-    )
-    render-backmatter-section(attachments, section-label, numbering-style: "1.", continuation-label: continuation-label)
-  }
-
-  if not falsey(cc) {
-    calculate-backmatter-spacing(falsey(attachments))
-    render-backmatter-section(cc, "cc:")
-  }
+  render-backmatter-sections(attachments: attachments, cc: cc)
 }
