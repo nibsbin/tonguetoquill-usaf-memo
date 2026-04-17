@@ -5,6 +5,7 @@
   letterhead_title: "DEPARTMENT OF THE AIR FORCE",
   letterhead_caption: "washington, DC",
   letterhead_seal: image("assets/dow_seal.png"),
+  letterhead_seal_subtitle: "Office of the Secretary",
   date: datetime(month:1,day:1,year:2024),
   subject: "Format for the Official Memorandum",
   memo_for: "XXXX",

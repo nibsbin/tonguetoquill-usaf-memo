@@ -18,6 +18,7 @@
   letterhead_title: "DEPARTMENT OF THE AIR FORCE",
   letterhead_caption: "[YOUR SQUADRON/UNIT NAME]",
   letterhead_seal: none,
+  letterhead_seal_subtitle: none, // optional line under seal (9pt bold caps); ignored if no seal
   letterhead_font: DEFAULT_LETTERHEAD_FONTS,
   body_font: DEFAULT_BODY_FONTS,
   font_size: 12pt,
@@ -94,7 +95,13 @@
     },
   )
 
-  render-letterhead(letterhead_title, letterhead_caption, letterhead_seal, letterhead_font)
+  render-letterhead(
+    letterhead_title,
+    letterhead_caption,
+    letterhead_font,
+    letterhead-seal: letterhead_seal,
+    letterhead-seal-subtitle: letterhead_seal_subtitle,
+  )
 
   // AFH 33-337 "Date": "Place the date 1 inch from the right edge, 1.75 inches from the top"
   // Since we have a 1-inch top margin, we need (1.75in - margin) vertical space

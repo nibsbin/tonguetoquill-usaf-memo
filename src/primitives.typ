@@ -14,7 +14,13 @@
 // Letterhead placement is not explicitly specified in AFH 33-337, but follows
 // standard USAF memo formatting conventions
 
-#let render-letterhead(title, caption, letterhead-seal, font) = {
+#let render-letterhead(
+  title,
+  caption,
+  font,
+  letterhead-seal: none,
+  letterhead-seal-subtitle: none,
+) = {
   font = ensure-array(font)
   title = ensure-string(title)
   caption = ensure-string(caption)
@@ -41,20 +47,27 @@
   )
 
   if letterhead-seal != none {
-    place(
-      left + top,
-      dx: -0.5in,
-      dy: -.5in,
+    let seal-body = if falsey(letterhead-seal-subtitle) {
+      block[
+        #fit-box(width: 2in, height: 1in)[#letterhead-seal]
+      ]
+    } else {
       block(width: 2in)[
         #align(left)[
           #stack(spacing: 0.15em)[
             #fit-box(width: 2in, height: 1in)[#letterhead-seal]
             #text(9pt, font: font, fill: LETTERHEAD_COLOR, weight: "bold")[
-              OFFICE OF THE SECRETARY
+              #upper(ensure-string(letterhead-seal-subtitle))
             ]
           ]
         ]
-      ],
+      ]
+    }
+    place(
+      left + top,
+      dx: -0.5in,
+      dy: -.5in,
+      seal-body,
     )
   }
 }

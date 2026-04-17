@@ -205,6 +205,7 @@ Configures the memorandum header and establishes document-wide settings. Applied
   letterhead_title: "DEPARTMENT OF THE AIR FORCE",           // Organization title
   letterhead_caption: "[YOUR SQUADRON/UNIT NAME]",           // Sub-organization
   letterhead_seal: none,                                     // Organization seal image
+  letterhead_seal_subtitle: none,                            // Optional line under seal (9pt bold caps)
   date: none,                                                // Date (defaults to today; also accepts ISO string "YYYY-MM-DD")
   memo_for: ("[OFFICE1]", "[OFFICE2]"),                     // Recipients array
   memo_from: ("[YOUR/SYMBOL]", "[Organization]", "[Address]"), // Sender info array
@@ -228,7 +229,7 @@ Configures the memorandum header and establishes document-wide settings. Applied
 
 **Responsibilities:**
 - Sets page layout with 1-inch margins
-- Renders letterhead with optional seal
+- Renders letterhead with optional seal and optional `letterhead_seal_subtitle` under the seal
 - Renders date, MEMORANDUM FOR, FROM, SUBJECT, and references sections
 - Establishes typography and spacing rules
 - Renders color-coded classification banners in header and footer when `classification_level` is set
