@@ -130,7 +130,7 @@
     blank-line()
     grid(
       columns: (auto, auto, 1fr),
-      "References:", "  ", enum(..references, numbering: "(a)"),
+      "References:", "  ", enum(..references, numbering: "(a) ", body-indent: 0pt),
     )
   }
 }
