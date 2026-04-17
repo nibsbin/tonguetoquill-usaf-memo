@@ -22,7 +22,7 @@
 //
 // Basic usage:
 //
-// #import "@preview/tonguetoquill-usaf-memo:2.0.0": frontmatter, mainmatter, backmatter, indorsement
+// #import "@preview/tonguetoquill-usaf-memo:3.0.0": frontmatter, mainmatter, backmatter, indorsement
 //
 // #show: frontmatter.with(
 //   subject: "Your Subject Here",
