@@ -20,6 +20,7 @@ echo
 compile_template "starkindustries"
 compile_template "usaf-template"
 compile_template "ussf-template"
+compile_template "daf-template"
 
 echo
 echo "All compilations completed."

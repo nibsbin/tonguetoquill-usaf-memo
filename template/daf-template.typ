@@ -1,4 +1,5 @@
-#import "@preview/tonguetoquill-usaf-memo:2.0.0": backmatter, frontmatter, mainmatter
+// Local import: `memo_style` is not yet in the published package; swap to @preview after release.
+#import "/src/lib.typ": backmatter, frontmatter, mainmatter
 
 #show: frontmatter.with(
   letterhead_title: "DEPARTMENT OF THE AIR FORCE",
