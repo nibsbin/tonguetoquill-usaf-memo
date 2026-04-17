@@ -21,8 +21,8 @@
 // =============================================================================
 // AFH 33-337 §5: "Use 12 point Times New Roman font for text"
 
-#let DEFAULT_LETTERHEAD_FONTS = ("Copperplate CC",)
-#let DEFAULT_BODY_FONTS = ("times new roman", "NimbusRomNo9L")  // AFH 33-337 §5: Times New Roman required
+#let DEFAULT_LETTERHEAD_FONTS = ("NimbusRomNo9L", "times new roman")
+#let DEFAULT_BODY_FONTS = ("NimbusRomNo9L", "times new roman")  // AFH 33-337 §5: Times New Roman required
 #let LETTERHEAD_COLOR = rgb("#204093")  // Faded USAF blue for letterhead
 
 // =============================================================================

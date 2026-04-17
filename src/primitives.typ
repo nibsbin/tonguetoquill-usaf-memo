@@ -16,7 +16,10 @@
 
 #let render-letterhead(title, caption, letterhead-seal, font) = {
   font = ensure-array(font)
+  title = ensure-string(title)
   caption = ensure-string(caption)
+  title = upper(title)
+  caption = upper(caption)
 
   place(
     dy: 0.625in - spacing.margin,
@@ -28,7 +31,7 @@
         #place(
           center + top,
           align(center)[
-            #set text(12pt, font: font, fill: LETTERHEAD_COLOR)
+            #set text(12pt, font: font, fill: LETTERHEAD_COLOR, weight: "bold")
             #title\
             #text(10.5pt)[#caption]
           ],
