@@ -9,8 +9,10 @@
 // AFH 33-337 specifies precise spacing requirements throughout Chapter 14
 
 #let spacing = (
-  vertical: 19.05pt, // Base gap between elements
-  line: .5em, // Internal line spacing for readability
+  // Legacy exported field retained for compatibility with downstream imports.
+  // Internal blank-line spacing now uses measured line stride from utils.typ.
+  vertical: 19.05pt,
+  line: .5em, // Internal line spacing for readability (`par.leading`; gap between line boxes)
   line-height: .7em, // Base height of text lines for pagination estimates
   tab: 0.5in, // Tab stop for multi-column recipient alignment
   margin: 1in, // AFH 33-337 §4: "Use 1-inch margins on the left, right and bottom"

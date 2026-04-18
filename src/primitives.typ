@@ -57,7 +57,7 @@
       block(width: 2in)[
         #set text(9pt, font: font, fill: LETTERHEAD_COLOR, weight: "bold")
         #align(left)[
-          #stack(spacing: 0.15em)[
+          #stack(spacing: 0.4em)[
             #fit-box(width: 2in, height: 1in)[#letterhead-seal]
             #upper(ensure-string(letterhead-seal-subtitle))
           ]
