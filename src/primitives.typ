@@ -59,7 +59,7 @@
         #align(left)[
           // Spacing applies between positional stack children only, not one `[…]` body.
           #stack(
-            spacing: 0.5em,
+            spacing: .8em,
             fit-box(width: 2in, height: 1in)[#letterhead-seal],
             upper(ensure-string(letterhead-seal-subtitle)),
           )
