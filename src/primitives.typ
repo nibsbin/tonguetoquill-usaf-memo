@@ -52,13 +52,14 @@
         #fit-box(width: 2in, height: 1in)[#letterhead-seal]
       ]
     } else {
+      // Isolate seal column from document `font_size`: stack `em` spacing and subtitle
+      // must not scale with body text (see frontmatter `set text(size: font_size)`).
       block(width: 2in)[
+        #set text(9pt, font: font, fill: LETTERHEAD_COLOR, weight: "bold")
         #align(left)[
           #stack(spacing: 0.15em)[
             #fit-box(width: 2in, height: 1in)[#letterhead-seal]
-            #text(9pt, font: font, fill: LETTERHEAD_COLOR, weight: "bold")[
-              #upper(ensure-string(letterhead-seal-subtitle))
-            ]
+            #upper(ensure-string(letterhead-seal-subtitle))
           ]
         ]
       ]
