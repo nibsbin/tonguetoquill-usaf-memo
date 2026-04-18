@@ -57,10 +57,12 @@
       block(width: 2in)[
         #set text(9pt, font: font, fill: LETTERHEAD_COLOR, weight: "bold")
         #align(left)[
-          #stack(spacing: 0.4em)[
-            #fit-box(width: 2in, height: 1in)[#letterhead-seal]
-            #upper(ensure-string(letterhead-seal-subtitle))
-          ]
+          // Spacing applies between positional stack children only, not one `[…]` body.
+          #stack(
+            spacing: 0.5em,
+            fit-box(width: 2in, height: 1in)[#letterhead-seal],
+            upper(ensure-string(letterhead-seal-subtitle)),
+          )
         ]
       ]
     }
