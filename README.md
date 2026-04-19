@@ -39,7 +39,7 @@ Maintained by [TTQ](https://www.tonguetoquill.com).
 
 You can either clone the repository to pull all fonts or download just the files you need. All font files are available from the `fonts/` directory in the repo: https://github.com/nibsbin/tonguetoquill-usaf-memo/tree/main/fonts
 
-  - **Note:** *Times New Roman* is a proprietary Microsoft font that I can't distribute legally. The package will automatically use the included *NimbusRomNo9L* files to approximate Times.
+  - **Note:** *Times New Roman* is a proprietary Microsoft font that I can't distribute legally. After you add the *NimbusRomNo9L* files (see above), the templates use them to approximate Times.
 
 3. Start with one of the template files:
    - `template/usaf-template.typ` for a standard Air Force memo
@@ -313,7 +313,7 @@ Contributions are welcome! Please explore `src/` for core functions and `templat
 
 ### Project Structure
 
-```
+```text
 ├── src/                     # Core implementation
 │   ├── lib.typ              # Public API exports
 │   ├── config.typ           # Configuration constants (single source of truth)
@@ -327,12 +327,13 @@ Contributions are welcome! Please explore `src/` for core functions and `templat
 │   ├── usaf-template.typ    # Standard Air Force memo
 │   ├── ussf-template.typ    # Space Force variant
 │   ├── starkindustries.typ  # Custom organization example
-│   └── assets/              # Fonts and images
+│   └── assets/              # Images (seals, etc.); font files live in `fonts/`)
 ├── prose/                   # Design documentation
 │   ├── designs/             # Active design documents
 │   ├── plans/               # Implementation plans
 │   └── archive/             # Archived designs and analyses
 ├── pdfs/                    # Compiled example outputs
+├── thumbnail.png            # Typst Universe package thumbnail (outside template/)
 └── README.md                # This documentation
 ```
 
@@ -344,4 +345,4 @@ External assets used in this project:
 
 - `dow_seal.png` is [public domain](https://www.e-publishing.af.mil/Portals/1/Documents/Official%20Memorandum%20Template_10Nov2020.dotx?ver=M7cny_cp1_QDajkyg0xWBw%3D%3D)
 - `starkindustries_seal.png` is [public domain](https://commons.wikimedia.org/wiki/File:Stark_Industries.png).
-- `NimbusRomNo9L` is under [GPL](./fonts/NimbusRomanNo9L/GNU%20General%20Public%20License.txt) pulled from URW++ foundry
+- `NimbusRomNo9L` is under the [GNU GPL, version 2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html); a copy is also in `fonts/NimbusRomanNo9L/GNU General Public License.txt`. Fonts are from the URW++ foundry.
