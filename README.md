@@ -52,7 +52,7 @@ You can either clone the repository to pull all fonts or download just the files
 
 2. Initialize template from Typst Universe:
 ```bash
-typst init @preview/tonguetoquill-usaf-memo:2.0.0 my-memo
+typst init @preview/tonguetoquill-usaf-memo:3.0.0 my-memo
 cd my-memo
 ```
 
@@ -87,7 +87,7 @@ cd tonguetoquill-usaf-memo
 Import the core functions for creating memorandums:
 
 ```typst
-#import "@preview/tonguetoquill-usaf-memo:2.0.0": frontmatter, mainmatter, backmatter, indorsement
+#import "@preview/tonguetoquill-usaf-memo:3.0.0": frontmatter, mainmatter, backmatter, indorsement
 ```
 
 **Minimal Example:**
