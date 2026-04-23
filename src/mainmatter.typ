@@ -18,7 +18,7 @@
 /// of the memorandum. Automatically detects single vs. multiple paragraphs
 /// to comply with AFH 33-337 numbering requirements.
 ///
-/// When `auto_numbering` is false (set in frontmatter), base-level paragraphs
+/// When `auto-numbering` is false (set in frontmatter), base-level paragraphs
 /// render flush left without numbering. Only explicitly numbered or bulleted
 /// items enter the numbering hierarchy.
 ///
@@ -26,7 +26,7 @@
 /// -> content
 #let mainmatter(it) = context {
   let config = query(metadata).last().value
-  let auto-numbering = config.at("auto_numbering", default: true)
-  let memo-style = config.at("memo_style", default: "usaf")
+  let auto-numbering = config.at("auto-numbering", default: true)
+  let memo-style = config.at("memo-style", default: "usaf")
   render-body(it, auto-numbering: auto-numbering, memo-style: memo-style)
 }

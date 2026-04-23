@@ -1,16 +1,16 @@
 #import "@preview/tonguetoquill-usaf-memo:3.0.0": backmatter, frontmatter, mainmatter
 
 #show: frontmatter.with(
-  letterhead_title: "STARK INDUSTRIES",
-  letterhead_caption: "EXECUTIVE OFFICE",
-  letterhead_seal: image("assets/starkindustries_seal.png"),
+  letterhead-title: "STARK INDUSTRIES",
+  letterhead-caption: "EXECUTIVE OFFICE",
+  letterhead-seal: image("assets/starkindustries_seal.png"),
   subject: "Immediate Compliance Required: Unauthorized Flight Operations and Workplace Safety Violations",
-  memo_for: (
+  memo-for: (
     "MR. ANTHONY E. STARK, CEO",
     "STARK INDUSTRIES",
   ),
-  memo_for_cols: 1,
-  memo_from: (
+  memo-for-cols: 1,
+  memo-from: (
     "STARK INDUSTRIES",
     "Executive Office",
     "10880 Malibu Point",
@@ -24,8 +24,8 @@
     "USAF Aircraft Accident Investigation Report, F-22 Raptor Incidents, Classified",
     "Coulson, P., SHIELD Intelligence Brief, 'Unidentified Flying Objects Over Malibu",
   ),
-  footer_tag_line: "Peace Through Power",
-  classification_level: "CONFIDENTIAL",
+  footer-tag-line: "Peace Through Power",
+  classification-level: "CONFIDENTIAL",
 )
 
 #mainmatter[
@@ -79,7 +79,7 @@
   Also, please remind DUM-E that government inspectors are not appropriate targets for fire extinguisher practice, regardless of how "suspicious" they appear.
 ]
 #backmatter(
-  signature_block: (
+  signature-block: (
     "VIRGINIA E. POTTS",
     "Executive Assistant to the CEO",
     "Stark Industries",

@@ -1,20 +1,20 @@
 #import "@preview/tonguetoquill-usaf-memo:3.0.0": backmatter, frontmatter, mainmatter
 
 #show: frontmatter.with(
-  letterhead_title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead_caption: "washington, DC",
-  letterhead_seal: image("assets/dow_seal.png"),
-  letterhead_seal_subtitle: "Office of the Secretary",
+  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
+  letterhead-caption: "washington, DC",
+  letterhead-seal: image("assets/dow_seal.png"),
+  letterhead-seal-subtitle: "Office of the Secretary",
   date: datetime(month:1,day:1,year:2024),
   subject: "Format for the Official Memorandum",
-  memo_for: "XXXX",
-  memo_from: (
+  memo-for: "XXXX",
+  memo-from: (
     "SAF/CN",
     "1800 Air Force Pentagon",
     "Washington, D.C., 20330-1665",
   ),
   references: ("HOI 33-3, Correspondence Preparation, Control, and Tracking",),
-  memo_style: "daf",
+  memo-style: "daf",
 )
 
 #mainmatter[
@@ -30,7 +30,7 @@
 ]
 
 #backmatter(
-  signature_block: (
+  signature-block: (
     "VENICE M. GOODWINE, SES, DAF",
     "Chief Information Officer",
   ),

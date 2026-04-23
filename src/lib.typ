@@ -26,9 +26,9 @@
 //
 // #show: frontmatter.with(
 //   subject: "Your Subject Here",
-//   memo_for: ("OFFICE/SYMBOL",),
-//   memo_from: ("YOUR/SYMBOL",),
-//   memo_style: "usaf", // "usaf" (default) or "daf"
+//   memo-for: ("OFFICE/SYMBOL",),
+//   memo-from: ("YOUR/SYMBOL",),
+//   memo-style: "usaf", // "usaf" (default) or "daf"
 // )
 //
 // #show: mainmatter
@@ -38,7 +38,7 @@
 // top-level paragraphs with fixed 0.5in first-line indentation)
 //
 // #backmatter(
-//   signature_block: ("NAME, Rank, USAF", "Title"),
+//   signature-block: ("NAME, Rank, USAF", "Title"),
 //   attachments: (...),
 //   cc: (...),
 // )
@@ -46,7 +46,7 @@
 // #indorsement(
 //   from: "ORG/SYMBOL",
 //   to: "RECIPIENT/SYMBOL",
-//   signature_block: ("NAME, Rank, USAF", "Title"),
+//   signature-block: ("NAME, Rank, USAF", "Title"),
 // )[
 //   Indorsement content here.
 // ]

@@ -52,8 +52,8 @@
         #fit-box(width: 2in, height: 1in)[#letterhead-seal]
       ]
     } else {
-      // Isolate seal column from document `font_size`: stack `em` spacing and subtitle
-      // must not scale with body text (see frontmatter `set text(size: font_size)`).
+      // Isolate seal column from document `font-size`: stack `em` spacing and subtitle
+      // must not scale with body text (see frontmatter `set text(size: font-size)`).
       block(width: 2in)[
         #set text(9pt, font: font, fill: LETTERHEAD_COLOR, weight: "bold")
         #align(left)[
@@ -276,8 +276,8 @@
 
 #let calculate-backmatter-spacing(is-first-section) = {
   context {
-    let line_count = if is-first-section { 2 } else { 1 }
-    blank-lines(line_count)
+    let line-count = if is-first-section { 2 } else { 1 }
+    blank-lines(line-count)
   }
 }
 

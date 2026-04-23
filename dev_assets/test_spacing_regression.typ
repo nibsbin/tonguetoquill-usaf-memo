@@ -2,11 +2,11 @@
 
 #show: frontmatter.with(
   subject: "Spacing Regression",
-  memo_for: (
+  memo-for: (
     "TEST/CC",
     "TEST/CD",
   ),
-  memo_from: (
+  memo-from: (
     "TEST/DO",
     "123 Example Street",
     "Washington DC 12345",

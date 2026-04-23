@@ -11,39 +11,39 @@
 
 #let frontmatter(
   subject: none,
-  memo_for: none,
-  memo_from: none,
+  memo-for: none,
+  memo-from: none,
   date: none,
   references: none,
-  letterhead_title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead_caption: "[YOUR SQUADRON/UNIT NAME]",
-  letterhead_seal: none,
-  letterhead_seal_subtitle: none, // optional line under seal (9pt bold caps); ignored if no seal
-  letterhead_font: DEFAULT_LETTERHEAD_FONTS,
-  body_font: DEFAULT_BODY_FONTS,
-  font_size: 12pt,
-  memo_for_cols: 3,
-  classification_level: none,
-  footer_tag_line: none,
-  auto_numbering: true,
-  memo_style: "usaf",
+  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
+  letterhead-caption: "[YOUR SQUADRON/UNIT NAME]",
+  letterhead-seal: none,
+  letterhead-seal-subtitle: none, // optional line under seal (9pt bold caps); ignored if no seal
+  letterhead-font: DEFAULT_LETTERHEAD_FONTS,
+  body-font: DEFAULT_BODY_FONTS,
+  font-size: 12pt,
+  memo-for-cols: 3,
+  classification-level: none,
+  footer-tag-line: none,
+  auto-numbering: true,
+  memo-style: "usaf",
   it,
 ) = {
   assert(subject != none, message: "subject is required")
-  assert(memo_for != none, message: "memo_for is required")
-  assert(memo_from != none, message: "memo_from is required")
+  assert(memo-for != none, message: "memo-for is required")
+  assert(memo-from != none, message: "memo-from is required")
   assert(
-    memo_style in ("usaf", "daf"),
-    message: "memo_style must be \"usaf\" or \"daf\"",
+    memo-style in ("usaf", "daf"),
+    message: "memo-style must be \"usaf\" or \"daf\"",
   )
 
-  let actual_date = if date == none { datetime.today() } else { date }
-  let classification_color = get-classification-level-color(classification_level)
+  let actual-date = if date == none { datetime.today() } else { date }
+  let classification-color = get-classification-level-color(classification-level)
 
   // Document-wide typography settings (inlined from configure())
   set par(leading: spacing.line, spacing: spacing.line, justify: false)
   set block(above: spacing.line, below: 0em, spacing: 0em)
-  set text(font: body_font, size: font_size, fallback: true)
+  set text(font: body-font, size: font-size, fallback: true)
 
   set page(
     paper: "us-letter",
@@ -68,11 +68,11 @@
         )
       }
 
-      if classification_level != none {
+      if classification-level != none {
         place(
           top + center,
           dy: 0.375in,
-          text(12pt, font: DEFAULT_BODY_FONTS, fill: classification_color)[#strong(classification_level)],
+          text(12pt, font: DEFAULT_BODY_FONTS, fill: classification-color)[#strong(classification-level)],
         )
       }
     },
@@ -80,15 +80,15 @@
       place(
         bottom + center,
         dy: -.375in,
-        text(12pt, font: DEFAULT_BODY_FONTS, fill: classification_color)[#strong(classification_level)],
+        text(12pt, font: DEFAULT_BODY_FONTS, fill: classification-color)[#strong(classification-level)],
       )
 
-      if not falsey(footer_tag_line) {
+      if not falsey(footer-tag-line) {
         place(
           bottom + center,
           dy: -0.625in,
           align(center)[
-            #text(fill: LETTERHEAD_COLOR, font: "cinzel", size: 15pt)[#footer_tag_line]
+            #text(fill: LETTERHEAD_COLOR, font: "cinzel", size: 15pt)[#footer-tag-line]
           ],
         )
       }
@@ -96,11 +96,11 @@
   )
 
   render-letterhead(
-    letterhead_title,
-    letterhead_caption,
-    letterhead_font,
-    letterhead-seal: letterhead_seal,
-    letterhead-seal-subtitle: letterhead_seal_subtitle,
+    letterhead-title,
+    letterhead-caption,
+    letterhead-font,
+    letterhead-seal: letterhead-seal,
+    letterhead-seal-subtitle: letterhead-seal-subtitle,
   )
 
   // AFH 33-337 "Date": "Place the date 1 inch from the right edge, 1.75 inches from the top"
@@ -119,17 +119,17 @@
 
   metadata((
     subject: subject,
-    original_date: actual_date,
-    original_from: first-or-value(memo_from),
-    body_font: body_font,
-    font_size: font_size,
-    auto_numbering: auto_numbering,
-    memo_style: memo_style,
+    original-date: actual-date,
+    original-from: first-or-value(memo-from),
+    body-font: body-font,
+    font-size: font-size,
+    auto-numbering: auto-numbering,
+    memo-style: memo-style,
   ))
 
-  render-date-section(actual_date, memo-style: memo_style)
-  render-for-section(memo_for, memo_for_cols)
-  render-from-section(memo_from)
+  render-date-section(actual-date, memo-style: memo-style)
+  render-for-section(memo-for, memo-for-cols)
+  render-from-section(memo-from)
   render-subject-section(subject)
   render-references-section(references)
 

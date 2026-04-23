@@ -2,8 +2,8 @@
 
 #show: frontmatter.with(
   subject: "Test Multi-Block List Items",
-  memo_for: "TEST/CC",
-  memo_from: "TEST/DO",
+  memo-for: "TEST/CC",
+  memo-from: "TEST/DO",
 )
 
 #show: mainmatter

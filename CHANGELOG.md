@@ -4,6 +4,17 @@ All notable changes to `tonguetoquill-usaf-memo` are documented here.
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- **Breaking: all public parameters renamed from `snake_case` to `kebab-case`** for consistency with Typst idiom. Update call sites as follows:
+  - `frontmatter`: `memo_for` → `memo-for`, `memo_from` → `memo-from`, `letterhead_title` → `letterhead-title`, `letterhead_caption` → `letterhead-caption`, `letterhead_seal` → `letterhead-seal`, `letterhead_seal_subtitle` → `letterhead-seal-subtitle`, `letterhead_font` → `letterhead-font`, `body_font` → `body-font`, `font_size` → `font-size`, `memo_for_cols` → `memo-for-cols`, `classification_level` → `classification-level`, `footer_tag_line` → `footer-tag-line`, `auto_numbering` → `auto-numbering`, `memo_style` → `memo-style`.
+  - `backmatter`: `signature_block` → `signature-block`, `signature_blank_lines` → `signature-blank-lines`, `leading_pagebreak` → `leading-pagebreak`.
+  - `indorsement`: `signature_block` → `signature-block`, `signature_blank_lines` → `signature-blank-lines`.
+
+---
+
 ## [2.0.0] — 2026-03-11
 
 ### Added
