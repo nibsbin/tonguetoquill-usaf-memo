@@ -1,9 +1,0 @@
-*
-!*/
-!/.gitignore
-!/LICENSE
-!/README.md
-!/typst.toml
-!/thumbnail.png
-!/src/**
-!/template/**
