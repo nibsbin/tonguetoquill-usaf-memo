@@ -1,0 +1,7 @@
+*
+!*/
+!/.gitignore
+!/LICENSE
+!/typst.toml
+!/src/**
+!/fonts/**
