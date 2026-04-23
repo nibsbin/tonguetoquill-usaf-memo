@@ -94,8 +94,8 @@ Import the core functions for creating memorandums:
 ```typst
 #show: frontmatter.with(
   subject: "Your Subject Here",
-  memo_for: ("OFFICE/SYMBOL",),
-  memo_from: ("YOUR/SYMBOL",),
+  memo-for: ("OFFICE/SYMBOL",),
+  memo-from: ("YOUR/SYMBOL",),
 )
 
 #show: mainmatter
@@ -108,7 +108,7 @@ Your memorandum content goes here.
 Continue with regular paragraphs.
 
 #backmatter(
-  signature_block: ("NAME, Rank, USAF", "Title"),
+  signature-block: ("NAME, Rank, USAF", "Title"),
 )
 ```
 
@@ -171,12 +171,12 @@ Tables do not count toward paragraph numbering and are rendered between numbered
 
 ### Classification markings
 
-Set `classification_level` in `frontmatter` to display color-coded banners in the page header and footer:
+Set `classification-level` in `frontmatter` to display color-coded banners in the page header and footer:
 
 ```typst
 #show: frontmatter.with(
   // ...
-  classification_level: "SECRET",
+  classification-level: "SECRET",
 )
 ```
 
@@ -194,44 +194,44 @@ Configures the memorandum header and establishes document-wide settings. Applied
 
 **Required Parameters:**
 - `subject`: Memorandum subject line (must be descriptive and in title case)
-- `memo_for`: Recipients (string or array of office symbols)
-- `memo_from`: Sender information (string or array with office symbol, organization, address)
+- `memo-for`: Recipients (string or array of office symbols)
+- `memo-from`: Sender information (string or array with office symbol, organization, address)
 
 **Key Parameters:**
 ```typst
 #show: frontmatter.with(
-  letterhead_title: "DEPARTMENT OF THE AIR FORCE",           // Organization title
-  letterhead_caption: "[YOUR SQUADRON/UNIT NAME]",           // Sub-organization
-  letterhead_seal: none,                                     // Organization seal image
-  letterhead_seal_subtitle: none,                            // Optional line under seal (9pt bold caps)
+  letterhead-title: "DEPARTMENT OF THE AIR FORCE",           // Organization title
+  letterhead-caption: "[YOUR SQUADRON/UNIT NAME]",           // Sub-organization
+  letterhead-seal: none,                                     // Organization seal image
+  letterhead-seal-subtitle: none,                            // Optional line under seal (9pt bold caps)
   date: none,                                                // Date (defaults to today; also accepts ISO string "YYYY-MM-DD")
-  memo_for: ("[OFFICE1]", "[OFFICE2]"),                     // Recipients array
-  memo_from: ("[YOUR/SYMBOL]", "[Organization]", "[Address]"), // Sender info array
+  memo-for: ("[OFFICE1]", "[OFFICE2]"),                     // Recipients array
+  memo-from: ("[YOUR/SYMBOL]", "[Organization]", "[Address]"), // Sender info array
   subject: "[Your Subject in Title Case - Required]",        // Subject line
   references: ("AFI 123-45", "AFMAN 67-89"),                // Optional references
 
   // Styling options
-  letterhead_font: ("times new roman", "NimbusRomNo9L"),   // Letterhead fonts (defaults match body)
-  body_font: ("times new roman", "NimbusRomNo9L"),          // Body fonts
-  font_size: 12pt,                                          // Font size (default 12pt; 10pt minimum per AFH 33-337 §5)
-  memo_for_cols: 3,                                         // Recipient columns
+  letterhead-font: ("times new roman", "NimbusRomNo9L"),   // Letterhead fonts (defaults match body)
+  body-font: ("times new roman", "NimbusRomNo9L"),          // Body fonts
+  font-size: 12pt,                                          // Font size (default 12pt; 10pt minimum per AFH 33-337 §5)
+  memo-for-cols: 3,                                         // Recipient columns
 
   // Classification and branding
-  classification_level: none,                               // e.g. "UNCLASSIFIED", "SECRET", or "TOP SECRET" for standard colors
-  footer_tag_line: none,                                    // Custom footer tagline (e.g., "semper supra")
+  classification-level: none,                               // e.g. "UNCLASSIFIED", "SECRET", or "TOP SECRET" for standard colors
+  footer-tag-line: none,                                    // Custom footer tagline (e.g., "semper supra")
 
   // Paragraph numbering
-  auto_numbering: true,                                     // Automatic AFH 33-337 paragraph numbering (default true)
+  auto-numbering: true,                                     // Automatic AFH 33-337 paragraph numbering (default true)
 )
 ```
 
 **Responsibilities:**
 - Sets page layout with 1-inch margins
-- Renders letterhead with optional seal and optional `letterhead_seal_subtitle` under the seal
+- Renders letterhead with optional seal and optional `letterhead-seal-subtitle` under the seal
 - Renders date, MEMORANDUM FOR, FROM, SUBJECT, and references sections
 - Establishes typography and spacing rules
-- Renders color-coded classification banners in header and footer when `classification_level` is set
-- Renders custom footer tagline when `footer_tag_line` is set
+- Renders color-coded classification banners in header and footer when `classification-level` is set
+- Renders custom footer tagline when `footer-tag-line` is set
 - Stores configuration for downstream sections
 
 #### `mainmatter`
@@ -246,7 +246,7 @@ Processes the memorandum body content with automatic paragraph numbering. Applie
 - Applies AFH 33-337 hierarchical paragraph numbering (1., a., (1), (a))
 - Handles proper indentation and spacing
 - Auto-detects single vs. multiple paragraphs
-- When `auto_numbering: false` is set in `frontmatter`, base-level paragraphs render flush left without numbering; only explicitly bulleted or numbered items (list/enum) receive numbering
+- When `auto-numbering: false` is set in `frontmatter`, base-level paragraphs render flush left without numbering; only explicitly bulleted or numbered items (list/enum) receive numbering
 - Supports inline tables with formal black-border formatting
 - Inherits configuration from frontmatter
 
@@ -257,12 +257,12 @@ Renders the closing section including signature block and optional attachments/c
 **Key Parameters:**
 ```typst
 #backmatter(
-  signature_block: ("[NAME, Rank, USAF]", "[Title]"),      // Signature lines (required)
-  signature_blank_lines: 4,                                // Blank lines above signature
+  signature-block: ("[NAME, Rank, USAF]", "[Title]"),      // Signature lines (required)
+  signature-blank-lines: 4,                                // Blank lines above signature
   attachments: ("Attachment 1", "Attachment 2"),            // Optional attachments
   cc: ("[OFFICE/SYMBOL]",),                                // Courtesy copies
   distribution: ("[OFFICE]",),                             // Distribution list
-  leading_pagebreak: false,                                // Force page break before backmatter
+  leading-pagebreak: false,                                // Force page break before backmatter
 )
 ```
 
@@ -280,8 +280,8 @@ Creates an indorsement for forwarding or commenting on a memorandum. Called as a
 #indorsement(
   from: "ORG/SYMBOL",                                       // Sending organization
   to: "RECIPIENT/SYMBOL",                                   // Recipient organization
-  signature_block: ("[NAME, Rank, USAF]", "[Title]"),      // Signature lines
-  signature_blank_lines: 4,                                // Blank lines above signature
+  signature-block: ("[NAME, Rank, USAF]", "[Title]"),      // Signature lines
+  signature-blank-lines: 4,                                // Blank lines above signature
   attachments: none,                                        // Optional attachments
   cc: none,                                                 // Courtesy copies
   date: datetime.today(),                                  // Indorsement date (also accepts ISO string "YYYY-MM-DD")

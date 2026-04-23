@@ -1,11 +1,11 @@
 #import "@preview/tonguetoquill-usaf-memo:3.0.0": backmatter, frontmatter, indorsement, mainmatter
 
 #show: frontmatter.with(
-  letterhead_title: "DEPARTMENT OF THE AIR FORCE",
-  letterhead_caption: "123RD EXAMPLE SQUADRON",
-  letterhead_seal: image("assets/dow_seal.png"),
+  letterhead-title: "DEPARTMENT OF THE AIR FORCE",
+  letterhead-caption: "123RD EXAMPLE SQUADRON",
+  letterhead-seal: image("assets/dow_seal.png"),
   subject: "Format for the Official Memorandum",
-  memo_for: (
+  memo-for: (
     "123 ES/CC",
     "123 ES/DO",
     "123 ES/CSS",
@@ -13,7 +13,7 @@
     "456 ES/DO",
     "456 ES/CSS",
   ),
-  memo_from: (
+  memo-from: (
     "ORG/SYMBOL",
     "Organization",
     "Street Address",
@@ -78,7 +78,7 @@
 ]
 
 #backmatter(
-  signature_block: (
+  signature-block: (
     "FIRST M. LAST, Rank, USAF",
     "Duty Title",
   ),
@@ -98,7 +98,7 @@
   from: "ORG/SYMBOL [Office symbol for 1st Indorsement Official]",
   to: "ORG/SYMBOL [Office symbol for 2d Indorsement official]",
   action: "approve",
-  signature_block: (
+  signature-block: (
     "FIRST M LAST, Rank, USAF",
     "Duty Title",
   ),
@@ -109,7 +109,7 @@
 #indorsement(
   from: "[Indorser ORG/SYMBOL]",
   to: "ORG/SYMBOL [Originator]",
-  signature_block: (
+  signature-block: (
     "FIRST M LAST, Rank, USAF",
     "Duty Title",
   ),

@@ -164,17 +164,17 @@
 /// - cols (int): Number of columns for the grid (default: 3)
 /// -> grid
 #let create-auto-grid(content, column-gutter: .5em, cols: 3) = {
-  let content_type = type(content)
+  let content-type = type(content)
 
-  assert(content_type == str or content_type == array, message: "Content must be a string or an array of strings.")
-  if content_type == array {
+  assert(content-type == str or content-type == array, message: "Content must be a string or an array of strings.")
+  if content-type == array {
     for item in content {
       assert(type(item) == str, message: "All items in content array must be strings.")
     }
   }
 
   // Normalize to 1d array
-  if content_type == str {
+  if content-type == str {
     content = (content,)
   }
 
@@ -194,8 +194,8 @@
   // Add padding cells to complete the last row if needed
   let remainder = calc.rem(cells.len(), cols + 1)
   if remainder != 0 {
-    let padding_needed = (cols + 1) - remainder
-    for _ in range(padding_needed) {
+    let padding-needed = (cols + 1) - remainder
+    for _ in range(padding-needed) {
       cells.push([])
     }
   }

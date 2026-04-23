@@ -106,28 +106,28 @@
   ITEM_FIRST_PAR.update(false)
 
   // The first pass parses paragraphs, list items, etc. into standardized arrays
-  let first_pass = {
+  let first-pass = {
     // Collect pars with nesting level
     show par: p => context {
-      let nest_level = NEST_DOWN.get().at(0) - NEST_UP.get().at(0)
-      let is_heading = IS_HEADING.get()
-      let is_first_par = ITEM_FIRST_PAR.get()
+      let nest-level = NEST_DOWN.get().at(0) - NEST_UP.get().at(0)
+      let is-heading = IS_HEADING.get()
+      let is-first-par = ITEM_FIRST_PAR.get()
 
       // Determine if this is a continuation block within a multi-block list item.
-      // A continuation is a non-first paragraph inside a list item (nest_level > 0).
-      let is_continuation = nest_level > 0 and not is_first_par
+      // A continuation is a non-first paragraph inside a list item (nest-level > 0).
+      let is-continuation = nest-level > 0 and not is-first-par
 
       PAR_BUFFER.update(pars => {
         pars.push((
           content: text([#p.body]),
-          nest_level: nest_level,
-          kind: if is_heading { "heading" } else if is_continuation { "continuation" } else { "par" },
+          nest-level: nest-level,
+          kind: if is-heading { "heading" } else if is-continuation { "continuation" } else { "par" },
         ))
         pars
       })
 
       // After the first paragraph of a list item, mark subsequent ones as continuations
-      if nest_level > 0 and is_first_par {
+      if nest-level > 0 and is-first-par {
         ITEM_FIRST_PAR.update(false)
       }
 
@@ -138,7 +138,7 @@
       PAR_BUFFER.update(pars => {
         pars.push((
           content: t,
-          nest_level: -1,
+          nest-level: -1,
           kind: "table",
         ))
         pars
@@ -189,20 +189,20 @@
     }
   }
   // Use place() to prevent hidden content from affecting layout flow
-  place(hide(first_pass))
+  place(hide(first-pass))
 
   // Second pass: consume par buffer
   //
   // PAR_BUFFER item dictionary layout:
   //   item.content    — the paragraph body or table element
-  //   item.nest_level — nesting depth (−1 for tables)
+  //   item.nest-level — nesting depth (−1 for tables)
   //   item.kind       — "par", "heading", "table", or "continuation"
   context {
-    let heading_buffer = none
+    let heading-buffer = none
     // Only top-level paragraphs count for AFH 33-337 §2 numbering purposes
-    let par_count = PAR_BUFFER.get().filter(item => item.kind == "par").len()
+    let par-count = PAR_BUFFER.get().filter(item => item.kind == "par").len()
     let items = PAR_BUFFER.get()
-    let total_count = items.len()
+    let total-count = items.len()
 
     // Track paragraph numbers per level manually to avoid nested-context
     // counter propagation issues.  Dictionary maps level index (as string)
@@ -217,91 +217,91 @@
     for item in items {
       i += 1
       let kind = item.kind
-      let item_content = item.content
+      let item-content = item.content
 
       // Buffer headings for prepend to the next rendered element
       if kind == "heading" {
-        heading_buffer = item_content
+        heading-buffer = item-content
         continue
       }
 
       // Prepend buffered heading to the next non-heading element
-      if heading_buffer != none {
+      if heading-buffer != none {
         if kind == "table" {
           // Tables cannot have inline text prepended; emit heading as
           // a standalone bold line above the table
           blank-line()
-          strong[#heading_buffer.]
-          heading_buffer = none
+          strong[#heading-buffer.]
+          heading-buffer = none
         } else {
-          item_content = [#strong[#heading_buffer.] #item_content]
-          heading_buffer = none
+          item-content = [#strong[#heading-buffer.] #item-content]
+          heading-buffer = none
         }
       }
 
       // Format based on element kind
-      let nest_level = item.nest_level
+      let nest-level = item.nest-level
       let indent-fn = if memo-style == "daf" {
         (level, _counts) => calculate-daf-indent(level)
       } else {
         (level, counts) => calculate-indent-from-counts(level, counts)
       }
-      let final_par = {
+      let final-par = {
         if kind == "table" {
-          render-memo-table(item_content)
+          render-memo-table(item-content)
         } else if kind == "continuation" {
           // Continuation block within a multi-block list item:
           // indent to align with preceding numbered paragraph's text, no new number.
           // level-counts still holds the value of the preceding numbered paragraph.
           if memo-style == "daf" {
-            if nest_level > 0 {
-              format-par(item_content, nest_level, level-counts, indent-fn, continuation: true)
+            if nest-level > 0 {
+              format-par(item-content, nest-level, level-counts, indent-fn, continuation: true)
             } else {
-              item_content
+              item-content
             }
           } else if auto-numbering {
-            format-par(item_content, nest_level, level-counts, indent-fn, continuation: true)
-          } else if nest_level > 0 {
-            format-par(item_content, nest_level - 1, level-counts, indent-fn, continuation: true)
+            format-par(item-content, nest-level, level-counts, indent-fn, continuation: true)
+          } else if nest-level > 0 {
+            format-par(item-content, nest-level - 1, level-counts, indent-fn, continuation: true)
           } else {
-            item_content
+            item-content
           }
         } else if memo-style == "daf" {
-          if nest_level > 0 {
-            let par = format-par(item_content, nest_level, level-counts, indent-fn)
-            level-counts.insert(str(nest_level), level-counts.at(str(nest_level), default: 1) + 1)
-            level-counts = reset-levels-from(level-counts, nest_level + 1, max-levels)
+          if nest-level > 0 {
+            let par = format-par(item-content, nest-level, level-counts, indent-fn)
+            level-counts.insert(str(nest-level), level-counts.at(str(nest-level), default: 1) + 1)
+            level-counts = reset-levels-from(level-counts, nest-level + 1, max-levels)
             par
           } else {
             // DAF top-level paragraphs are unnumbered and first-line indented.
             // Reset nested counters so each new top-level paragraph restarts children.
             level-counts = reset-levels-from(level-counts, 0, max-levels)
-            [#h(daf-paragraph.top-first-line-indent)#item_content]
+            [#h(daf-paragraph.top-first-line-indent)#item-content]
           }
         } else if auto-numbering {
-          if par_count > 1 {
+          if par-count > 1 {
             // Apply paragraph numbering per AFH 33-337 §2
-            let par = format-par(item_content, nest_level, level-counts, indent-fn)
-            level-counts.insert(str(nest_level), level-counts.at(str(nest_level)) + 1)
-            level-counts = reset-levels-from(level-counts, nest_level + 1, max-levels)
+            let par = format-par(item-content, nest-level, level-counts, indent-fn)
+            level-counts.insert(str(nest-level), level-counts.at(str(nest-level)) + 1)
+            level-counts = reset-levels-from(level-counts, nest-level + 1, max-levels)
             par
           } else {
             // AFH 33-337 §2: "A single paragraph is not numbered"
-            item_content
+            item-content
           }
         } else {
           // Unnumbered mode: only explicitly nested items (enum/list) get numbered
-          if nest_level > 0 {
-            let effective_level = nest_level - 1
-            let par = format-par(item_content, effective_level, level-counts, indent-fn)
-            level-counts.insert(str(effective_level), level-counts.at(str(effective_level)) + 1)
-            level-counts = reset-levels-from(level-counts, effective_level + 1, max-levels)
+          if nest-level > 0 {
+            let effective-level = nest-level - 1
+            let par = format-par(item-content, effective-level, level-counts, indent-fn)
+            level-counts.insert(str(effective-level), level-counts.at(str(effective-level)) + 1)
+            level-counts = reset-levels-from(level-counts, effective-level + 1, max-levels)
             par
           } else {
             // Base-level paragraphs are flush left with no numbering.
             // Reset all child level counters so subsequent list items restart at 1.
             level-counts = reset-levels-from(level-counts, 0, max-levels)
-            item_content
+            item-content
           }
         }
       }
@@ -309,11 +309,11 @@
       // If this is the final item, apply AFH 33-337 §11 rule:
       // "Avoid dividing a paragraph of less than four lines between two pages"
       blank-line()
-      if i == total_count {
-        let available_width = page.width - spacing.margin * 2
+      if i == total-count {
+        let available-width = page.width - spacing.margin * 2
 
         // Use the shared measured line stride used by blank-line spacing.
-        let line_height = {
+        let line-height = {
           let cached = LINE_STRIDE.get()
           if cached != none {
             cached
@@ -323,19 +323,19 @@
           }
         }
         // Calculate last item's height
-        let par_height = measure(final_par, width: available_width).height
+        let par-height = measure(final-par, width: available-width).height
 
-        let estimated_lines = calc.ceil(par_height / line_height)
+        let estimated-lines = calc.ceil(par-height / line-height)
 
-        if estimated_lines < 4 {
+        if estimated-lines < 4 {
           // Short content (< 4 lines): make sticky to keep with signature
-          block(sticky: true)[#final_par]
+          block(sticky: true)[#final-par]
         } else {
           // Longer content (≥ 4 lines): use default breaking behavior
-          block(breakable: true)[#final_par]
+          block(breakable: true)[#final-par]
         }
       } else {
-        final_par
+        final-par
       }
     }
   }
